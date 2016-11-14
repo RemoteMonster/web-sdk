@@ -1,0 +1,19 @@
+{
+  "name": "remon-browser-sdk",
+  "version": "0.0.1",
+  "description": "RemoteMonster Browser SDK",
+  "main": "remon.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "WebRTC",
+    "RTC"
+  ],
+  "author": "REMOTEMONSTER",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RemoteMonster/Browser-SDK"
+  }
+}
