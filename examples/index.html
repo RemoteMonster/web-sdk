@@ -1,143 +1,107 @@
-/* global Remon */
-/* eslint-disable no-console */
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Remon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+    <style>
+      video {
+        width: 40%;
+      }
+    </style>
+  </head>
 
-const channelIdNoticeTitleElement = document.querySelector('#channelIdNoticeTitle');
-const connectChannelButtonElement = document.querySelector('#connectChannelButton');
-const disconnectButtonElement = document.querySelector('#disconnectButton');
-const initButtonElement = document.querySelector('#initButton');
-const localVideoElement = document.querySelector('#localVideo');
-const remoteVideoElement = document.querySelector('#remoteVideo');
-const channelIdInputElement = document.querySelector('#channelIdInput');
-const localVideoTracksPauseCheckboxElement = document.querySelector('#localVideoTracksPauseCheckbox');
-const localAudioTracksMuteCheckboxElement = document.querySelector('#localAudioTracksMuteCheckbox');
-const remoteVideoTracksPauseCheckboxElement = document.querySelector('#remoteVideoTracksPauseCheckbox');
-const remoteAudioTracksMuteCheckboxElement = document.querySelector('#remoteAudioTracksMuteCheckbox');
-const chatMessageHistoryElement = document.querySelector('#chatMessageHistory');
-const chatMessageInputElement = document.querySelector('#chatMessageInput');
-const sendChatMessageButtonElement = document.querySelector('#sendChatMessageButton');
-const rtc = Remon;
+  <body>
+    <div class="container">
+      <div class="row">
+        <section class="col-sm-12">
+          <h1 id="channelIdNoticeTitle" class="h3"></h1>
+          <hr>
+        </section>
+      </div>
+      <div class="row">
+        <section class="con-sm-12">
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="channelIdInput">Room Id</label>
+              <input id="channelIdInput" class="form-control form-control-sm" type="text">
+              <button id="initButton" class="btn btn-sm">Init</button>
+              <button id="connectChannelButton" class="btn btn-sm">Connect Channel</button>
+              <button id="disconnectButton" class="btn btn-sm">Disconnect</button>
 
-const rtcConfig = {
-  credential: {
-    key: '1234567890',
-    serviceId: 'SERVICEID1'
-  },
-  view: {
-    local: '#localVideo',
-    remote: '#remoteVideo'
-  },
-  sdk: {
-    logLevel: 'DEBUG',
-  },
-}
+            </div>
+          </form>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col-sm-6">
+          <video id="localVideo" autoplay controls muted></video>
+          <form action="">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="localVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
+                Video Tracks Pause
+              </label>
+              <label class="form-check-label">
+                <input id="localAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
+                Audio Tracks Mute
+              </label>
+            </div>
+          </form>
+        </section>
+        <section class="col-sm-6">
+          <video id="remoteVideo" autoplay controls></video>
+          <form action="">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="remoteVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
+                Video Tracks Pause
+              </label>
+              <label class="form-check-label">
+                <input id="remoteAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
+                Audio Tracks Mute
+              </label>
+            </div>
+          </form>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col-sm-12">
+          <hr>
+          <div class="card">
+            <div id="chatMessageHistory" class="card-blcok"></div>
+          </div>
+          <form>
+            <div class="form-group form-inline">
+              <label class="sr-only" for="chatMessageInput">Chat message</label>
+              <input id="chatMessageInput" class="form-control form-control-sm" type="text">
+              <button id="sendChatMessageButton" class="btn btn-sm">Send Message</button>
+            </div>
+          </form>
+        </section>
+      </div>
 
-const rtcListener = {
-  onInit(token) { console.log(`EVENT FIRED : onInit: ${token}`); },
-  onCreateChannel(channelId) {
-    console.log(`EVENT FIRED : onCreateChannel: ${channelId}`);
-    channelIdNoticeTitleElement.textContent = channelId;
-  },
-  onConnectChannel(channelId) { console.log(`EVENT FIRED : onConnectChannel ${channelId}`); },
-  onComplate() { console.log('EVENT FIRED : onComplate'); },
-  onDisplayUserMedia() {
-    localVideoTracksPauseCheckboxElement.checked = true;
-    localAudioTracksMuteCheckboxElement.checked = true;
-  },
-  onAddLocalStream(stream) { console.log(`EVENT FIRED : onAddLocalStream: ${stream}`); },
-  onAddRemoteStream(stream) {
-    console.log(`EVENT FIRED : onAddRemoteStream: ${stream}`);
-    remoteVideoTracksPauseCheckboxElement.checked = true;
-    remoteAudioTracksMuteCheckboxElement.checked = true;
-  },
-  onStateChange(state) { console.log(`EVENT FIRED : onStateChange: ${state}`); },
-  onDisconnectChannel() { console.log('EVENT FIRED : onDisconnectChannel'); },
-  onMessage(message) {
-    console.log(`EVENT FIRED : onMessage: ${message}`);
-    let chatParagraph;
-    chatParagraph = document.createElement('p');
-    chatParagraph.classList.add('card-text', 'remote');
-    chatParagraph.textContent = message;
-    chatMessageHistoryElement.appendChild(chatParagraph);
-  },
-  onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
-}
+      <div class="row">
+        <section class="col-sm-12">
+          <hr>
+          <div class="card">
+            <div id="settings" class="card-blcok"></div>
+          </div>
+          <form>
+            <div class="form-group form-inline">
+              <label class="sr-only" for="settings">Settings</label>
+              <input type="checkbox" id="useVideo" checked>useVideo
+              <input type="text" id="resolution_width" value="640">Width
+              <input type="text" id="resolution_height" value="480">Height
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
 
-//rtc.init({ userConfig: rtcConfig, userListeners: rtcListener });
+    <script src="../remon.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
 
-connectChannelButtonElement.addEventListener('click', (event) => {
-  console.log(`[App] Try to connect channel: ${channelIdInputElement.value}`);
-  rtc.connectChannel(channelIdInputElement.value);
-  event.preventDefault();
-}, false);
-
-disconnectButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to disconnect.');
-  if (rtc.disconnect)rtc.disconnect();
-  event.preventDefault();
-}, false);
-
-initButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to Init');
-  if (rtc.disconnect) rtc.disconnect();
-  rtcConfig.media={
-    audio: true,
-    video: {
-      width: {max: document.querySelector('#resolution_width').value},
-      height: {max: document.querySelector('#resolution_height').value}
-    }
-  };
-  rtc.init({ userConfig: rtcConfig, userListeners: rtcListener });
-  event.preventDefault();
-}, false);
-
-sendChatMessageButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to send message');
-  const message = chatMessageInputElement.value;
-  let chatParagraph;
-
-  if (message) {
-    chatParagraph = document.createElement('p');
-    chatParagraph.classList.add('card-text', 'text-xs-right', 'local');
-    chatParagraph.textContent = message;
-    chatMessageHistoryElement.appendChild(chatParagraph);
-    rtc.sendMessage(message);
-  }
-
-  event.preventDefault();
-}, false);
-
-localVideoTracksPauseCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to local video pause/unpase');
-  if (localVideoTracksPauseCheckboxElement.checked) {
-    rtc.pauseLocalVideo(true);
-  } else {
-    rtc.pauseLocalVideo(false);
-  }
-})
-
-localAudioTracksMuteCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to local audio mute/unmute');
-  if (localVideoTracksPauseCheckboxElement.checked) {
-    rtc.muteLocalAudio(true);
-  } else {
-    rtc.muteLocalAudio(false);
-  }
-})
-
-remoteVideoTracksPauseCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to remote video pause/unpase');
-  if (remoteVideoTracksPauseCheckboxElement.checked) {
-    rtc.pauseRemoteVideo(true);
-  } else {
-    rtc.pauseRemoteVideo(false);
-  }
-})
-
-remoteAudioTracksMuteCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to remote audio mute/unmute');
-  if (remoteVideoTracksPauseCheckboxElement.checked) {
-    rtc.muteRemoteAudio(true);
-  } else {
-    rtc.muteRemoteAudio(false);
-  }
-})
