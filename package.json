@@ -1,13 +1,13 @@
 {
   "name": "remon-browser-sdk",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "description": "RemoteMonster Browser SDK",
   "main": "remon.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "WebRTC",
+    "WebRTC", "Remote Monster", "remon"
     "RTC"
   ],
   "author": "REMOTEMONSTER",
