@@ -3,5 +3,5 @@
 - Document: https://docs.remotemonster.com/
 
 # Examples
-- Full:
-- Simple:
+- Full: examples/index.html
+- Simple: examples/simple.html
