@@ -13,7 +13,7 @@ notice폴더에 사용된 오픈소스 라이센스의 세부 내용이 담겨�
 - webrtc-adapter: BSD-3-Clause
 - platform.js: MIT
 
-## 사용
+## 사용법
 예제문서를 `gh-pages`에 퍼블리싱하기 위해 다음과 같이 사용 가능함
 
 ``` bash
