@@ -8,10 +8,12 @@
     "publish:examples": "gh-pages --dist examples"
   },
   "keywords": [
-    "WebRTC", "Remote Monster", "remon",
+    "WebRTC",
+    "RemoteMonster",
+    "remon",
     "RTC"
   ],
-  "author": "REMOTEMONSTER",
+  "author": "RemoteMonster",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
