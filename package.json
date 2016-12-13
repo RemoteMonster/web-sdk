@@ -4,7 +4,8 @@
   "description": "RemoteMonster Browser SDK",
   "main": "remon.min.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish:examples": "gh-pages --dist examples"
   },
   "keywords": [
     "WebRTC", "Remote Monster", "remon",
@@ -15,5 +16,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/RemoteMonster/Browser-SDK"
+  },
+  "devDependencies": {
+    "gh-pages": "^0.12.0"
   }
 }

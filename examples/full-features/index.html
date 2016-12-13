@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Remon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RemoteMonster Full Features Example</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+    <style>
+      video {
+        width: 40%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <section class="col-sm-12">
+          <h1 id="channelIdNoticeTitle" class="h3"></h1>
+          <hr>
+        </section>
+      </div>
+      <div class="row">
+        <section class="con-sm-12">
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="channelIdInput">Room Id</label>
+              <input id="channelIdInput" class="form-control form-control-sm" type="text">
+              <button id="initButton" class="btn btn-sm">Init</button>
+              <button id="connectChannelButton" class="btn btn-sm">Connect Channel</button>
+              <button id="disconnectButton" class="btn btn-sm">Disconnect</button>
+            </div>
+          </form>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col-sm-6">
+          <video id="localVideo" autoplay controls muted></video>
+          <form action="">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="localVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
+                Video Tracks Pause
+              </label>
+              <label class="form-check-label">
+                <input id="localAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
+                Audio Tracks Mute
+              </label>
+            </div>
+          </form>
+        </section>
+        <section class="col-sm-6">
+          <video id="remoteVideo" autoplay controls></video>
+          <form action="">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input id="remoteVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
+                Video Tracks Pause
+              </label>
+              <label class="form-check-label">
+                <input id="remoteAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
+                Audio Tracks Mute
+              </label>
+            </div>
+          </form>
+        </section>
+      </div>
+      <div class="row">
+        <section class="col-sm-12">
+          <hr>
+          <div class="card">
+            <div id="chatMessageHistory" class="card-blcok"></div>
+          </div>
+          <form>
+            <div class="form-group form-inline">
+              <label class="sr-only" for="chatMessageInput">Chat message</label>
+              <input id="chatMessageInput" class="form-control form-control-sm" type="text">
+              <button id="sendChatMessageButton" class="btn btn-sm">Send Message</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div class="row">
+        <section class="col-sm-12">
+          <hr>
+          <div class="card">
+            <div id="settings" class="card-blcok"></div>
+          </div>
+          <form>
+            <div class="form-group form-inline">
+              <label class="sr-only" for="settings">Settings</label>
+              <input type="checkbox" id="useVideo" checked>useVideo
+              <input type="text" id="resolution_width" value="640">Width
+              <input type="text" id="resolution_height" value="480">Height
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <script src="../../remon.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
