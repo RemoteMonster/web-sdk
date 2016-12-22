@@ -13,7 +13,6 @@
 
   <script src="../../remon.min.js"></script>
   <script>
-  const remon = Remon;
   let isConnected = false;
 
   const config = {
@@ -25,8 +24,7 @@
       remote: '#remoteVideo'
     }
   };
-  remon.init({ userConfig: config });
-
+  const remon = new Remon({config: config});
   function start(){
     if (isConnected === false){
       isConnected = true;
