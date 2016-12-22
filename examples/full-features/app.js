@@ -1,143 +1,141 @@
 /* global Remon */
 /* eslint-disable no-console */
 
-const channelIdNoticeTitleElement = document.querySelector('#channelIdNoticeTitle');
-const connectChannelButtonElement = document.querySelector('#connectChannelButton');
-const disconnectButtonElement = document.querySelector('#disconnectButton');
-const initButtonElement = document.querySelector('#initButton');
-const localVideoElement = document.querySelector('#localVideo');
-const remoteVideoElement = document.querySelector('#remoteVideo');
-const channelIdInputElement = document.querySelector('#channelIdInput');
-const localVideoTracksPauseCheckboxElement = document.querySelector('#localVideoTracksPauseCheckbox');
-const localAudioTracksMuteCheckboxElement = document.querySelector('#localAudioTracksMuteCheckbox');
-const remoteVideoTracksPauseCheckboxElement = document.querySelector('#remoteVideoTracksPauseCheckbox');
-const remoteAudioTracksMuteCheckboxElement = document.querySelector('#remoteAudioTracksMuteCheckbox');
-const chatMessageHistoryElement = document.querySelector('#chatMessageHistory');
-const chatMessageInputElement = document.querySelector('#chatMessageInput');
-const sendChatMessageButtonElement = document.querySelector('#sendChatMessageButton');
-const rtc = Remon;
+const initButton1 = document.querySelector("#initButton1");
+const connectChannelButtonElement1 = document.querySelector('#connectChannelButton1');
+const disconnectButtonElement1 = document.querySelector('#disconnectButton1');
+const localVideoElement1 = document.querySelector('#localVideo1');
+const remoteVideoElement1 = document.querySelector('#remoteVideo1');
+const channelIdInputElement1 = document.querySelector('#channelIdInput1');
 
-const rtcConfig = {
+const initButton2 = document.querySelector("#initButton2");
+const connectChannelButtonElement2 = document.querySelector('#connectChannelButton2');
+const disconnectButtonElement2 = document.querySelector('#disconnectButton2');
+const remoteVideoElement2 = document.querySelector('#remoteVideo2');
+const channelIdInputElement2 = document.querySelector('#channelIdInput2');
+
+const rtcConfig1 = {
   credential: {
-    key: '1234567890',
-    serviceId: 'SERVICEID1'
+    key: 'e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03',
+    serviceId: 'simpleapp'
   },
   view: {
-    local: '#localVideo',
-    remote: '#remoteVideo'
+    local: '#localVideo1',
+    remote: '#remoteVideo1'
   },
   sdk: {
     logLevel: 'DEBUG',
   },
 }
+const rtcConfig2 = {
+  credential: {
+    key: 'e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03',
+    serviceId: 'simpleapp'
+  },
+  view: {
+    local: '#localVideo1',
+    remote: '#remoteVideo2'
+  },
+  sdk: {
+    logLevel: 'DEBUG',
+  },
+}
+rtcConfig1.media = {
+  audio: true,
+  video: {
+    width: {max: '640'},
+    height: {max: '480'},
+    codec: 'H264',
+  }
+};
+rtcConfig2.media = {
+  audio: true,
+  video: {
+    width: {max: '640'},
+    height: {max: '480'},
+    codec: 'H264',
+  }
+};
+var r1;
+var r2;
+initButton1.addEventListener('click', (event) =>{
+  console.log("init button1");
+  rtcConfig1.media.video.width.max = document.querySelector('#width1').value;
+  rtcConfig1.media.video.height.max = document.querySelector('#height1').value;
+  rtcConfig1.media.video.codec = document.querySelector('#videoCodec1').value;
+  rtcConfig1.media.video.frameRate = document.querySelector('#frameRate1').value;
+  rtcConfig1.media.video.facingMode = (document.querySelector('#facingMode1').value)? "user": "environment";
+  rtcConfig1.media.video = document.querySelector('#useVideo1').checked;
+  console.log(rtcConfig1);
+  r1 = new Remon({config: rtcConfig1, listener: rtcListener});
+  event.preventDefault();
+}, false);
+initButton2.addEventListener('click', (event) =>{
+  console.log("init button2");
+  rtcConfig2.media.video.width.max = document.querySelector('#width2').value;
+  rtcConfig2.media.video.height.max = document.querySelector('#height2').value;
+  rtcConfig2.media.video.codec = document.querySelector('#videoCodec2').value;
+  rtcConfig2.media.video.frameRate = document.querySelector('#frameRate2').value;
+  rtcConfig2.media.video.facingMode = (document.querySelector('#facingMode2').value)? "user": "environment";
+  rtcConfig2.media.video = document.querySelector('#useVideo2').checked;
+  console.log(rtcConfig2);
+  r2 = new Remon({config: rtcConfig2});
+  event.preventDefault();
+}, false);
+connectChannelButtonElement1.addEventListener('click', (event) => {
+  console.log(`[App] Try to connect channel: ${channelIdInputElement1.value}`);
+  r1.connectChannel(channelIdInputElement1.value);
+  event.preventDefault();
+}, false);
+
+connectChannelButtonElement2.addEventListener('click', (event) => {
+  console.log(`[App] Try to connect channel: ${channelIdInputElement2.value}`);
+  r2.connectChannel(channelIdInputElement2.value);
+  event.preventDefault();
+}, false);
+
+disconnectButtonElement1.addEventListener('click', (event) => {
+  console.log('[App] Try to disconnect.');
+  r1.close();
+  //event.preventDefault();
+}, false);
+disconnectButtonElement2.addEventListener('click', (event) => {
+  console.log('[App] Try to disconnect.');
+  r2.close();
+  //event.preventDefault();
+}, false);
 
 const rtcListener = {
   onInit(token) { console.log(`EVENT FIRED : onInit: ${token}`); },
   onCreateChannel(channelId) {
     console.log(`EVENT FIRED : onCreateChannel: ${channelId}`);
-    channelIdNoticeTitleElement.textContent = channelId;
   },
   onConnectChannel(channelId) { console.log(`EVENT FIRED : onConnectChannel ${channelId}`); },
-  onComplate() { console.log('EVENT FIRED : onComplate'); },
-  onDisplayUserMedia() {
-    localVideoTracksPauseCheckboxElement.checked = true;
-    localAudioTracksMuteCheckboxElement.checked = true;
-  },
+  onComplete() { console.log('EVENT FIRED : onComplete'); },
+  // onDisplayUserMedia() {
+  //   localVideoTracksPauseCheckboxElement.checked = true;
+  //   localAudioTracksMuteCheckboxElement.checked = true;
+  // },
   onAddLocalStream(stream) { console.log(`EVENT FIRED : onAddLocalStream: ${stream}`); },
-  onAddRemoteStream(stream) {
-    console.log(`EVENT FIRED : onAddRemoteStream: ${stream}`);
-    remoteVideoTracksPauseCheckboxElement.checked = true;
-    remoteAudioTracksMuteCheckboxElement.checked = true;
-  },
+  // onAddRemoteStream(stream) {
+  //   console.log(`EVENT FIRED : onAddRemoteStream: ${stream}`);
+  //   remoteVideoTracksPauseCheckboxElement.checked = true;
+  //   remoteAudioTracksMuteCheckboxElement.checked = true;
+  // },
   onStateChange(state) { console.log(`EVENT FIRED : onStateChange: ${state}`); },
   onDisconnectChannel() { console.log('EVENT FIRED : onDisconnectChannel'); },
-  onMessage(message) {
-    console.log(`EVENT FIRED : onMessage: ${message}`);
-    let chatParagraph;
-    chatParagraph = document.createElement('p');
-    chatParagraph.classList.add('card-text', 'remote');
-    chatParagraph.textContent = message;
-    chatMessageHistoryElement.appendChild(chatParagraph);
-  },
+  // onMessage(message) {
+  //   console.log(`EVENT FIRED : onMessage: ${message}`);
+  //   let chatParagraph;
+  //   chatParagraph = document.createElement('p');
+  //   chatParagraph.classList.add('card-text', 'remote');
+  //   chatParagraph.textContent = message;
+  //   chatMessageHistoryElement.appendChild(chatParagraph);
+  // },
   onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
+  onStat(result){
+    console.log(result);
+  },
 }
 
 //rtc.init({ userConfig: rtcConfig, userListeners: rtcListener });
-
-connectChannelButtonElement.addEventListener('click', (event) => {
-  console.log(`[App] Try to connect channel: ${channelIdInputElement.value}`);
-  rtc.connectChannel(channelIdInputElement.value);
-  event.preventDefault();
-}, false);
-
-disconnectButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to disconnect.');
-  if (rtc.disconnect)rtc.disconnect();
-  event.preventDefault();
-}, false);
-
-initButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to Init');
-  if (rtc.disconnect) rtc.disconnect();
-  rtcConfig.media={
-    audio: true,
-    video: {
-      width: {max: document.querySelector('#resolution_width').value},
-      height: {max: document.querySelector('#resolution_height').value}
-    }
-  };
-  rtc.init({ userConfig: rtcConfig, userListeners: rtcListener });
-  event.preventDefault();
-}, false);
-
-sendChatMessageButtonElement.addEventListener('click', (event) => {
-  console.log('[App] Try to send message');
-  const message = chatMessageInputElement.value;
-  let chatParagraph;
-
-  if (message) {
-    chatParagraph = document.createElement('p');
-    chatParagraph.classList.add('card-text', 'text-xs-right', 'local');
-    chatParagraph.textContent = message;
-    chatMessageHistoryElement.appendChild(chatParagraph);
-    rtc.sendMessage(message);
-  }
-
-  event.preventDefault();
-}, false);
-
-localVideoTracksPauseCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to local video pause/unpase');
-  if (localVideoTracksPauseCheckboxElement.checked) {
-    rtc.pauseLocalVideo(true);
-  } else {
-    rtc.pauseLocalVideo(false);
-  }
-})
-
-localAudioTracksMuteCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to local audio mute/unmute');
-  if (localVideoTracksPauseCheckboxElement.checked) {
-    rtc.muteLocalAudio(true);
-  } else {
-    rtc.muteLocalAudio(false);
-  }
-})
-
-remoteVideoTracksPauseCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to remote video pause/unpase');
-  if (remoteVideoTracksPauseCheckboxElement.checked) {
-    rtc.pauseRemoteVideo(true);
-  } else {
-    rtc.pauseRemoteVideo(false);
-  }
-})
-
-remoteAudioTracksMuteCheckboxElement.addEventListener('click', (event) => {
-  console.log('[App] Try to remote audio mute/unmute');
-  if (remoteVideoTracksPauseCheckboxElement.checked) {
-    rtc.muteRemoteAudio(true);
-  } else {
-    rtc.muteRemoteAudio(false);
-  }
-})

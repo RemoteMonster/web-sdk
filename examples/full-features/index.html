@@ -2,14 +2,31 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Remon</title>
+    <title>Remon Test for multichat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RemoteMonster Full Features Example</title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
     <style>
       video {
-        width: 40%;
+        width: 90%;
+      }
+      .gray{
+        -webkit-filter: grayscale(1);
+        filter: grayscale(1);
+        transform: rotateY(180deg);
+        -webkit-transform:rotateY(180deg); /* Safari and Chrome */
+        -moz-transform:rotateY(180deg);
+      }
+      #video-container1, #video-container2, #video-container3 {
+        margin: 0em auto 0;
+        width:30%;
+        padding: 1em;
+        background: white;
+        -webkit-box-shadow: 0 1px 5px #D9D9D9;
+        -moz-box-shadow: 0 1px 5px #D9D9D9;
+        -ms-box-shadow: 0 1px 5px #D9D9D9;
+        -o-box-shadow: 0 1px 5px #D9D9D9;
+        box-shadow: 0 1px 5px #D9D9D9;
+        float:left;
       }
     </style>
   </head>
@@ -18,7 +35,78 @@
     <div class="container">
       <div class="row">
         <section class="col-sm-12">
-          <h1 id="channelIdNoticeTitle" class="h3"></h1>
+          <div id="video-container">
+            <div id="video-container1">
+              L: <video id="localVideo1" class="gray" autoplay controls muted></video>
+            </div>
+            <div id="video-container2">
+              R1: <video id="remoteVideo1" autoplay controls muted></video>
+            </div>
+            <div id="video-container3">
+              R2: <video id="remoteVideo2" autoplay controls muted></video>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="row">
+        <section class="con-sm-12">
+          <hr>
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="channelIdInput">Room Id</label>
+              <input id="channelIdInput1" class="form-control form-control-sm" type="text">
+              <button id="initButton1" class="btn btn-sm">Init</button>
+              <button id="connectChannelButton1" class="btn btn-sm">Connect</button>
+              <button id="disconnectButton1" class="btn btn-sm">Close</button>
+            </div>
+          </form>
+          Video:<input type="checkbox" id="useVideo1" checked>
+          codec:<select id="videoCodec1">
+            <option value="H264">H.264</option>
+            <option value="VP8">VP8</option>
+            <option value="VP9">VP9</option>
+          </select>
+          width:<select id="width1">
+            <option value="640">640</option>
+            <option value="1920">1920</option>
+            <option value="1080">1080</option>
+            <option value="800">800</option>
+            <option value="720">720</option>
+            <option value="600">600</option>
+            <option value="480">480</option>
+            <option value="450">450</option>
+            <option value="360">360</option>
+            <option value="320">320</option>
+            <option value="240">240</option>
+            <option value="176">176</option>
+            <option value="144">144</option>
+            <option value="120">120</option>
+          </select>
+          height:<select id="height1">
+            <option value="480">480</option>
+            <option value="1920">1920</option>
+            <option value="1080">1080</option>
+            <option value="800">800</option>
+            <option value="720">720</option>
+            <option value="640">640</option>
+            <option value="600">600</option>
+            <option value="450">450</option>
+            <option value="360">360</option>
+            <option value="320">320</option>
+            <option value="240">240</option>
+            <option value="176">176</option>
+            <option value="144">144</option>
+            <option value="120">120</option>
+          </select>
+          frameRate:<input id="frameRate1" value="15">
+          facingMode(front):<input type="checkbox" id="facingMode1" checked>
+        </section>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <section class="col-sm-12">
           <hr>
         </section>
       </div>
@@ -27,76 +115,53 @@
           <form class="form-inline">
             <div class="form-group">
               <label for="channelIdInput">Room Id</label>
-              <input id="channelIdInput" class="form-control form-control-sm" type="text">
-              <button id="initButton" class="btn btn-sm">Init</button>
-              <button id="connectChannelButton" class="btn btn-sm">Connect Channel</button>
-              <button id="disconnectButton" class="btn btn-sm">Disconnect</button>
+              <input id="channelIdInput2" class="form-control form-control-sm" type="text">
+              <button id="initButton2" class="btn btn-sm">Init</button>
+              <button id="connectChannelButton2" class="btn btn-sm">Connect</button>
+              <button id="disconnectButton2" class="btn btn-sm">Close</button>
             </div>
           </form>
-        </section>
-      </div>
-      <div class="row">
-        <section class="col-sm-6">
-          <video id="localVideo" autoplay controls muted></video>
-          <form action="">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="localVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
-                Video Tracks Pause
-              </label>
-              <label class="form-check-label">
-                <input id="localAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
-                Audio Tracks Mute
-              </label>
-            </div>
-          </form>
-        </section>
-        <section class="col-sm-6">
-          <video id="remoteVideo" autoplay controls></video>
-          <form action="">
-            <div class="form-check">
-              <label class="form-check-label">
-                <input id="remoteVideoTracksPauseCheckbox" type="checkbox" class="form-check-input">
-                Video Tracks Pause
-              </label>
-              <label class="form-check-label">
-                <input id="remoteAudioTracksMuteCheckbox" type="checkbox" class="form-check-input">
-                Audio Tracks Mute
-              </label>
-            </div>
-          </form>
-        </section>
-      </div>
-      <div class="row">
-        <section class="col-sm-12">
+          Video:<input type="checkbox" id="useVideo2" checked>
+          codec:<select id="videoCodec2">
+            <option value="H264">H.264</option>
+            <option value="VP8">VP8</option>
+            <option value="VP9">VP9</option>
+          </select>
+          width:<select id="width2">
+            <option value="640">640</option>
+            <option value="1920">1920</option>
+            <option value="1080">1080</option>
+            <option value="800">800</option>
+            <option value="720">720</option>
+            <option value="600">600</option>
+            <option value="480">480</option>
+            <option value="450">450</option>
+            <option value="360">360</option>
+            <option value="320">320</option>
+            <option value="240">240</option>
+            <option value="176">176</option>
+            <option value="144">144</option>
+            <option value="120">120</option>
+          </select>
+          height:<select id="height2">
+            <option value="480">480</option>
+            <option value="1920">1920</option>
+            <option value="1080">1080</option>
+            <option value="800">800</option>
+            <option value="720">720</option>
+            <option value="640">640</option>
+            <option value="600">600</option>
+            <option value="450">450</option>
+            <option value="360">360</option>
+            <option value="320">320</option>
+            <option value="240">240</option>
+            <option value="176">176</option>
+            <option value="144">144</option>
+            <option value="120">120</option>
+          </select>
+          frameRate:<input id="frameRate2" value="15">
+          facingMode(front):<input type="checkbox" id="facingMode2" checked>
           <hr>
-          <div class="card">
-            <div id="chatMessageHistory" class="card-blcok"></div>
-          </div>
-          <form>
-            <div class="form-group form-inline">
-              <label class="sr-only" for="chatMessageInput">Chat message</label>
-              <input id="chatMessageInput" class="form-control form-control-sm" type="text">
-              <button id="sendChatMessageButton" class="btn btn-sm">Send Message</button>
-            </div>
-          </form>
-        </section>
-      </div>
-
-      <div class="row">
-        <section class="col-sm-12">
-          <hr>
-          <div class="card">
-            <div id="settings" class="card-blcok"></div>
-          </div>
-          <form>
-            <div class="form-group form-inline">
-              <label class="sr-only" for="settings">Settings</label>
-              <input type="checkbox" id="useVideo" checked>useVideo
-              <input type="text" id="resolution_width" value="640">Width
-              <input type="text" id="resolution_height" value="480">Height
-            </div>
-          </form>
         </section>
       </div>
     </div>
