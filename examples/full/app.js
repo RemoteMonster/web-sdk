@@ -23,8 +23,8 @@ const rtcConfig1 = {
     local: '#localVideo1',
     remote: '#remoteVideo1'
   },
-  sdk: {
-    logLevel: 'DEBUG',
+  dev: {
+    logLevel: 'VERBOSE',
   },
 }
 const rtcConfig2 = {
@@ -36,7 +36,7 @@ const rtcConfig2 = {
     local: '#localVideo1',
     remote: '#remoteVideo2'
   },
-  sdk: {
+  dev: {
     logLevel: 'DEBUG',
   },
 }
@@ -66,7 +66,7 @@ initButton1.addEventListener('click', (event) =>{
   rtcConfig1.media.video.frameRate = document.querySelector('#frameRate1').value;
   rtcConfig1.media.video.facingMode = (document.querySelector('#facingMode1').value)? "user": "environment";
   rtcConfig1.media.video = document.querySelector('#useVideo1').checked;
-  console.log(rtcConfig1);
+  console.log("config:"+JSON.stringify(rtcConfig1));
   r1 = new Remon({config: rtcConfig1, listener: rtcListener});
   event.preventDefault();
 }, false);
@@ -78,7 +78,7 @@ initButton2.addEventListener('click', (event) =>{
   rtcConfig2.media.video.frameRate = document.querySelector('#frameRate2').value;
   rtcConfig2.media.video.facingMode = (document.querySelector('#facingMode2').value)? "user": "environment";
   rtcConfig2.media.video = document.querySelector('#useVideo2').checked;
-  console.log(rtcConfig2);
+  console.log("config:"+JSON.stringify(rtcConfig1));
   r2 = new Remon({config: rtcConfig2});
   event.preventDefault();
 }, false);
@@ -134,7 +134,9 @@ const rtcListener = {
   // },
   onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
   onStat(result){
-    console.log(result);
+    const stat = "l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
+    document.querySelector('#log').innerHTML += stat;
+    //console.log(result);
   },
 }
 
