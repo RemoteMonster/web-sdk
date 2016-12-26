@@ -24,7 +24,7 @@ const rtcConfig1 = {
     remote: '#remoteVideo1'
   },
   dev: {
-    logLevel: 'VERBOSE',
+    logLevel: 'DEBUG',
   },
 }
 const rtcConfig2 = {
@@ -46,7 +46,8 @@ rtcConfig1.media = {
     width: {max: '640'},
     height: {max: '480'},
     codec: 'H264',
-  }
+  },
+  record: false,
 };
 rtcConfig2.media = {
   audio: true,
@@ -54,7 +55,8 @@ rtcConfig2.media = {
     width: {max: '640'},
     height: {max: '480'},
     codec: 'H264',
-  }
+  },
+  record: false,
 };
 var r1;
 var r2;
@@ -97,12 +99,12 @@ connectChannelButtonElement2.addEventListener('click', (event) => {
 disconnectButtonElement1.addEventListener('click', (event) => {
   console.log('[App] Try to disconnect.');
   r1.close();
-  //event.preventDefault();
+  event.preventDefault();
 }, false);
 disconnectButtonElement2.addEventListener('click', (event) => {
   console.log('[App] Try to disconnect.');
   r2.close();
-  //event.preventDefault();
+  event.preventDefault();
 }, false);
 
 const rtcListener = {
@@ -112,32 +114,17 @@ const rtcListener = {
   },
   onConnectChannel(channelId) { console.log(`EVENT FIRED : onConnectChannel ${channelId}`); },
   onComplete() { console.log('EVENT FIRED : onComplete'); },
-  // onDisplayUserMedia() {
-  //   localVideoTracksPauseCheckboxElement.checked = true;
-  //   localAudioTracksMuteCheckboxElement.checked = true;
-  // },
   onAddLocalStream(stream) { console.log(`EVENT FIRED : onAddLocalStream: ${stream}`); },
-  // onAddRemoteStream(stream) {
-  //   console.log(`EVENT FIRED : onAddRemoteStream: ${stream}`);
-  //   remoteVideoTracksPauseCheckboxElement.checked = true;
-  //   remoteAudioTracksMuteCheckboxElement.checked = true;
-  // },
   onStateChange(state) { console.log(`EVENT FIRED : onStateChange: ${state}`); },
   onDisconnectChannel() { console.log('EVENT FIRED : onDisconnectChannel'); },
-  // onMessage(message) {
-  //   console.log(`EVENT FIRED : onMessage: ${message}`);
-  //   let chatParagraph;
-  //   chatParagraph = document.createElement('p');
-  //   chatParagraph.classList.add('card-text', 'remote');
-  //   chatParagraph.textContent = message;
-  //   chatMessageHistoryElement.appendChild(chatParagraph);
-  // },
   onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
   onStat(result){
     const stat = "l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
     document.querySelector('#log').innerHTML += stat;
-    //console.log(result);
   },
+  onSearch(result){
+    document.querySelector('#log').innerHTML += result;
+  }
 }
 
 //rtc.init({ userConfig: rtcConfig, userListeners: rtcListener });
