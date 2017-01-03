@@ -43,18 +43,20 @@ const rtcConfig2 = {
 rtcConfig1.media = {
   audio: true,
   video: {
-    width: {max: '640'},
-    height: {max: '480'},
+    width: {max: '320', min: '320'},
+    height: {max: '240', min: '240'},
     codec: 'H264',
+    frameRate: 15,
   },
-  record: false,
+  record: true,
 };
 rtcConfig2.media = {
   audio: true,
   video: {
-    width: {max: '640'},
-    height: {max: '480'},
+    width: {max: '160', min: '160'},
+    height: {max: '120', min: '120'},
     codec: 'H264',
+    frameRate: 15,
   },
   record: false,
 };
@@ -62,25 +64,34 @@ var r1;
 var r2;
 initButton1.addEventListener('click', (event) =>{
   console.log("init button1");
-  rtcConfig1.media.video.width.max = document.querySelector('#width1').value;
-  rtcConfig1.media.video.height.max = document.querySelector('#height1').value;
-  rtcConfig1.media.video.codec = document.querySelector('#videoCodec1').value;
-  rtcConfig1.media.video.frameRate = document.querySelector('#frameRate1').value;
-  rtcConfig1.media.video.facingMode = (document.querySelector('#facingMode1').value)? "user": "environment";
-  rtcConfig1.media.video = document.querySelector('#useVideo1').checked;
+  if (!document.querySelector('#useVideo1').checked){
+    rtcConfig1.media.video = false;
+  }else{
+    rtcConfig1.media.video.width.idea = document.querySelector('#width1').value;
+    rtcConfig1.media.video.height.idea = document.querySelector('#height1').value;
+    rtcConfig1.media.video.codec = document.querySelector('#videoCodec1').value;
+    rtcConfig1.media.video.frameRate.ideal = document.querySelector('#frameRate1').value;
+    rtcConfig1.media.video.frameRate.max = 30;
+    rtcConfig1.media.video.facingMode = (document.querySelector('#facingMode1').value)? "user": "environment";
+  }
+
   console.log("config:"+JSON.stringify(rtcConfig1));
   r1 = new Remon({config: rtcConfig1, listener: rtcListener});
   event.preventDefault();
 }, false);
 initButton2.addEventListener('click', (event) =>{
   console.log("init button2");
-  rtcConfig2.media.video.width.max = document.querySelector('#width2').value;
-  rtcConfig2.media.video.height.max = document.querySelector('#height2').value;
-  rtcConfig2.media.video.codec = document.querySelector('#videoCodec2').value;
-  rtcConfig2.media.video.frameRate = document.querySelector('#frameRate2').value;
-  rtcConfig2.media.video.facingMode = (document.querySelector('#facingMode2').value)? "user": "environment";
-  rtcConfig2.media.video = document.querySelector('#useVideo2').checked;
-  console.log("config:"+JSON.stringify(rtcConfig1));
+  if (!document.querySelector('#useVideo2').checked){
+    rtcConfig2.media.video = false;
+  }else{
+    rtcConfig2.media.video.width.idea = document.querySelector('#width2').value;
+    rtcConfig2.media.video.height.idea = document.querySelector('#height2').value;
+    rtcConfig2.media.video.codec = document.querySelector('#videoCodec2').value;
+    rtcConfig2.media.video.frameRate.ideal = document.querySelector('#frameRate2').value;
+    rtcConfig2.media.video.frameRate.max = 30;
+    rtcConfig2.media.video.facingMode = (document.querySelector('#facingMode2').value)? "user": "environment";
+  }
+  console.log("config:"+JSON.stringify(rtcConfig2));
   r2 = new Remon({config: rtcConfig2});
   event.preventDefault();
 }, false);
