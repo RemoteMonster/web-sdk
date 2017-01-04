@@ -24,7 +24,7 @@ const rtcConfig1 = {
     remote: '#remoteVideo1'
   },
   dev: {
-    logLevel: 'DEBUG',
+    logLevel: 'VERBOSE',
   },
 }
 const rtcConfig2 = {
@@ -67,8 +67,8 @@ initButton1.addEventListener('click', (event) =>{
   if (!document.querySelector('#useVideo1').checked){
     rtcConfig1.media.video = false;
   }else{
-    rtcConfig1.media.video.width.idea = document.querySelector('#width1').value;
-    rtcConfig1.media.video.height.idea = document.querySelector('#height1').value;
+    rtcConfig1.media.video.width.ideal = document.querySelector('#width1').value;
+    rtcConfig1.media.video.height.ideal = document.querySelector('#height1').value;
     rtcConfig1.media.video.codec = document.querySelector('#videoCodec1').value;
     rtcConfig1.media.video.frameRate.ideal = document.querySelector('#frameRate1').value;
     rtcConfig1.media.video.frameRate.max = 30;
@@ -84,8 +84,8 @@ initButton2.addEventListener('click', (event) =>{
   if (!document.querySelector('#useVideo2').checked){
     rtcConfig2.media.video = false;
   }else{
-    rtcConfig2.media.video.width.idea = document.querySelector('#width2').value;
-    rtcConfig2.media.video.height.idea = document.querySelector('#height2').value;
+    rtcConfig2.media.video.width.ideal = document.querySelector('#width2').value;
+    rtcConfig2.media.video.height.ideal = document.querySelector('#height2').value;
     rtcConfig2.media.video.codec = document.querySelector('#videoCodec2').value;
     rtcConfig2.media.video.frameRate.ideal = document.querySelector('#frameRate2').value;
     rtcConfig2.media.video.frameRate.max = 30;
