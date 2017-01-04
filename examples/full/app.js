@@ -129,6 +129,7 @@ const rtcListener = {
   onStateChange(state) { console.log(`EVENT FIRED : onStateChange: ${state}`); },
   onDisconnectChannel() { console.log('EVENT FIRED : onDisconnectChannel'); },
   onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
+  onDisplayUserMedia(stream) { console.log('event fired: stream');},
   onStat(result){
     const stat = "l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
     document.querySelector('#log').innerHTML += stat;

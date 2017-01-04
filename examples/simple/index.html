@@ -24,7 +24,23 @@
       remote: '#remoteVideo'
     }
   };
-  const remon = new Remon({config: config});
+const rtcListener = {
+  onInit(token) { console.log(`EVENT FIRED : onInit: ${token}`); },
+  onCreateChannel(channelId) {
+    console.log(`EVENT FIRED : onCreateChannel: ${channelId}`);
+  },
+  onConnectChannel(channelId) { console.log(`EVENT FIRED : onConnectChannel ${channelId}`); },
+  onComplete() { console.log('EVENT FIRED : onComplete'); },
+  onAddLocalStream(stream) { console.log(`EVENT FIRED : onAddLocalStream: ${stream}`); },
+  onStateChange(state) { console.log(`EVENT FIRED : onStateChange: ${state}`); },
+  onDisconnectChannel() { console.log('EVENT FIRED : onDisconnectChannel'); },
+  onError(error) { console.log(`EVENT FIRED : onError: ${error}`); },
+  onStat(result){
+  },
+  onSearch(result){
+  }
+}
+  const remon = new Remon({config: config, listener: rtcListener});
   function start(){
     if (isConnected === false){
       isConnected = true;
