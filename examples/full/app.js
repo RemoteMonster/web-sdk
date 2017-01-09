@@ -58,16 +58,19 @@ const rtcListener = {
   onStateChange(state) {
     l(`EVENT FIRED : onStateChange: ${state}`);
     if (state == 'CLOSE'){
-      toggleButton();
+      if (!bored)toggleButton();
     }else if(state == 'FAIL'){
-      toggleButton();
+      if (!bored)toggleButton();
     }
   },
   onDisconnectChannel() {
     l('EVENT FIRED : onDisconnectChannel');
-    toggleButton();
+    if (!bored)toggleButton();
   },
-  onError(error) { l(`EVENT FIRED : onError: ${error}`); },
+  onError(error) {
+    l(`EVENT FIRED : onError: ${error}`);
+    if (!bored)toggleButton();
+  },
   onDisplayUserMedia(stream) { l('event fired: stream');},
   onStat(result){
     const stat = "State: l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
@@ -81,7 +84,7 @@ const rtcListener = {
 closeButton.addEventListener('click', (event) => {
   console.log('[App] Try to disconnect.');
   r1.close();
-  toggleButton();
+  if (!bored)toggleButton();
   event.preventDefault();
 }, false);
 
@@ -171,10 +174,10 @@ const rtcListener0 = {
     for( var ch_i=0;ch_i<resultObj.length; ch_i++){
       if (resultObj[ch_i].status==="WAIT" && roomName.trim() != resultObj[ch_i].id.trim()){
         var resultRoomName = resultObj[ch_i].id;
-        var createTime = new Date(resultObj[ch_i].createTime).toDateString();
+        var createTime = new Date(resultObj[ch_i].createTime).toTimeString();
         search_list.innerHTML += "<div class='mdl-list__item' style='float:left;'>";
         search_list.innerHTML += "<span class='mdl-list__item-primary-content'>";
-        search_list.innerHTML += "&nbsp;&nbsp;<span><button class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent' onclick='connectRoom(\""+resultRoomName+"\")'><i class='material-icons mdl-list__item-icon'>person</i>"+createTime+"&nbsp;&nbsp;- "+resultRoomName+"</button></span>";
+        search_list.innerHTML += "&nbsp;&nbsp;<span><button class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent' onclick='connectRoom(\""+resultRoomName+"\")'><i class='material-icons mdl-list__item-icon'>person</i>"+createTime+"&nbsp;- "+resultRoomName+"</button></span>";
         search_list.innerHTML += "</span></div>";
       }
     }
