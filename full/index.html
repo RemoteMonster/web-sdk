@@ -126,14 +126,15 @@
              <h3 class="mdl-card__title-text">Connect</h3>
           </div>
           <div class="mdl-card__supporting-text">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:90px;float:left;" >
-              <input id="channelIdInput1" class="mdl-textfield__input" value="demo">
-              <label class="mdl-textfield__label" for="channelIdInput1"><b>RoomId</b></label>
+            <div style="float:none;">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:150px;" >
+                <input id="channelIdInput1" class="mdl-textfield__input" value="demo">
+                <label class="mdl-textfield__label" for="channelIdInput1"><b>방 이름을 입력하세요!</b></label>
+              </div>
+              <button id="createButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" >Create room</button>
+              <button id="exitButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="visibility:hidden;">Exit</button>
             </div>
-            <button id="createButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" >Create room</button>
-            <button id="exitButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="visibility:hidden;">Exit</button>
-            <br>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:60px;" >
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width:60px;clear:left;" >
               <input id="frameRate1" class="mdl-textfield__input" value="15">
               <label class="mdl-textfield__label" for="frameRate1">framerate</label>
             </div>
