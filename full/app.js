@@ -11,6 +11,8 @@ const channelIdInputElement1 = document.querySelector('#channelIdInput1');
 const logElement = document.querySelector('#log');
 let appTitleElement = document.querySelector('#appTitle');
 const createButton = document.querySelector('#createButton');
+var isInitStatusCalled =false;
+var isOnDisplayUserMediaCalled = false;
 var r0;
 var r1;
 
@@ -40,7 +42,6 @@ const rtcConfig1 = {
 const rtcListener = {
   onInit(token) {
     l(`EVENT FIRED : onInit: ${token}`);
-    r1.connectChannel(roomName);
   },
   onCreateChannel(channelId) {
     l(`EVENT FIRED : onCreateChannel: ${channelId}`);
@@ -54,13 +55,20 @@ const rtcListener = {
     l('EVENT FIRED : onComplete');
     appTitleElement.innerHTML = roomName+" - "+ "Join completed";
   },
-  onAddLocalStream(stream) { l(`EVENT FIRED : onAddLocalStream: ${stream}`); },
+  onAddLocalStream(stream) {
+    l(`EVENT FIRED : onAddLocalStream: ${stream}`);
+  },
   onStateChange(state) {
     l(`EVENT FIRED : onStateChange: ${state}`);
     if (state == 'CLOSE'){
       if (!bored)toggleButton();
     }else if(state == 'FAIL'){
       if (!bored)toggleButton();
+    }else if (state == 'INIT'){
+      isInitStatusCalled = true;
+      if (isOnDisplayUserMediaCalled){
+        r1.connectChannel(roomName);
+      }
     }
   },
   onDisconnectChannel() {
@@ -69,9 +77,16 @@ const rtcListener = {
   },
   onError(error) {
     l(`EVENT FIRED : onError: ${error}`);
+    l(error);
     if (!bored)toggleButton();
   },
-  onDisplayUserMedia(stream) { l('event fired: stream');},
+  onDisplayUserMedia(stream) {
+    l('event fired: onDisplayUserMedia');
+    isOnDisplayUserMediaCalled = true;
+    if (isInitStatusCalled){
+      r1.connectChannel(roomName);
+    }
+  },
   onStat(result){
     const stat = "State: l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
     l(stat);

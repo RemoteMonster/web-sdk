@@ -53,13 +53,13 @@
          float:left;
       }
       .log_popup{
-        background : white; filter: alpha(opacity:'60');
+        background : black; filter: alpha(opacity:'30');
         background : rgba(0, 0, 0, 0.6);
         position:absolute;
         top:100px;
         left:100px;
-        width:550px;
-        height:550px;
+        width:70%;
+        height:80%;
         z-index:1;
         visibility:hidden;
         white-space:normal;
@@ -141,7 +141,7 @@
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height" style="width:70px;">
               <input class="mdl-textfield__input" type="text" id="videoCodec1" value="H264" readonly tabIndex="-1">
               <label for="videoCodec1">
-                  <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                  <i class="mdl-icon-toggle__label material-icons"></i>
               </label>
               <label for="videoCodec1" class="mdl-textfield__label">codec</label>
               <ul for="videoCodec1" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
@@ -153,7 +153,7 @@
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height" style="width:70px;">
               <input class="mdl-textfield__input" type="text" id="width1" value="640" readonly tabIndex="-1">
               <label for="width1">
-                  <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                  <i class="mdl-icon-toggle__label material-icons"></i>
               </label>
               <label for="width1" class="mdl-textfield__label">width</label>
               <ul for="width1" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
@@ -175,7 +175,7 @@
             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height" style="width:70px;">
               <input class="mdl-textfield__input" type="text" id="height1" value="480" readonly tabIndex="-1">
               <label for="height1">
-                  <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                  <i class="mdl-icon-toggle__label material-icons"></i>
               </label>
               <label for="height1" class="mdl-textfield__label">height</label>
               <ul for="height1" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
@@ -203,7 +203,7 @@
         </div>
 
     </main>
-<div id="log" class="log_popup" style="overflow:auto;">
+<div id="log" class="log_popup" style="overflow:auto; font-color:white;">
 </div>
     <script src="https://remotemonster.com/sdk/remon.min.js"></script>
     <script src="app.js"></script>
