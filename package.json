@@ -11,7 +11,11 @@
     "WebRTC",
     "RemoteMonster",
     "remon",
-    "RTC"
+    "RTC",
+    "SDK",
+    "API",
+    "PaaS",
+    "Cloud"
   ],
   "author": "RemoteMonster",
   "license": "UNLICENSED",
