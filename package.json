@@ -21,7 +21,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RemoteMonster/Browser-SDK"
+    "url": "https://github.com/RemoteMonster/browser-sdk"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0"
