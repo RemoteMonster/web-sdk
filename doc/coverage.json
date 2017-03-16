@@ -1,0 +1,43 @@
+{
+  "coverage": "51.85%",
+  "expectCount": 27,
+  "actualCount": 14,
+  "files": {
+    "src/Remon.js": {
+      "expectCount": 24,
+      "actualCount": 13,
+      "undocumentLines": [
+        193,
+        37,
+        35,
+        42,
+        47,
+        39,
+        196,
+        200,
+        43,
+        41,
+        33
+      ]
+    },
+    "src/Configure.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        77
+      ]
+    },
+    "src/RemonEvents.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
+    "src/SignalingStates.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        2
+      ]
+    }
+  }
+}
