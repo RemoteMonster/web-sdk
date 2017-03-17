@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Util.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Recorder.js~Recorder.html">Recorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Remon.js~Remon.html">Remon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/RemonRecorder.js~RemonRecorder.html">RemonRecorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-SignalingConnection">SignalingConnection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-bindSignalingConnectionEvents">bindSignalingConnectionEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-configure">configure</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-remonEvents">remonEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-signalingStates">signalingStates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-util">util</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Util.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable no-console, consistent-return */
+const util = (function Util() {
+  function validateConfig(context, targetConfig) {
+    const mandatorySpec = Object.seal({
+      credential: {
+        key: undefined,
+        serviceId: undefined,
+      },
+    });
+
+    Object.keys(mandatorySpec).forEach((category) =&gt; {
+      Object.keys(mandatorySpec[category]).forEach((item) =&gt; {
+        if (targetConfig[category][item]) {
+          (mandatorySpec[category][item] = true);
+        } else {
+          (mandatorySpec[category][item] = false);
+        }
+      });
+    });
+
+    Object.keys(mandatorySpec).forEach((category) =&gt; {
+      Object.keys(mandatorySpec[category]).forEach((item) =&gt; {
+        if (mandatorySpec[category][item] === false) {
+          if (context.eventManager.hasEventListener(&apos;onError&apos;)) { context.eventManager.dispatchEvent(&apos;onError&apos;, &apos;InvalidParameterError&apos;); }
+        }
+      });
+    });
+  }
+
+  function bind(fn, context){
+  	if(!fn || !context){
+  		throw new Error(&quot;Failed to execute &apos;bind&apos; on &apos;utils&apos;: 2 arguments required, but only &quot; + arguments.length + &quot; present.&quot;);
+  	}
+  	return function(){
+  		fn.apply(context, Array.prototype.slice.call(arguments));
+  	};
+  }
+
+  function replaceCodec(sdp, mLineReg, preferCodec){
+		var mLine,
+			newMLine = [],
+			sdpCodec,
+			mLineSplit,
+			reg = new RegExp(&quot;a=rtpmap:(\\d+) &quot; + preferCodec + &quot;/\\d+&quot;);
+
+		mLine = sdp.match(mLineReg);
+		if(!mLine){
+			return sdp;
+		}
+
+		sdpCodec = sdp.match(reg);
+		if(!sdpCodec){
+			return sdp;
+		}
+
+		mLine = mLine[0];
+		sdpCodec = sdpCodec[1];
+
+		mLineSplit = mLine.split(&quot; &quot;);
+		newMLine.push(mLineSplit[0]);
+		newMLine.push(mLineSplit[1]);
+		newMLine.push(mLineSplit[2]);
+		newMLine.push(sdpCodec);
+
+		for(var i=3; i&lt;mLineSplit.length; i++){
+			if(mLineSplit[i] !== sdpCodec){
+				newMLine.push(mLineSplit[i]);
+			}
+		}
+
+		return sdp.replace(mLine, newMLine.join(&quot; &quot;));
+	}
+  
+/**
+ * @param Array elements
+ * @param String boundary
+ * @return String
+ */
+function buildMessage(filename, binary, boundary) {
+    var CRLF = &quot;\r\n&quot;;
+    var parts = [];
+    var part = &quot;&quot;;
+    var fileName = filename;
+
+    /*
+     * Content-Disposition header contains name of the field
+     * used to upload the file and also the name of the file as
+     * it was on the user&apos;s computer.
+     */
+    part += &apos;Content-Disposition: form-data; &apos;;
+    part += &apos;name=files&quot;; &apos;;
+    part += &apos;filename=&quot;&apos;+ fileName + &apos;&quot;&apos; + CRLF;
+
+    /*
+     * Content-Type header contains the mime-type of the file
+     * to send. Although we could build a map of mime-types
+     * that match certain file extensions, we&apos;ll take the easy
+     * approach and send a general binary header:
+     * application/octet-stream
+     */
+    part += &quot;Content-Type: application/octet-stream&quot;;
+    part += CRLF + CRLF; // marks end of the headers part
+
+    /*
+     * File contents read as binary data, obviously
+     */
+    //part += element.files[0].getAsBinary() + CRLF;
+    part += binary + CRLF;
+    parts.push(part);
+
+    var request = &quot;--&quot; + boundary + CRLF;
+        request+= parts.join(&quot;--&quot; + boundary + CRLF);
+        request+= &quot;--&quot; + boundary + &quot;--&quot; + CRLF;
+
+    return request;
+  }
+return Object.freeze({
+  validateConfig,
+  bind,
+  buildMessage,
+});
+}());
+export default util;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

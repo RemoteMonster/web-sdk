@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Recorder.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Recorder.js~Recorder.html">Recorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Remon.js~Remon.html">Remon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/RemonRecorder.js~RemonRecorder.html">RemonRecorder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-SignalingConnection">SignalingConnection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-bindSignalingConnectionEvents">bindSignalingConnectionEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-configure">configure</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-remonEvents">remonEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-signalingStates">signalingStates</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-util">util</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Recorder.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import InlineWorker from &apos;inline-worker&apos;;
+
+class Recorder {
+    constructor(source, cfg) {
+      this.config = { bufferLen: 4096, numChannels: 2,
+         mimeType: &apos;audio/webm&apos;
+      };
+
+      this.recording = false;
+
+      this.callbacks = {
+          getBuffer: [],
+          exportWAV: []
+      };
+        Object.assign(this.config, cfg);
+        this.context = source.context;
+        this.node = (this.context.createScriptProcessor ||
+        this.context.createJavaScriptNode).call(this.context,
+            this.config.bufferLen, this.config.numChannels, this.config.numChannels);
+
+        this.node.onaudioprocess = (e) =&gt; {
+            if (!this.recording) return;
+
+            var buffer = [];
+            for (var channel = 0; channel &lt; this.config.numChannels; channel++) {
+                buffer.push(e.inputBuffer.getChannelData(channel));
+            }
+            this.worker.postMessage({
+                command: &apos;record&apos;,
+                buffer: buffer
+            });
+        };
+
+        source.connect(this.node);
+        this.node.connect(this.context.destination);    //this should not be necessary
+
+        let self = {};
+        this.worker = new InlineWorker(function () {
+            let recLength = 0,
+                recBuffers = [],
+                sampleRate,
+                numChannels;
+
+            this.onmessage = function (e) {
+                switch (e.data.command) {
+                    case &apos;init&apos;:
+                        init(e.data.config);
+                        break;
+                    case &apos;record&apos;:
+                        record(e.data.buffer);
+                        break;
+                    case &apos;exportWAV&apos;:
+                        exportWAV(e.data.type);
+                        break;
+                    case &apos;getBuffer&apos;:
+                        getBuffer();
+                        break;
+                    case &apos;clear&apos;:
+                        clear();
+                        break;
+                }
+            };
+
+            function init(config) {
+                sampleRate = config.sampleRate;
+                numChannels = config.numChannels;
+                initBuffers();
+            }
+
+            function record(inputBuffer) {
+                for (var channel = 0; channel &lt; numChannels; channel++) {
+                    recBuffers[channel].push(inputBuffer[channel]);
+                }
+                recLength += inputBuffer[0].length;
+            }
+
+            function exportWAV(type) {
+                let buffers = [];
+                for (let channel = 0; channel &lt; numChannels; channel++) {
+                    buffers.push(mergeBuffers(recBuffers[channel], recLength));
+                }
+                let interleaved;
+                if (numChannels === 2) {
+                    interleaved = interleave(buffers[0], buffers[1]);
+                } else {
+                    interleaved = buffers[0];
+                }
+                let dataview = encodeWAV(interleaved);
+                let audioBlob = new Blob([dataview], {type: type});
+
+                this.postMessage({command: &apos;exportWAV&apos;, data: audioBlob});
+            }
+
+            function getBuffer() {
+                let buffers = [];
+                for (let channel = 0; channel &lt; numChannels; channel++) {
+                    buffers.push(mergeBuffers(recBuffers[channel], recLength));
+                }
+                this.postMessage({command: &apos;getBuffer&apos;, data: buffers});
+            }
+
+            function clear() {
+                recLength = 0;
+                recBuffers = [];
+                initBuffers();
+            }
+
+            function initBuffers() {
+                for (let channel = 0; channel &lt; numChannels; channel++) {
+                    recBuffers[channel] = [];
+                }
+            }
+
+            function mergeBuffers(recBuffers, recLength) {
+                let result = new Float32Array(recLength);
+                let offset = 0;
+                for (let i = 0; i &lt; recBuffers.length; i++) {
+                    result.set(recBuffers[i], offset);
+                    offset += recBuffers[i].length;
+                }
+                return result;
+            }
+
+            function interleave(inputL, inputR) {
+                let length = inputL.length + inputR.length;
+                let result = new Float32Array(length);
+
+                let index = 0,
+                    inputIndex = 0;
+
+                while (index &lt; length) {
+                    result[index++] = inputL[inputIndex];
+                    result[index++] = inputR[inputIndex];
+                    inputIndex++;
+                }
+                return result;
+            }
+
+            function floatTo16BitPCM(output, offset, input) {
+                for (let i = 0; i &lt; input.length; i++, offset += 2) {
+                    let s = Math.max(-1, Math.min(1, input[i]));
+                    output.setInt16(offset, s &lt; 0 ? s * 0x8000 : s * 0x7FFF, true);
+                }
+            }
+
+            function writeString(view, offset, string) {
+                for (let i = 0; i &lt; string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+
+            function encodeWAV(samples) {
+                let buffer = new ArrayBuffer(44 + samples.length * 2);
+                let view = new DataView(buffer);
+
+                /* RIFF identifier */
+                writeString(view, 0, &apos;RIFF&apos;);
+                /* RIFF chunk length */
+                view.setUint32(4, 36 + samples.length * 2, true);
+                /* RIFF type */
+                writeString(view, 8, &apos;WAVE&apos;);
+                /* format chunk identifier */
+                writeString(view, 12, &apos;fmt &apos;);
+                /* format chunk length */
+                view.setUint32(16, 16, true);
+                /* sample format (raw) */
+                view.setUint16(20, 1, true);
+                /* channel count */
+                view.setUint16(22, numChannels, true);
+                /* sample rate */
+                view.setUint32(24, sampleRate, true);
+                /* byte rate (sample rate * block align) */
+                view.setUint32(28, sampleRate * 4, true);
+                /* block align (channel count * bytes per sample) */
+                view.setUint16(32, numChannels * 2, true);
+                /* bits per sample */
+                view.setUint16(34, 16, true);
+                /* data chunk identifier */
+                writeString(view, 36, &apos;data&apos;);
+                /* data chunk length */
+                view.setUint32(40, samples.length * 2, true);
+
+                floatTo16BitPCM(view, 44, samples);
+
+                return view;
+            }
+        }, self);
+
+        this.worker.postMessage({
+            command: &apos;init&apos;,
+            config: {
+                sampleRate: this.context.sampleRate,
+                numChannels: this.config.numChannels
+            }
+        });
+
+        this.worker.onmessage = (e) =&gt; {
+            let cb = this.callbacks[e.data.command].pop();
+            if (typeof cb == &apos;function&apos;) {
+                cb(e.data.data);
+            }
+        };
+    }
+
+
+    record() {
+        this.recording = true;
+    }
+
+    stop() {
+        this.recording = false;
+    }
+
+    clear() {
+        this.worker.postMessage({command: &apos;clear&apos;});
+    }
+
+    getBuffer(cb) {
+        cb = cb || this.config.callback;
+        if (!cb) throw new Error(&apos;Callback not set&apos;);
+
+        this.callbacks.getBuffer.push(cb);
+
+        this.worker.postMessage({command: &apos;getBuffer&apos;});
+    }
+
+    exportWAV(cb, mimeType) {
+        mimeType = mimeType || this.config.mimeType;
+        cb = cb || this.config.callback;
+        if (!cb) throw new Error(&apos;Callback not set&apos;);
+
+        this.callbacks.exportWAV.push(cb);
+
+        this.worker.postMessage({
+            command: &apos;exportWAV&apos;,
+            type: mimeType
+        });
+    }
+
+    static
+    forceDownload(blob, filename) {
+        let url = (window.URL || window.webkitURL).createObjectURL(blob);
+        let link = window.document.createElement(&apos;a&apos;);
+        link.href = url;
+        link.download = filename || &apos;output.wav&apos;;
+        let click = document.createEvent(&quot;Event&quot;);
+        click.initEvent(&quot;click&quot;, true, true);
+        link.dispatchEvent(click);
+    }
+}
+
+export default Recorder;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
