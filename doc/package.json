@@ -1,24 +1,35 @@
 {
   "name": "remon-browsersdk",
   "version": "0.2.4",
-  "description": "REMOTEMONSTER Browser SDK",
+  "description": "RemoteMonster Browser SDK",
   "main": "index.js",
   "scripts": {
-    "test:dev": "karma start",
+    "dev": "webpack-dev-server --hot --inline --progress",
     "test": "karma start --single-run",
+    "test:dev": "karma start",
     "e2e": "nightwatch --env local",
     "lint": "eslint ./src",
+    "clean": "npm run clean:dist && npm run clean:doc",
+    "clean:dist": "rm -rf ./dist",
+    "clean:doc": "rm -rf ./doc",
     "compile-babel": "babel --presets es2015 -d dist/ src/",
     "prepublish": "npm run build",
-    "build": "npm run clean && npm run build:production && npm run build:doc",
+    "build": "npm run clean && npm run build:production && npm run build:doc && npm run build:changelog",
     "build:dev": "webpack --progress --display-modules --env dev",
     "build:production": "webpack --progress --display-modules --env build",
     "build:doc": "esdoc",
-    "deploy:upload:remotemonster.com": "scp -rp ./dist/* ubuntu@remotemonster.com:/tmp/REMON-BrowserSDK/dist && scp -rp ./dev/* ubuntu@remotemonster.com:/tmp/REMON-BrowserSDK",
-    "dev": "webpack-dev-server --hot --inline --progress",
-    "clean": "rm -rf ./dist && rm -rf ./doc"
+    "build:changelog": "standard-changelog",
+    "package:template": "cp -r template/* release",
+    "package:sdk": "cp dist/remon.min.js release",
+    "package:doc": "cp -r doc release",
+    "package:changelog": "cp CHANGELOG.md release",
+    "package": "npm run build && npm run package:template && npm run package:sdk && npm run package:changelog",
+    "deploy:npm": "서브모듈에서 npm 실행",
+    "deploy:gh-pages": "서브모듈에서 npm 실행 doc과 examples가 올라감",
+    "deploy:upload:remotemonster.com": "scp -rp dist/* ubuntu@remotemonster.com:/tmp/browser-sdk/dist && scp -rp dev/* ubuntu@remotemonster.com:/tmp/browser-sdk",
+    "deploy": ""
   },
-  "author": "REMOTEMONSTER",
+  "author": "RemoteMonster",
   "license": "UNLICENSED",
   "private": true,
   "devDependencies": {
@@ -49,6 +60,7 @@
     "karma-tap-pretty-reporter": "^3.0.0",
     "karma-webpack": "^2.0.0",
     "nightwatch": "^0.9.8",
+    "standard-changelog": "^1.0.1",
     "tap-diff": "^0.1.1",
     "tap-difflet": "^0.7.0",
     "tap-markdown": "^1.2.1",
@@ -63,8 +75,8 @@
     "yargs": "^7.0.2"
   },
   "dependencies": {
+    "inline-worker": "^1.1.0",
     "platform": "^1.3.3",
-    "webrtc-adapter": "^2.0.3",
-    "inline-worker": "^1.1.0"
+    "webrtc-adapter": "^2.0.3"
   }
 }
