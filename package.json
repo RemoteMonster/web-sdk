@@ -5,7 +5,13 @@
   "main": "remon.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "publish:examples": "gh-pages --dist examples"
+    "clean": "rm -rf cache",
+    "prepackage": "mkdir cache",
+    "package:examples": "cp -r examples cache",
+    "package:doc": "cp -r doc cache",
+    "package": "npm run package:examples && npm run package:doc",
+    "publish": "gh-pages --dist cache",
+    "deploy": "npm run package && npm run publish && npm run clean"
   },
   "keywords": [
     "WebRTC",
