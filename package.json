@@ -1,16 +1,16 @@
 {
   "name": "remon-browser-sdk",
-  "version": "0.2.12",
+  "version": "0.2.14",
   "description": "RemoteMonster Browser SDK",
   "main": "remon.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf cache",
-    "prepackage": "mkdir cache",
+    "clean": "if [ -d 'cache' ]; then rm -rf cache; fi",
+    "prepackage": "if [ ! -d 'cache' ]; then mkdir cache; fi",
     "package:examples": "cp -r examples cache",
     "package:doc": "cp -r doc cache",
-    "package": "npm run package:examples && npm run package:doc",
-    "publish": "gh-pages --dist cache",
+    "package": "npm run prepackage && npm run package:examples && npm run package:doc",
+    "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run publish && npm run clean"
   },
   "keywords": [
