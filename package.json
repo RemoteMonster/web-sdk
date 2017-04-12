@@ -11,7 +11,7 @@
     "package:doc": "cp -r doc cache",
     "package": "npm run prepackage && npm run package:examples && npm run package:doc",
     "deploy:gh-pages": "gh-pages --dist cache",
-    "deploy": "npm run package && npm run publish && npm run clean"
+    "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
   "keywords": [
     "WebRTC",
