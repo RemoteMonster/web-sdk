@@ -1,12 +1,8 @@
-<a name="0.2.14"></a>
-## [0.2.14](https://github.com/RemoteMonster/REMON-BrowserSDK/compare/v0.2.12...v0.2.14) (2017-04-12)
+<a name="0.2.17"></a>
+## [0.2.17](https://github.com/RemoteMonster/REMON-BrowserSDK/compare/v0.2.16...v0.2.17) (2017-04-19)
 
 
 ### Bug Fixes
 
-* **config:** bump to v0.2.13 ([4b2eaf4](https://github.com/RemoteMonster/REMON-BrowserSDK/commit/4b2eaf4))
 * **config:** remote view체크로직 수정 ([af3b5a7](https://github.com/RemoteMonster/REMON-BrowserSDK/commit/af3b5a7))
-
-
-
-
+* **config:** resturl 버그 수정 ([9f29f02](https://github.com/RemoteMonster/REMON-BrowserSDK/commit/9f29f02))
