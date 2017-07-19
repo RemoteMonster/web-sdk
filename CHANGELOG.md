@@ -1,3 +1,13 @@
+<a name="0.2.22"></a>
+## [0.2.22](https://github.com/RemoteMonster/REMON-BrowserSDK/compare/v0.2.20...v0.2.22) (2017-07-19)
+
+
+
+<a name="0.2.21"></a>
+## [0.2.21](https://github.com/RemoteMonster/REMON-BrowserSDK/compare/v0.2.20...v0.2.21) (2017-07-18)
+
+
+
 <a name="0.2.20"></a>
 ## [0.2.20](https://github.com/RemoteMonster/REMON-BrowserSDK/compare/v0.2.17...v0.2.20) (2017-06-12)
 

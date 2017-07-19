@@ -88,7 +88,7 @@ const rtcListener = {
     }
   },
   onStat(result){
-    const stat = "State: l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
+    const stat = "State: l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rating +"<br>";
     l(stat);
   },
   onSearch(result){
