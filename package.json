@@ -1,6 +1,6 @@
 {
   "name": "remon-browser-sdk",
-  "version": "0.2.22",
+  "version": "0.3.10",
   "description": "RemoteMonster Browser SDK",
   "main": "remon.min.js",
   "scripts": {
