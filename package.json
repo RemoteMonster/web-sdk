@@ -1,6 +1,6 @@
 {
-  "name": "remon-browser-sdk",
-  "version": "0.3.10",
+  "name": "@remotemonster/sdk",
+  "version": "1.0.0",
   "description": "RemoteMonster Browser SDK",
   "main": "remon.min.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "prepackage": "if [ ! -d 'cache' ]; then mkdir cache; fi",
     "package:examples": "cp -r examples cache",
     "package:doc": "cp -r doc cache",
-    "package": "npm run prepackage && npm run package:examples && npm run package:doc",
+    "package":
+      "npm run prepackage && npm run package:examples && npm run package:doc",
     "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
@@ -27,9 +28,18 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RemoteMonster/browser-sdk"
+    "url": "git+https://github.com/RemoteMonster/browser-sdk.git"
   },
   "devDependencies": {
     "gh-pages": "^0.12.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/RemoteMonster/browser-sdk/issues"
+  },
+  "homepage": "https://github.com/RemoteMonster/browser-sdk#readme",
+  "directories": {
+    "doc": "doc",
+    "example": "examples"
+  },
+  "dependencies": {}
 }

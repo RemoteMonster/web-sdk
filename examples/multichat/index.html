@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdn.rawgit.com/CreativeIT/getmdl-select/master/getmdl-select.min.css">
     <script defer src="https://cdn.rawgit.com/CreativeIT/getmdl-select/master/getmdl-select.min.js"></script>
     <script>
-    let logLayerPop=false;
-    let setupLayerPop=false;
+    const logLayerPop = false;
+    const setupLayerPop = false;
     function log_popup(){
-      let layer = document.getElementById("log");
+      const layer = document.getElementById("log");
       if (logLayerPop){
         layer.style.visibility="hidden";
         layer.style.display="none";
@@ -96,14 +96,14 @@
           <a class="mdl-navigation__link" href="javascript:log_popup();">Log</a>
         </nav>
       </div>
-      <main class="mdl-layout__content">
+      <main class="mdl-layout__content" id="mainDiv">
 
         <div class="square-card mdl-card mdl-shadow--2dp" style="float:left;">
               <div class="mdl-card__title">
                  <h2 class="mdl-card__title-text">local</h2>
               </div>
               <div class="mdl-card__media video-container">
-                 <video id="localVideo1" class="gray" autoplay controls muted></video>
+                 <video id="localVideo0" class="gray" autoplay controls muted></video>
               </div>
         </div>
         <div class="square-card mdl-card mdl-shadow--2dp">
@@ -111,7 +111,7 @@
                  <h2 class="mdl-card__title-text">remote1</h2>
               </div>
               <div class="mdl-card__media video-container">
-                 <video id="remoteVideo1" autoplay controls></video>
+                 <video id="remoteVideo0" autoplay controls></video>
               </div>
         </div>
         <div class="square-card mdl-card mdl-shadow--2dp" id="search_layer">
@@ -207,6 +207,6 @@
 </div>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="https://remotemonster.com/sdk/remon.min.js"></script>
-    <script src="app.js"></script>
+    <script src="multichat.js"></script>
   </body>
 </html>

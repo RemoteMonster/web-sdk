@@ -9,33 +9,57 @@ const channelIdInputElement1 = document.querySelector("#channelIdInput1");
 const logElement = document.querySelector("#log");
 const appTitleElement = document.querySelector("#appTitle");
 const createButton = document.querySelector("#createButton");
-const isInitStatusCalled = false;
-const isOnDisplayUserMediaCalled = false;
 let roomName = "";
 let bored = true;
+let currentRoomNumber = 0;
+let originalRoomName = "";
+let vList = [];
+let latestRoom;
+let isHost = false;
+let isInitStatusCalled = false;
+let isOnDisplayUserMediaCalled = false;
 let r0;
-let r1;
+let wsurl = "ws://localhost:8081/ws";
+let resturl = "http://localhost:8081/rest/init";
+// let wsurl= 'wss://remotemonster.com/ws';
+// let resturl = 'https://remotemonster.com/rest';
 
 const rtcConfig1 = {
   credential: {
-    key: "e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03",
-    serviceId: "simpleapp"
+    //key: 'e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03',
+    //serviceId: 'simpleapp'
+    key: "1234567890",
+    serviceId: "SERVICEID1",
+    //key: '72625d89cede53ec052a86e9a12867665190c110a9132222',
+    //serviceId: 'firstnet'
+    //key: '686a1ad4af61c5fed3c7c6cb403acf1cd50a84fcc0258ff3',
+    //serviceId: 'peace'
+    //wsurl: 'wss://remotemonster.com/ws',
+    //resturl: 'https://remotemonster.com/rest'
+    wsurl: wsurl,
+    resturl: resturl
+    //wsurl: 'wss://apius1.remotemonster.com/ws',
+    //resturl: 'https://apius1.remotemonster.com/rest'
+    //    url: 'wss://remotemonster.com/ws',
+    //url: 'wss://apius1.remotemonster.com/ws',
+    //url: 'ws://localhost:8081/ws',
   },
   view: {
-    local: "#localVideo1",
-    remote: "#remoteVideo1"
+    local: "#localVideo0",
+    remote: "#remoteVideo" + currentRoomNumber
   },
   media: {
     audio: true,
     video: {
-      width: { max: "320", min: "320" },
-      height: { max: "240", min: "240" },
+      width: { max: "640", min: "640" },
+      height: { max: "480", min: "480" },
       codec: "H264",
       frameRate: 15
-    }
+    },
+    record: false
   },
   dev: {
-    logLevel: "VERBOSE"
+    logLevel: "DEBUG"
   }
 };
 
@@ -54,6 +78,7 @@ const rtcListener = {
   onComplete() {
     l("EVENT FIRED : onComplete");
     appTitleElement.innerHTML = roomName + " - " + "Join completed";
+    if (isHost) createRemoteDiv();
   },
   onAddLocalStream(stream) {
     l(`EVENT FIRED : onAddLocalStream: ${stream}`);
@@ -62,12 +87,17 @@ const rtcListener = {
     l(`EVENT FIRED : onStateChange: ${state}`);
     if (state == "CLOSE") {
       if (!bored) toggleButton();
+      l("****************** closed");
     } else if (state == "FAIL") {
       if (!bored) toggleButton();
     } else if (state == "INIT") {
       isInitStatusCalled = true;
       if (isOnDisplayUserMediaCalled) {
-        r1.connectChannel(roomName);
+        isOnDisplayUserMediaCalled = false;
+        isInitStatusCalled = false;
+        console.log("------------ roomname:" + roomName);
+        latestRoom.connectChannel(roomName);
+        currentRoomNumber++;
       }
     }
   },
@@ -84,35 +114,16 @@ const rtcListener = {
     l("event fired: onDisplayUserMedia");
     isOnDisplayUserMediaCalled = true;
     if (isInitStatusCalled) {
-      r1.connectChannel(roomName);
+      isInitStatusCalled = false;
+      isOnDisplayUserMediaCalled = false;
+      console.log("------------ roomname:" + roomName);
+      latestRoom.connectChannel(roomName);
+      currentRoomNumber++;
     }
   },
   onStat(result) {
-    const stat =
-      "State: l.cand:" +
-      result.localCandidate +
-      "/r.cand:" +
-      result.remoteCandidate +
-      "/l.res:" +
-      result.localFrameWidth +
-      " " +
-      result.localFrameHeight +
-      "/r.res:" +
-      result.remoteFrameWidth +
-      " " +
-      result.remoteFrameHeight +
-      "/l.rate:" +
-      result.localFrameRate +
-      "/r.rate:" +
-      result.remoteFrameRate +
-      "/s.BW:" +
-      result.availableSendBandwidth +
-      "/r.BW" +
-      result.availableReceiveBandwidth +
-      "/rtt:" +
-      result.rating +
-      "<br>";
-    l(stat);
+    //const stat = "State: l.cand:"+result.localCandidate+"/r.cand:"+result.remoteCandidate+"/l.res:"+result.localFrameWidth+" "+result.localFrameHeight+"/r.res:"+result.remoteFrameWidth+" "+result.remoteFrameHeight+"/l.rate:"+result.localFrameRate + "/r.rate:"+result.remoteFrameRate+"/s.BW:"+ result.availableSendBandwidth + "/r.BW"+ result.availableReceiveBandwidth + "/rtt:" + result.rtt + "/l.AFL:" + result.localAudioFractionLost + "/l.VFL:"+ result.localVideoFractionLost + "/r.AFL" + result.remoteAudioFractionLost + "/r.VFL" + result.remoteVideoFractionLost +"<br>";
+    //l(stat);
   },
   onSearch(result) {
     document.querySelector("#log").innerHTML += result;
@@ -123,7 +134,9 @@ closeButton.addEventListener(
   "click",
   event => {
     console.log("[App] Try to disconnect.");
-    r1.close();
+    for (var v in vList) {
+      v.close();
+    }
     if (!bored) toggleButton();
     event.preventDefault();
   },
@@ -133,7 +146,9 @@ closeButton.addEventListener(
 createButton.addEventListener(
   "click",
   event => {
-    roomName = document.querySelector("#channelIdInput1").value;
+    isHost = true;
+    originalRoomName = document.querySelector("#channelIdInput1").value;
+    roomName = originalRoomName + "_0";
     if (!document.querySelector("#useVideo1").checked) {
       rtcConfig1.media.video = false;
     } else {
@@ -161,7 +176,8 @@ createButton.addEventListener(
     }
 
     l("config:" + JSON.stringify(rtcConfig1));
-    r1 = new Remon({ config: rtcConfig1, listener: rtcListener });
+    latestRoom = new Remon({ config: rtcConfig1, listener: rtcListener });
+    vList.push(latestRoom);
     toggleButton();
     event.preventDefault();
   },
@@ -189,7 +205,8 @@ function connectRoom(rName) {
       "#frameRate1"
     ).value;
   }
-  r1 = new Remon({ config: rtcConfig1, listener: rtcListener });
+  latestRoom = new Remon({ config: rtcConfig1, listener: rtcListener });
+  vList.push(latestRoom);
   toggleButton();
 }
 
@@ -208,11 +225,62 @@ function toggleButton() {
   bored = !bored;
 }
 
+function createRemoteDiv() {
+  var videoTag = document.createElement("video");
+  videoTag.id = "remoteVideo" + currentRoomNumber;
+  videoTag.autoplay = "autoplay";
+  videoTag.controls = "controls";
+  var videoDiv = document.createElement("div");
+  videoDiv.classname = "mdl-card__media video-container";
+  videoDiv.appendChild(videoTag);
+  var h2Div = document.createElement("h2");
+  h2Div.className = "mdl-card__title-text";
+  h2Div.innerHTML = "remote" + currentRoomNumber;
+  var titleDiv = document.createElement("div");
+  titleDiv.className = "mdl-card__title";
+  titleDiv.appendChild(h2Div);
+  var motherDiv = document.createElement("div");
+  if (currentRoomNumber == 1) {
+    console.log("currentCount:" + currentRoomNumber);
+    motherDiv.className = "square-card mdl-card mdl-shadow--2dp";
+  } else {
+    motherDiv.className = "square-card mdl-card mdl-shadow--2dp";
+    //motherDiv.style['top']= (currentRoomNumber-2)* 210 + 10 +"px";
+  }
+  //motherDiv.appendChild(titleDiv);
+  motherDiv.appendChild(videoDiv);
+  motherDiv.id = "viewerDiv" + currentRoomNumber;
+  motherDiv.style["z-index"] = currentRoomNumber;
+
+  var mainDiv = document.querySelector("#mainDiv");
+  mainDiv.appendChild(motherDiv);
+  createAdditionalRemonObject();
+}
+
+function createAdditionalRemonObject() {
+  roomName = originalRoomName + "_" + currentRoomNumber;
+  rtcConfig1.view.remote = "#remoteVideo" + currentRoomNumber;
+  latestRoom = new Remon({ config: rtcConfig1, listener: rtcListener });
+  vList.push(latestRoom);
+}
+// search관련 로직 시작
 // remon object for just only search
 const rtcConfig0 = {
   credential: {
-    key: "e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03",
-    serviceId: "simpleapp"
+    //key: 'e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03',
+    //serviceId: 'simpleapp'
+    key: "1234567890",
+    serviceId: "SERVICEID1",
+    //key: '686a1ad4af61c5fed3c7c6cb403acf1cd50a84fcc0258ff3',
+    //serviceId: 'peace',
+    //key: '72625d89cede53ec052a86e9a12867665190c110a9132222',
+    //serviceId: 'firstnet'
+    //wsurl: 'ws://localhost:8081/ws',
+    //resturl: 'http://localhost:8081/rest',
+    //wsurl: 'wss://apius1.remotemonster.com/ws',
+    //resturl: 'https://apius1.remotemonster.com/rest'
+    wsurl: wsurl,
+    resturl: resturl
   },
   media: {
     audio: true,
@@ -222,7 +290,6 @@ const rtcConfig0 = {
     logLevel: "ERROR"
   }
 };
-
 function searchPoller() {
   r0.search();
 }
@@ -253,8 +320,6 @@ const rtcListener0 = {
           "&nbsp;&nbsp;<span><button class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent' onclick='connectRoom(\"" +
           resultRoomName +
           "\")'><i class='material-icons mdl-list__item-icon'>person</i>" +
-          createTime +
-          "&nbsp;- " +
           resultRoomName +
           "</button></span>";
         search_list.innerHTML += "</span></div>";
