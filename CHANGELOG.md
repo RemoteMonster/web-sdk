@@ -1,5 +1,5 @@
-<a name="1.0.2"></a>
-## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.3.10...v1.0.2) (2018-04-11)
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.3.10...v1.0.3) (2018-04-11)
 
 
 ### Bug Fixes
@@ -7,6 +7,102 @@
 * record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
 
 
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.3.10...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.2.17...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* **bug:** 0.2.23 record.close 시 발생하는 버그 해결 ([24d268b](https://github.com/RemoteMonster/remon-browser-sdk/commit/24d268b))
+* **close:** fix remon.close for broadcast ([824b17d](https://github.com/RemoteMonster/remon-browser-sdk/commit/824b17d))
+* **record:** audio bps to 64k ([e9d55a4](https://github.com/RemoteMonster/remon-browser-sdk/commit/e9d55a4))
+* **recording:** change bps to 128k ([f7c7b49](https://github.com/RemoteMonster/remon-browser-sdk/commit/f7c7b49))
+* **recording:** change bps to 8k ([bc1eccc](https://github.com/RemoteMonster/remon-browser-sdk/commit/bc1eccc))
+* **recording:** change bps to 8k ([f34a69d](https://github.com/RemoteMonster/remon-browser-sdk/commit/f34a69d))
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
+* sdk.country check bug ([8046843](https://github.com/RemoteMonster/remon-browser-sdk/commit/8046843))
+* sdk.country check bug v0.3.9 ([6bbed77](https://github.com/RemoteMonster/remon-browser-sdk/commit/6bbed77))
+
+### Features
+
+* upgrade adapter js to 5.x ([1607070](https://github.com/RemoteMonster/remon-browser-sdk/commit/1607070))
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.2.17...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* **bug:** 0.2.23 record.close 시 발생하는 버그 해결 ([24d268b](https://github.com/RemoteMonster/remon-browser-sdk/commit/24d268b))
+* **close:** fix remon.close for broadcast ([824b17d](https://github.com/RemoteMonster/remon-browser-sdk/commit/824b17d))
+* **record:** audio bps to 64k ([e9d55a4](https://github.com/RemoteMonster/remon-browser-sdk/commit/e9d55a4))
+* **recording:** change bps to 128k ([f7c7b49](https://github.com/RemoteMonster/remon-browser-sdk/commit/f7c7b49))
+* **recording:** change bps to 8k ([bc1eccc](https://github.com/RemoteMonster/remon-browser-sdk/commit/bc1eccc))
+* **recording:** change bps to 8k ([f34a69d](https://github.com/RemoteMonster/remon-browser-sdk/commit/f34a69d))
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
+* sdk.country check bug ([8046843](https://github.com/RemoteMonster/remon-browser-sdk/commit/8046843))
+* sdk.country check bug v0.3.9 ([6bbed77](https://github.com/RemoteMonster/remon-browser-sdk/commit/6bbed77))
+
+### Features
+
+* upgrade adapter js to 5.x ([1607070](https://github.com/RemoteMonster/remon-browser-sdk/commit/1607070))
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.2.17...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* **bug:** 0.2.23 record.close 시 발생하는 버그 해결 ([24d268b](https://github.com/RemoteMonster/remon-browser-sdk/commit/24d268b))
+* **close:** fix remon.close for broadcast ([824b17d](https://github.com/RemoteMonster/remon-browser-sdk/commit/824b17d))
+* **record:** audio bps to 64k ([e9d55a4](https://github.com/RemoteMonster/remon-browser-sdk/commit/e9d55a4))
+* **recording:** change bps to 128k ([f7c7b49](https://github.com/RemoteMonster/remon-browser-sdk/commit/f7c7b49))
+* **recording:** change bps to 8k ([bc1eccc](https://github.com/RemoteMonster/remon-browser-sdk/commit/bc1eccc))
+* **recording:** change bps to 8k ([f34a69d](https://github.com/RemoteMonster/remon-browser-sdk/commit/f34a69d))
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
+* sdk.country check bug ([8046843](https://github.com/RemoteMonster/remon-browser-sdk/commit/8046843))
+* sdk.country check bug v0.3.9 ([6bbed77](https://github.com/RemoteMonster/remon-browser-sdk/commit/6bbed77))
+
+### Features
+
+* upgrade adapter js to 5.x ([1607070](https://github.com/RemoteMonster/remon-browser-sdk/commit/1607070))
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.2.17...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* **bug:** 0.2.23 record.close 시 발생하는 버그 해결 ([24d268b](https://github.com/RemoteMonster/remon-browser-sdk/commit/24d268b))
+* **close:** fix remon.close for broadcast ([824b17d](https://github.com/RemoteMonster/remon-browser-sdk/commit/824b17d))
+* **record:** audio bps to 64k ([e9d55a4](https://github.com/RemoteMonster/remon-browser-sdk/commit/e9d55a4))
+* **recording:** change bps to 128k ([f7c7b49](https://github.com/RemoteMonster/remon-browser-sdk/commit/f7c7b49))
+* **recording:** change bps to 8k ([bc1eccc](https://github.com/RemoteMonster/remon-browser-sdk/commit/bc1eccc))
+* **recording:** change bps to 8k ([f34a69d](https://github.com/RemoteMonster/remon-browser-sdk/commit/f34a69d))
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
+* sdk.country check bug ([8046843](https://github.com/RemoteMonster/remon-browser-sdk/commit/8046843))
+* sdk.country check bug v0.3.9 ([6bbed77](https://github.com/RemoteMonster/remon-browser-sdk/commit/6bbed77))
+
+### Features
+
+* upgrade adapter js to 5.x ([1607070](https://github.com/RemoteMonster/remon-browser-sdk/commit/1607070))
+
+<a name="1.0.2"></a>
+
+## [1.0.2](https://github.com/RemoteMonster/remon-browser-sdk/compare/v0.3.10...v1.0.2) (2018-04-11)
+
+### Bug Fixes
+
+* record only one track ([7ec7987](https://github.com/RemoteMonster/remon-browser-sdk/commit/7ec7987))
 
 <a name="1.0.1"></a>
 
