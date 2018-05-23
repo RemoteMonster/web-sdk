@@ -58,19 +58,6 @@ const rtcListener = {
   onAddLocalStream(stream) {
     l(`EVENT FIRED : onAddLocalStream: ${stream}`);
   },
-  onStateChange(state) {
-    l(`EVENT FIRED : onStateChange: ${state}`);
-    if (state == "CLOSE") {
-      if (!bored) toggleButton();
-    } else if (state == "FAIL") {
-      if (!bored) toggleButton();
-    } else if (state == "INIT") {
-      isInitStatusCalled = true;
-      if (isOnDisplayUserMediaCalled) {
-        r1.connectChannel(roomName);
-      }
-    }
-  },
   onDisconnectChannel() {
     l("EVENT FIRED : onDisconnectChannel");
     if (!bored) toggleButton();
@@ -80,13 +67,7 @@ const rtcListener = {
     l(error);
     if (!bored) toggleButton();
   },
-  onDisplayUserMedia(stream) {
-    l("event fired: onDisplayUserMedia");
-    isOnDisplayUserMediaCalled = true;
-    if (isInitStatusCalled) {
-      r1.connectChannel(roomName);
-    }
-  },
+  onDisplayUserMedia(stream) {},
   onStat(result) {
     const stat =
       "State: l.cand:" +
@@ -162,6 +143,7 @@ createButton.addEventListener(
 
     l("config:" + JSON.stringify(rtcConfig1));
     r1 = new Remon({ config: rtcConfig1, listener: rtcListener });
+    r1.connectChannel(roomName);
     toggleButton();
     event.preventDefault();
   },
@@ -190,6 +172,7 @@ function connectRoom(rName) {
     ).value;
   }
   r1 = new Remon({ config: rtcConfig1, listener: rtcListener });
+  r1.connectChannel(roomName);
   toggleButton();
 }
 
@@ -230,12 +213,8 @@ function l(msg) {
   logElement.innerHTML = msg + "<br>" + logElement.innerHTML;
 }
 const rtcListener0 = {
-  onInit(token) {
-    searchPoller();
-    setInterval(searchPoller, 5000);
-  },
   onSearch(result) {
-    var resultObj = JSON.parse(result);
+    var resultObj = result;
     var search_list = document.querySelector("#search_list");
     search_list.innerHTML = "";
     for (var ch_i = 0; ch_i < resultObj.length; ch_i++) {
@@ -253,8 +232,6 @@ const rtcListener0 = {
           "&nbsp;&nbsp;<span><button class='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent' onclick='connectRoom(\"" +
           resultRoomName +
           "\")'><i class='material-icons mdl-list__item-icon'>person</i>" +
-          createTime +
-          "&nbsp;- " +
           resultRoomName +
           "</button></span>";
         search_list.innerHTML += "</span></div>";
@@ -263,3 +240,4 @@ const rtcListener0 = {
   }
 };
 r0 = new Remon({ config: rtcConfig0, listener: rtcListener0 });
+setInterval(searchPoller, 3000);

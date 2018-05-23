@@ -18,6 +18,7 @@
 
   <main>
     <video id="remoteVideo" class="remote-video w-100 h-100" autoplay></video>
+    <video id="localVideo" style="visibility: hidden;"> </video>
     <button id="connectChannelBtn" class="btn btn-main">CONNECT</button>
   </main>
 
@@ -32,7 +33,8 @@
       serviceId: 'simpleapp'
     },
     view: {
-      remote: '#remoteVideo'
+      remote: '#remoteVideo',
+      local: '#localVideo'
     },
     media: {
       audio:true,
