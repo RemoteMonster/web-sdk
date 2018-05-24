@@ -1,0 +1,194 @@
+[
+  {
+    "name": "Remon#createCast",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 207,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 208,
+        "line": "   * Create a broadcast room"
+      },
+      {
+        "lineNumber": 209,
+        "line": "   * @param (string) roomname name of broadcast room. it is no id but name. You can take a real room id from onCreateChannel event"
+      },
+      {
+        "lineNumber": 210,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 211,
+        "line": "  async createCast(roomname) {"
+      }
+    ],
+    "codeParams": [
+      "roomname"
+    ],
+    "docParams": [
+      "(string)"
+    ]
+  },
+  {
+    "name": "Remon#joinCast",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 216,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 217,
+        "line": "   * Join a room by room id."
+      },
+      {
+        "lineNumber": 218,
+        "line": "   * @param (string) room id"
+      },
+      {
+        "lineNumber": 219,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 220,
+        "line": "  async joinCast(roomid) {"
+      }
+    ],
+    "codeParams": [
+      "roomid"
+    ],
+    "docParams": [
+      "(string)"
+    ]
+  },
+  {
+    "name": "Remon#pauseLocalVideo",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 243,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 244,
+        "line": "   * mute local video"
+      },
+      {
+        "lineNumber": 245,
+        "line": "   * @param (bool)"
+      },
+      {
+        "lineNumber": 246,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 247,
+        "line": "  pauseLocalVideo(bool) {"
+      }
+    ],
+    "codeParams": [
+      "bool"
+    ],
+    "docParams": [
+      "(bool)"
+    ]
+  },
+  {
+    "name": "Remon#pauseRemoteVideo",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 253,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 254,
+        "line": "   * mute remote video"
+      },
+      {
+        "lineNumber": 255,
+        "line": "   * @param (bool) bool"
+      },
+      {
+        "lineNumber": 256,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 257,
+        "line": "  pauseRemoteVideo(bool) {"
+      }
+    ],
+    "codeParams": [
+      "bool"
+    ],
+    "docParams": [
+      "(bool)"
+    ]
+  },
+  {
+    "name": "Remon#search",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 290,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 291,
+        "line": "   * search P2P channels by id."
+      },
+      {
+        "lineNumber": 292,
+        "line": "   * @param (string) id for search. It can be part of full id"
+      },
+      {
+        "lineNumber": 293,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 294,
+        "line": "  search(id) {"
+      }
+    ],
+    "codeParams": [
+      "id"
+    ],
+    "docParams": [
+      "(string)"
+    ]
+  },
+  {
+    "name": "Remon#sendMessage",
+    "filePath": "src/Remon.js",
+    "lines": [
+      {
+        "lineNumber": 352,
+        "line": "  /**"
+      },
+      {
+        "lineNumber": 353,
+        "line": "   * It's only function for P2P communication. send message to peer"
+      },
+      {
+        "lineNumber": 354,
+        "line": "   * @param (string) userMessage message to peer"
+      },
+      {
+        "lineNumber": 355,
+        "line": "   */"
+      },
+      {
+        "lineNumber": 356,
+        "line": "  sendMessage(userMessage) {"
+      }
+    ],
+    "codeParams": [
+      "userMessage"
+    ],
+    "docParams": [
+      "(string)"
+    ]
+  }
+]
