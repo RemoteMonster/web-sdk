@@ -3,14 +3,12 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/RemonEvents.js | API Document</title>
+  <title data-ice="title">src/RemonEvents.js | @remotemonster/sdk</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
-  
-  
   <script src="script/manual.js"></script>
-</head>
+<meta name="description" content="RemoteMonster Browser SDK"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="@remotemonster/sdk"><meta property="twitter:description" content="RemoteMonster Browser SDK"></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -18,7 +16,6 @@
   
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
-  
   
   <div class="search-box">
   <span>
@@ -42,36 +39,36 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/RemonEvents.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
-* RemonEvents &#xC989; &#xAC1C;&#xBC1C;&#xC11C;&#xBE44;&#xC2A4;&#xC5D0;&#xC11C; &#xCC98;&#xB9AC;&#xD560; &#xC218; &#xC788;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&#xC5D0;&#xB294; &#xB2E4;&#xC74C;&#xACFC; &#xAC19;&#xC774; &#xC788;&#xB2E4;.&lt;br&gt;
-* onInit: RemoteMonster API &#xC11C;&#xBC84;&#xC640; &#xC5F0;&#xACB0;&#xC774; &#xB418;&#xC5C8;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
-* onConnectChannel: &#xCC44;&#xB110;&#xC5D0; &#xC5F0;&#xACB0;&#xB418;&#xC5C8;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
-* onCreateChannel: &#xCC44;&#xB110; &#xC0DD;&#xC131;&#xC5D0; &#xC131;&#xACF5;&#xD558;&#xC600;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
-* onComplete: &#xC5F0;&#xACB0;&#xC5D0; &#xC131;&#xACF5;&#xD558;&#xC600;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;. &#xC8FC;&#xB85C; &#xBA3C;&#xC800; &#xCC44;&#xB110;&#xC744; &#xB9CC;&#xB4E0; &#xCABD;&#xC5D0;&#xC11C; &#xBC1C;&#xC0DD;&#xD568;&lt;br&gt;
-* onAddLocalStream: &#xB85C;&#xCEEC; &#xC601;&#xC0C1;&#xC774;&#xB098; &#xC74C;&#xC131;&#xC744; &#xC81C;&#xC5B4;&#xAC00;&#xB2A5;&#xD558;&#xAC8C; &#xBC1B;&#xC744; &#xC218; &#xC788;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
-* onAddRemoteStream: &#xC0C1;&#xB300;&#xD3B8; &#xC601;&#xC0C1;&#xC774;&#xB098; &#xC74C;&#xC131;&#xC744; &#xBC1B;&#xC744; &#xC218; &#xC788;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&lt;br&gt;
-* onStateChange: &#xD1B5;&#xC2E0; &#xC5F0;&#xACB0;&#xC2DC;&#xC791;&#xBD80;&#xD130; &#xC885;&#xB8CC;&#xAE4C;&#xC9C0; &#xC0C1;&#xD0DC;&#xAC00; &#xBCC0;&#xACBD;&#xB420; &#xB54C;&#xB9C8;&#xB2E4; &#xD638;&#xCD9C;&#xB428;&lt;br&gt;
-* onDisconnectChannel: &#xC0C1;&#xB300;&#xD3B8;&#xC774; &#xD1B5;&#xC2E0;&#xC744; &#xC885;&#xB8CC;&#xD558;&#xC600;&#xC744; &#xACBD;&#xC6B0; &#xD638;&#xCD9C;&lt;br&gt;
-* onMessage: &#xC0C1;&#xB300;&#xBC29;&#xC73C;&#xB85C;&#xBD80;&#xD130; &#xBA54;&#xC2DC;&#xC9C0;&#xB97C; &#xC218;&#xC2E0;&#xD558;&#xC600;&#xC744; &#xACBD;&#xC6B0; &#xD638;&#xCD9C;&#xB428;&lt;br&gt;
-* onError: &#xD1B5;&#xC2E0; &#xBFD0; &#xC544;&#xB2C8;&#xB77C; &#xBAA8;&#xB4E0; &#xACFC;&#xC815;&#xC5D0;&#xC11C; &#xBC1C;&#xC0DD;&#xD55C; &#xC624;&#xB958;&lt;br&gt;
-*/
+ * RemonEvents &#xC989; &#xAC1C;&#xBC1C;&#xC11C;&#xBE44;&#xC2A4;&#xC5D0;&#xC11C; &#xCC98;&#xB9AC;&#xD560; &#xC218; &#xC788;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&#xC5D0;&#xB294; &#xB2E4;&#xC74C;&#xACFC; &#xAC19;&#xC774; &#xC788;&#xB2E4;.&lt;br&gt;
+ * onInit: RemoteMonster API &#xC11C;&#xBC84;&#xC640; &#xC5F0;&#xACB0;&#xC774; &#xB418;&#xC5C8;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
+ * onConnectChannel: &#xCC44;&#xB110;&#xC5D0; &#xC5F0;&#xACB0;&#xB418;&#xC5C8;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
+ * onCreateChannel: &#xCC44;&#xB110; &#xC0DD;&#xC131;&#xC5D0; &#xC131;&#xACF5;&#xD558;&#xC600;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
+ * onComplete: &#xC5F0;&#xACB0;&#xC5D0; &#xC131;&#xACF5;&#xD558;&#xC600;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;. &#xC8FC;&#xB85C; &#xBA3C;&#xC800; &#xCC44;&#xB110;&#xC744; &#xB9CC;&#xB4E0; &#xCABD;&#xC5D0;&#xC11C; &#xBC1C;&#xC0DD;&#xD568;&lt;br&gt;
+ * onAddLocalStream: &#xB85C;&#xCEEC; &#xC601;&#xC0C1;&#xC774;&#xB098; &#xC74C;&#xC131;&#xC744; &#xC81C;&#xC5B4;&#xAC00;&#xB2A5;&#xD558;&#xAC8C; &#xBC1B;&#xC744; &#xC218; &#xC788;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&#xD558;&#xB294; &#xC774;&#xBCA4;&#xD2B8;&lt;br&gt;
+ * onAddRemoteStream: &#xC0C1;&#xB300;&#xD3B8; &#xC601;&#xC0C1;&#xC774;&#xB098; &#xC74C;&#xC131;&#xC744; &#xBC1B;&#xC744; &#xC218; &#xC788;&#xC744; &#xB54C; &#xBC1C;&#xC0DD;&lt;br&gt;
+ * onStateChange: &#xD1B5;&#xC2E0; &#xC5F0;&#xACB0;&#xC2DC;&#xC791;&#xBD80;&#xD130; &#xC885;&#xB8CC;&#xAE4C;&#xC9C0; &#xC0C1;&#xD0DC;&#xAC00; &#xBCC0;&#xACBD;&#xB420; &#xB54C;&#xB9C8;&#xB2E4; &#xD638;&#xCD9C;&#xB428;&lt;br&gt;
+ * onDisconnectChannel: &#xC0C1;&#xB300;&#xD3B8;&#xC774; &#xD1B5;&#xC2E0;&#xC744; &#xC885;&#xB8CC;&#xD558;&#xC600;&#xC744; &#xACBD;&#xC6B0; &#xD638;&#xCD9C;&lt;br&gt;
+ * onMessage: &#xC0C1;&#xB300;&#xBC29;&#xC73C;&#xB85C;&#xBD80;&#xD130; &#xBA54;&#xC2DC;&#xC9C0;&#xB97C; &#xC218;&#xC2E0;&#xD558;&#xC600;&#xC744; &#xACBD;&#xC6B0; &#xD638;&#xCD9C;&#xB428;&lt;br&gt;
+ * onError: &#xD1B5;&#xC2E0; &#xBFD0; &#xC544;&#xB2C8;&#xB77C; &#xBAA8;&#xB4E0; &#xACFC;&#xC815;&#xC5D0;&#xC11C; &#xBC1C;&#xC0DD;&#xD55C; &#xC624;&#xB958;&lt;br&gt;
+ */
 const remonEvents = (function RemonEvents() {
   const events = [
-    &apos;onInit&apos;,
-    &apos;onConnectChannel&apos;,
-    &apos;onCreateChannel&apos;,
-    &apos;onComplete&apos;,
-    &apos;onDisplayUserMedia&apos;,
-    &apos;onAddLocalStream&apos;,
-    &apos;onAddRemoteStream&apos;,
-    &apos;onStateChange&apos;,
-    &apos;onDisconnectChannel&apos;,
-    &apos;onMessage&apos;,
-    &apos;onError&apos;,
-    &apos;onStat&apos;,
+    &quot;onInit&quot;,
+    &quot;onConnectChannel&quot;,
+    &quot;onCreateChannel&quot;,
+    &quot;onComplete&quot;,
+    &quot;onDisplayUserMedia&quot;,
+    &quot;onAddLocalStream&quot;,
+    &quot;onAddRemoteStream&quot;,
+    &quot;onStateChange&quot;,
+    &quot;onDisconnectChannel&quot;,
+    &quot;onMessage&quot;,
+    &quot;onError&quot;,
+    &quot;onStat&quot;
   ];
 
   return Object.freeze(events);
-}());
+})();
 
 export default remonEvents;
 </code></pre>
@@ -79,7 +76,7 @@ export default remonEvents;
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

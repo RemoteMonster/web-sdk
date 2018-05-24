@@ -11,7 +11,7 @@ RemoteMonster - Livecast Management in the Cloud
 ### Package Manager
 
 ```bash
-npm i @remotemonster/sdk`
+npm i @remotemonster/sdk
 ```
 
 ### Static import
@@ -22,31 +22,31 @@ npm i @remotemonster/sdk`
 
 ### Downloads
 
-[Download latest](https://github.com/RemoteMonster/browser-sdk/archive/master.zip)
+* [Download latest](https://github.com/RemoteMonster/browser-sdk/archive/master.zip)
 
 ## Examples
 
 ### Full festures
 
 * [demo](https://remotemonster.github.io/browser-sdk/examples/full/)
-* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/full)
+* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/full/)
 
 ### Simple - Communication
 
 * [demo](https://remotemonster.github.io/browser-sdk/examples/simple-communication/)
-* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-communication)
+* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-communication/)
 
 ### Simple - Livecast
 
 * [cast - demo](https://remotemonster.github.io/browser-sdk/examples/simple-livecast-cast/)
-* [cast - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-cast)
+* [cast - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-cast/)
 * [watch - demo](https://remotemonster.github.io/browser-sdk/examples/simple-livecast-watch/)
-* [watch - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-watch)
+* [watch - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-watch/)
 
 ## Documents
 
 * [Guides](https://docs.remotemonster.com/)
-* [API Reference](https://remotemonster.github.io/browser-sdk/docs)
+* [API Reference](https://remotemonster.github.io/browser-sdk/doc/)
 
 ## Changelog
 
