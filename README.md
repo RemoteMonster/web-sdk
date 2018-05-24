@@ -1,20 +1,53 @@
+[![npm version](https://badge.fury.io/js/%40remotemonster%2Fsdk.svg)](https://badge.fury.io/js/%40remotemonster%2Fsdk)
+
 # RemoteMonster Browser SDK
-WebRTC 기반의 앱과 웹을 위한 통화 클라우드, RemoteMonster의 브라우저 SDK 입니다. 자세한 사용법은 아래 링크를 참고하세요.
-- [Website](https://remotemonster.com)
-- [Documents](https://docs.remotemonster.com/ko/)
+
+RemoteMonster - Livecast Management in the Cloud
+
+* [Website](https://remotemonster.com)
+
+## Get SDK
+
+### Package Manager
+
+```bash
+npm i @remotemonster/sdk`
+```
+
+### Static import
+
+```html
+<script src="https://cdn.remotemonster.com/sdk/browser/remon.min.js"></script>
+```
+
+### Downloads
+
+[Download latest](https://github.com/RemoteMonster/browser-sdk/archive/master.zip)
 
 ## Examples
-examples 폴더에 사용예제가 담겨있습니다.
-- [examples/full](https://remotemonster.github.io/browser-sdk/examples/full/)
-- [examples/simple](https://remotemonster.github.io/browser-sdk/examples/simple/)
+
+### Full festures
+
+* [demo](https://remotemonster.github.io/browser-sdk/examples/full/)
+* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/full)
+
+### Simple - Communication
+
+* [demo](https://remotemonster.github.io/browser-sdk/examples/simple-communication/)
+* [source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-communication)
+
+### Simple - Livecast
+
+* [cast - demo](https://remotemonster.github.io/browser-sdk/examples/simple-livecast-cast/)
+* [cast - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-cast)
+* [watch - demo](https://remotemonster.github.io/browser-sdk/examples/simple-livecast-watch/)
+* [watch - source](https://github.com/RemoteMonster/browser-sdk/tree/master/examples/simple-livecast-watch)
 
 ## Documents
-doc 폴더에 API 문서가 담겨있습니다.
-- [doc](https://remotemonster.github.io/browser-sdk/doc)
+
+* [Guides](https://docs.remotemonster.com/)
+* [API Reference](https://remotemonster.github.io/browser-sdk/docs)
 
 ## Changelog
-변경사항이 아래와 같이 기록되어 있습니다.
-- [Changelog](https://github.com/RemoteMonster/browser-sdk/blob/master/CHANGELOG.md)
 
-## 사용된 오픈소스 라이센스
-notice폴더에 사용된 오픈소스 라이센스의 세부 내용이 담겨있습니다.
+* [Changelog](https://github.com/RemoteMonster/browser-sdk/blob/master/CHANGELOG.md)
