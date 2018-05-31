@@ -14,6 +14,10 @@ RemoteMonster - Livecast Management in the Cloud
 npm i @remotemonster/sdk
 ```
 
+```html
+<script src="node_modules/@remotemonster/sdk/remon.min.js"></script>
+```
+
 ### Static import
 
 ```html
@@ -26,7 +30,7 @@ npm i @remotemonster/sdk
 
 ### Downloads
 
-- [Download latest](https://github.com/RemoteMonster/web-sdk/archive/master.zip)
+- [Downloads](https://github.com/RemoteMonster/web-sdk/releases/)
 
 ## Examples
 
