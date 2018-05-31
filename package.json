@@ -1,16 +1,16 @@
 {
   "name": "@remotemonster/sdk",
   "version": "2.0.1",
-  "description": "RemoteMonster Browser SDK",
+  "description": "RemoteMonster Web SDK",
   "main": "remon.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "if [ -d 'cache' ]; then rm -rf cache; fi",
     "prepackage": "if [ ! -d 'cache' ]; then mkdir cache; fi",
     "package:examples": "cp -r examples cache",
-    "package:doc": "cp -r doc cache",
+    "package:docs": "cp -r docs cache",
     "package":
-      "npm run prepackage && npm run package:examples && npm run package:doc",
+      "npm run prepackage && npm run package:examples && npm run package:docs",
     "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
@@ -25,20 +25,20 @@
     "Cloud"
   ],
   "author": "RemoteMonster",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RemoteMonster/browser-sdk.git"
+    "url": "git+https://github.com/RemoteMonster/web-sdk.git"
   },
   "devDependencies": {
-    "gh-pages": "^0.12.0"
+    "gh-pages": "^1.1.0"
   },
   "bugs": {
-    "url": "https://github.com/RemoteMonster/browser-sdk/issues"
+    "url": "https://github.com/RemoteMonster/web-sdk/issues"
   },
-  "homepage": "https://github.com/RemoteMonster/browser-sdk#readme",
+  "homepage": "https://remotemonster.com/",
   "directories": {
-    "doc": "doc",
+    "doc": "docs",
     "example": "examples"
   },
   "dependencies": {}
