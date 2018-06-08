@@ -183,7 +183,6 @@ const fetchCasts = async function() {
   try {
     const casts = await castsFetcher.fetchCasts();
     channelsEl.innerHTML = "";
-    console.log(casts);
     casts
       .filter(cast => {
         return chid.trim() != cast.id.trim();
