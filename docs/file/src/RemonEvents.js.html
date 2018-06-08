@@ -57,6 +57,7 @@ const remonEvents = (function RemonEvents() {
     &quot;onConnectChannel&quot;,
     &quot;onCreateChannel&quot;,
     &quot;onComplete&quot;,
+    &quot;onConnect&quot;, //for remon 2.0 call interface when create channel is successful
     &quot;onDisplayUserMedia&quot;,
     &quot;onAddLocalStream&quot;,
     &quot;onAddRemoteStream&quot;,
@@ -64,7 +65,11 @@ const remonEvents = (function RemonEvents() {
     &quot;onDisconnectChannel&quot;,
     &quot;onMessage&quot;,
     &quot;onError&quot;,
-    &quot;onStat&quot;
+    &quot;onStat&quot;,
+    &quot;onClose&quot;,
+    &quot;onLog&quot;,
+    &quot;onJoin&quot;, // for remon 2.0 cast interface when create and join room is successful
+    &quot;onCreate&quot; // for remon 2.0 cast interface when create and join room is successful
   ];
 
   return Object.freeze(events);

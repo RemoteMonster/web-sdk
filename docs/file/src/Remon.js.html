@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.1&quot;;
+    this.version = &quot;2.0.8&quot;;
 
     this.context = new Context();
     this.context.eventManager = EventManager();
@@ -80,7 +80,7 @@ class Remon {
       this.config.dev &amp;&amp; this.config.dev.logLevel
         ? this.config.dev.logLevel
         : &quot;INFO&quot;;
-    l.init(this.context.logLevel);
+    l.init(this.context);
     if (listener) {
       Object.keys(listener).forEach(type =&gt; {
         const listenerItem = listener[type];
@@ -123,6 +123,7 @@ class Remon {
   }
 
   async init() {
+    l.d(&quot;init is called&quot;);
     var that = this;
     var ctx = this.context;
     var cfg = this.config;
@@ -237,11 +238,17 @@ class Remon {
     }
   }
 
+  async connectCall(...args) {
+    l.d(&quot;connect is called&quot;);
+    await this.connectChannel(args);
+  }
+
   /**
    * Create P2P channel, if there is no P2P channel with the id. Join the P2P channel, if there is P2P channel with the id.
    * example: remon.connectChannel(&quot;roomname1&quot;);
    */
   async connectChannel(...args) {
+    l.d(&quot;createChannel is called&quot;);
     await this.init();
     return this.context.signalingConnection.connectChannel(...args);
   }
@@ -251,6 +258,7 @@ class Remon {
    * @param (string) roomname name of broadcast room. it is no id but name. You can take a real room id from onCreateChannel event
    */
   async createCast(roomname) {
+    l.d(&quot;createCast is called&quot;);
     await this.init();
     this.context.signalingConnection.createBroadcastChannel(roomname);
   }
@@ -260,6 +268,7 @@ class Remon {
    * @param (string) room id
    */
   async joinCast(roomid) {
+    l.d(&quot;joinCast is called&quot;);
     await this.init();
     this.context.signalingConnection.createViewerChannel(roomid);
   }
@@ -287,6 +296,7 @@ class Remon {
    * @param (bool)
    */
   pauseLocalVideo(bool) {
+    l.d(&quot;pauseLocalVideo is called&quot;);
     this.media
       .mediaStreamTrackSwitch(Config.rtc.localStream)
       .type(&quot;Video&quot;)
@@ -297,6 +307,7 @@ class Remon {
    * @param (bool) bool
    */
   pauseRemoteVideo(bool) {
+    l.d(&quot;pauseRemoteVideo is called&quot;);
     this.media
       .mediaStreamTrackSwitch(this.context.remoteStream)
       .type(&quot;Video&quot;)
@@ -307,6 +318,7 @@ class Remon {
    * switch camera between fore and back
    */
   cameraSwitch() {
+    l.d(&quot;cameraSwitch is called&quot;);
     this.media.setUserDevices(null, this.context.devices[1].deviceId);
   }
   /**
@@ -329,12 +341,15 @@ class Remon {
       .type(&quot;Audio&quot;)
       .enabled(!!bool);
   }
+  async fetchCalls(id) {
+    return await this.search(id);
+  }
   /**
    * search P2P channels by id.
    * @param (string) id for search. It can be part of full id
    */
   search(id) {
-    l.i(&quot;search by&quot; + id);
+    l.d(&quot;search by&quot; + id);
     // const message = {
     //   command: &quot;search&quot;, token: this.context.token,
     //   serviceId: this.context.serviceId, body: id
@@ -364,6 +379,10 @@ class Remon {
           });
       });
     });
+  }
+
+  async fetchCasts() {
+    return await this.liveRooms();
   }
   /**
    * Retrieve all broadcast rooms information
