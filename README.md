@@ -39,15 +39,15 @@ npm i @remotemonster/sdk
 - [demo](https://studio.remotemonster.com/)
 - [source](https://github.com/RemoteMonster/remon-studio)
 
-### Full features
+### Full features - Livecast
 
-- [demo](https://remotemonster.github.io/web-sdk/examples/full/)
-- [source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/full/)
+- [demo](https://remotemonster.github.io/web-sdk/examples/full-livecast/)
+- [source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/full-livecast/)
 
-### Simple - Communication
+### Full features - Communication
 
-- [demo](https://remotemonster.github.io/web-sdk/examples/simple-communication/)
-- [source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/simple-communication/)
+- [demo](https://remotemonster.github.io/web-sdk/examples/full-communication/)
+- [source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/full-communication/)
 
 ### Simple - Livecast
 
@@ -55,6 +55,11 @@ npm i @remotemonster/sdk
 - [cast - source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/simple-livecast-cast/)
 - [watch - demo](https://remotemonster.github.io/web-sdk/examples/simple-livecast-watch/)
 - [watch - source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/simple-livecast-watch/)
+
+### Simple - Communication
+
+- [demo](https://remotemonster.github.io/web-sdk/examples/simple-communication/)
+- [source](https://github.com/RemoteMonster/web-sdk/tree/master/examples/simple-communication/)
 
 ## Documents
 
