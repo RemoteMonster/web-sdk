@@ -336,6 +336,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/remon.js~remon#connectcall",
+    "class/src/Remon.js~Remon.html#instance-method-connectCall",
+    "src/Remon.js~Remon#connectCall",
+    "method"
+  ],
+  [
     "src/remon.js~remon#connectchannel",
     "class/src/Remon.js~Remon.html#instance-method-connectChannel",
     "src/Remon.js~Remon#connectChannel",
@@ -357,6 +363,18 @@ window.esdocSearchIndex = [
     "src/remon.js~remon#createcast",
     "class/src/Remon.js~Remon.html#instance-method-createCast",
     "src/Remon.js~Remon#createCast",
+    "method"
+  ],
+  [
+    "src/remon.js~remon#fetchcalls",
+    "class/src/Remon.js~Remon.html#instance-method-fetchCalls",
+    "src/Remon.js~Remon#fetchCalls",
+    "method"
+  ],
+  [
+    "src/remon.js~remon#fetchcasts",
+    "class/src/Remon.js~Remon.html#instance-method-fetchCasts",
+    "src/Remon.js~Remon#fetchCasts",
     "method"
   ],
   [

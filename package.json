@@ -1,6 +1,6 @@
 {
   "name": "@remotemonster/sdk",
-  "version": "2.0.1",
+  "version": "2.0.8",
   "description": "RemoteMonster Web SDK",
   "main": "remon.min.js",
   "scripts": {
@@ -9,8 +9,7 @@
     "prepackage": "if [ ! -d 'cache' ]; then mkdir cache; fi",
     "package:examples": "cp -r examples cache",
     "package:docs": "cp -r docs cache",
-    "package":
-      "npm run prepackage && npm run package:examples && npm run package:docs",
+    "package": "npm run prepackage && npm run package:examples && npm run package:docs",
     "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
