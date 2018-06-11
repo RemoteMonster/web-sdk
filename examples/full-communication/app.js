@@ -1,4 +1,3 @@
-
 const statusEl = document.querySelector("#status");
 const localVideoEl = document.querySelector("#localVideo");
 const remoteVideoEl = document.querySelector("#remoteVideo");
@@ -40,11 +39,11 @@ const config = {
 };
 
 const listener = {
-  onConnect(chid) {
-    l(`EVENT FIRED : onConnect: ${chid}`);
-    statusEl.textContent = `WAIT - ${chid}`;
+  onConnect(mChid) {
+    l(`EVENT FIRED : onConnect: ${mChid}`);
+    statusEl.textContent = `WAIT - ${mChid}`;
   },
-  onComplete(chid) {
+  onComplete() {
     l(`EVENT FIRED : onComplete: ${chid}`);
     statusEl.textContent = `${chid}`;
   },
