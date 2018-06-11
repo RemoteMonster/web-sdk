@@ -1,8 +1,8 @@
 {
   "name": "@remotemonster/sdk",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "RemoteMonster Web SDK",
-  "main": "remon.min.js",
+  "browser": "remon.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "if [ -d 'cache' ]; then rm -rf cache; fi",
@@ -21,9 +21,16 @@
     "SDK",
     "API",
     "PaaS",
-    "Cloud"
+    "CPaaS",
+    "cloud",
+    "live",
+    "broadcast",
+    "p2p"
   ],
-  "author": "RemoteMonster",
+  "author": {
+    "name": "RemoteMonster",
+    "email": "remotemonster@remotemonster.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
