@@ -51,6 +51,7 @@ const listener = {
     l("EVENT FIRED : onClose");
     if (!bored) toggleBtn();
     statusEl.textContent = "";
+    chid = "";
   },
   onError(error) {
     l(`EVENT FIRED : onError: ${error}`);
@@ -153,7 +154,6 @@ function toggleBtn() {
     closeBtnEl.style.display = "none";
   }
   bored = !bored;
-  chid = "";
 }
 
 function l(msg) {
