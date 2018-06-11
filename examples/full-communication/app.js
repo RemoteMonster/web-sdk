@@ -1,3 +1,5 @@
+
+const statusEl = document.querySelector("#status");
 const localVideoEl = document.querySelector("#localVideo");
 const remoteVideoEl = document.querySelector("#remoteVideo");
 const chidInputEl = document.querySelector("#chidInput");

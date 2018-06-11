@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.8&quot;;
+    this.version = &quot;2.0.9&quot;;
 
     this.context = new Context();
     this.context.eventManager = EventManager();
@@ -240,7 +240,7 @@ class Remon {
 
   async connectCall(...args) {
     l.d(&quot;connect is called&quot;);
-    await this.connectChannel(args);
+    await this.connectChannel(...args);
   }
 
   /**
