@@ -20,12 +20,14 @@ npm i @remotemonster/sdk
 
 ### Static import
 
+From [jsdelivr](https://www.jsdelivr.com)
+
 ```html
-<!-- Latest -->
-<script src="https://cdn.remotemonster.com/sdk/web/remon.min.js"></script>
+<!-- v2.x Latest -->
+<script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
 <!-- Specific version -->
-<script src="https://cdn.remotemonster.com/sdk/web/2.0.0/remon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.0.8/remon.min.js"></script>
 ```
 
 ### Downloads
