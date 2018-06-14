@@ -20,10 +20,10 @@ npm i @remotemonster/sdk
 
 ### Static import
 
-From [jsdelivr](https://www.jsdelivr.com)
+From [jsDelivr](https://www.jsdelivr.com)
 
 ```html
-<!-- v2.x Latest -->
+<!-- Latest -->
 <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
 <!-- Specific version -->
