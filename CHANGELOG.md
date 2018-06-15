@@ -1,3 +1,16 @@
+<a name="2.0.9"></a>
+
+## [2.0.9](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.8...v2.0.9) (2018-06-11)
+
+### Bug Fixes
+
+- full example migrate to v2.x ([ccd7542](https://github.com/RemoteMonster/remon-web-sdk/commit/ccd7542))
+- full example migrate to v2.x ([1b1de30](https://github.com/RemoteMonster/remon-web-sdk/commit/1b1de30))
+
+### Features
+
+- migrate simple examples to 2.x ([8de4bf0](https://github.com/RemoteMonster/remon-web-sdk/commit/8de4bf0))
+
 <a name="2.0.8"></a>
 
 ## [2.0.8](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.7...v2.0.8) (2018-06-05)
