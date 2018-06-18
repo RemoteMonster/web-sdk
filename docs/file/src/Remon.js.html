@@ -62,11 +62,15 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.12&quot;;
+    this.version = &quot;2.0.13&quot;;
 
     this.context = new Context();
     this.context.eventManager = EventManager();
     this.config = config;
+    this.context.logLevel =
+      this.config.dev &amp;&amp; this.config.dev.logLevel
+        ? this.config.dev.logLevel
+        : &quot;INFO&quot;;
     util.validateConfig(this.context, this.config);
     this.media = new Media(this.context);
     this.context.mediaManager = this.media;
@@ -76,10 +80,6 @@ class Remon {
     this.context.key = this.key;
     this.context.serviceId = this.serviceId;
     this.context.state = &quot;INIT&quot;;
-    this.context.logLevel =
-      this.config.dev &amp;&amp; this.config.dev.logLevel
-        ? this.config.dev.logLevel
-        : &quot;INFO&quot;;
     l.init(this.context);
     if (listener) {
       Object.keys(listener).forEach(type =&gt; {
