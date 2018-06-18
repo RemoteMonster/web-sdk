@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.13&quot;;
+    this.version = &quot;2.0.14&quot;;
 
     this.context = new Context();
     this.context.eventManager = EventManager();
@@ -233,7 +233,7 @@ class Remon {
       ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;WebSocketFailedError&quot;);
     }
     try {
-      ctx.devices = navigator.mediaDevices.enumerateDevices();
+      ctx.devices = await navigator.mediaDevices.enumerateDevices();
       ctx.currentVideoDeviceId = ctx.devices[0].deviceId;
     } catch (e) {
       console.log(e);
