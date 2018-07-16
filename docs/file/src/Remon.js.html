@@ -62,11 +62,15 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.10&quot;;
+    this.version = &quot;2.0.15&quot;;
 
     this.context = new Context();
     this.context.eventManager = EventManager();
     this.config = config;
+    this.context.logLevel =
+      this.config.dev &amp;&amp; this.config.dev.logLevel
+        ? this.config.dev.logLevel
+        : &quot;INFO&quot;;
     util.validateConfig(this.context, this.config);
     this.media = new Media(this.context);
     this.context.mediaManager = this.media;
@@ -76,10 +80,6 @@ class Remon {
     this.context.key = this.key;
     this.context.serviceId = this.serviceId;
     this.context.state = &quot;INIT&quot;;
-    this.context.logLevel =
-      this.config.dev &amp;&amp; this.config.dev.logLevel
-        ? this.config.dev.logLevel
-        : &quot;INFO&quot;;
     l.init(this.context);
     if (listener) {
       Object.keys(listener).forEach(type =&gt; {
@@ -87,6 +87,7 @@ class Remon {
         this.context.eventManager.addEventListener({ type, listenerItem });
       });
     }
+    if (!this.config.rtc) this.config.rtc = Config.rtc;
     if (!this.config.media)
       this.config.media = { audio: true, video: true, record: false };
     if (this.config.media.record) {
@@ -140,8 +141,6 @@ class Remon {
     };
     if (this.config.sdk &amp;&amp; this.config.sdk.country)
       messageBody.env.country = this.config.sdk.country;
-    if (this.config.media.sendonly === true) messageBody.sendonly = &quot;true&quot;;
-    if (this.config.media.recvonly === true) messageBody.recvonly = &quot;true&quot;;
     if (this.config.media.roomid) messageBody.id = this.config.media.roomid;
     var message = {
       method: &quot;POST&quot;,
@@ -184,34 +183,31 @@ class Remon {
         }
       }
     });
-    if (
-      cfg.media.sendonly == true ||
-      cfg.media.recvonly == true ||
-      cfg.media.broadcast == true
-    )
-      ctx.broadcast = true;
+
     ctx.signalingConnection = await SignalingConnection({
       url: Config.signalingServer.url,
       context: ctx
     });
-    if (
-      cfg.media.sendonly == true ||
-      cfg.media.recvonly == true ||
-      cfg.media.broadcast == true
-    ) {
-      if (cfg.media.sendonly == true) ctx.channel.type = &quot;BROADCAST&quot;;
-      if (cfg.media.recvonly == true) ctx.channel.type = &quot;VIEWER&quot;;
-      ctx.signalingConnection.setDisconnectHandler();
+    if (cfg.rtc.audioType === &quot;music&quot;) {
+      cfg.opt = {
+        mandatory: {
+          googHighpassFilter: false,
+          googEchoCancellation: false,
+          googNoiseSuppression: false
+        },
+        optional: [{ googCpuOveruseDetection: false }]
+      };
     }
-
     ctx.peerConnection = new RTCPeerConnection(Config.rtc, cfg.opt);
     ctx.hasAddTrack = ctx.peerConnection.addTrack !== undefined;
-    bindSignalingConnectionEvents({ context: ctx, media: that.media });
+    bindSignalingConnectionEvents({
+      context: ctx,
+      media: that.media,
+      config: cfg
+    });
     bindPeerConnectionEvents({ context: ctx, media: that.media });
-    if (ctx.useVideo) {
-      if (cfg.view &amp;&amp; typeof cfg.view.local !== &quot;undefined&quot;)
-        Config.rtc.localVideo = document.querySelector(`${cfg.view.local}`);
-    }
+    if (cfg.view &amp;&amp; typeof cfg.view.local !== &quot;undefined&quot;)
+      Config.rtc.localVideo = document.querySelector(`${cfg.view.local}`);
     if (cfg.view &amp;&amp; typeof cfg.view.remote !== &quot;undefined&quot;) {
       ctx.remoteVideo = document.querySelector(`${cfg.view.remote}`);
     }
@@ -236,6 +232,12 @@ class Remon {
     if (ctx.eventManager.hasEventListener(&quot;onError&quot;)) {
       ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;WebSocketFailedError&quot;);
     }
+    try {
+      ctx.devices = await navigator.mediaDevices.enumerateDevices();
+      ctx.currentVideoDeviceId = ctx.devices[0].deviceId;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async connectCall(...args) {
@@ -249,6 +251,7 @@ class Remon {
    */
   async connectChannel(...args) {
     l.d(&quot;createChannel is called&quot;);
+    this.config.rtc.audioType = &quot;voice&quot;;
     await this.init();
     return this.context.signalingConnection.connectChannel(...args);
   }
@@ -259,6 +262,7 @@ class Remon {
    */
   async createCast(roomname) {
     l.d(&quot;createCast is called&quot;);
+    this.config.rtc.audioType = &quot;music&quot;;
     await this.init();
     this.context.signalingConnection.createBroadcastChannel(roomname);
   }
@@ -269,6 +273,7 @@ class Remon {
    */
   async joinCast(roomid) {
     l.d(&quot;joinCast is called&quot;);
+    this.config.rtc.audioType = &quot;music&quot;;
     await this.init();
     this.context.signalingConnection.createViewerChannel(roomid);
   }
@@ -498,7 +503,7 @@ export default Remon;
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>
