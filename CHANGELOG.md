@@ -1,12 +1,19 @@
+<a name="2.0.17"></a>
+## [2.0.17](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.16...v2.0.17) (2018-07-23)
+
+
+
+<a name="2.0.17"></a>
+
+## [2.0.17](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.16...v2.0.17) (2018-07-23)
+
 <a name="2.0.16"></a>
+
 ## [2.0.16](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.15...v2.0.16) (2018-07-18)
 
-
-
 <a name="2.0.16"></a>
+
 ## [2.0.16](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.15...v2.0.16) (2018-07-18)
-
-
 
 ## [2.0.15](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.14...v2.0.15) (2018-07-13)
 
