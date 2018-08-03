@@ -62,9 +62,10 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.17&quot;;
+    this.version = &quot;2.0.18&quot;;
 
     this.context = new Context();
+    this.context.sdkVersion = this.version;
     this.context.eventManager = EventManager();
     this.config = config;
     this.context.logLevel =
@@ -128,6 +129,7 @@ class Remon {
     var that = this;
     var ctx = this.context;
     var cfg = this.config;
+    l.errorEvt(ctx, &quot;1004&quot;, &quot;init failed:&quot;);
     var messageBody = {
       credential: { key: this.key, serviceId: this.serviceId },
       env: {
@@ -158,8 +160,10 @@ class Remon {
         ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;WebSocketFailedError&quot;);
       }
       l.e(&quot;Init: failed:&quot;, error);
+      l.errorEvt(ctx, &quot;1004&quot;, &quot;init failed:&quot; + error);
     }
     l.d(&quot;-&gt; Message:&quot;, responseJson);
+
     Object.keys(responseJson).forEach(responseJsonKey =&gt; {
       switch (responseJsonKey) {
         case &quot;iceServers&quot;: {
@@ -183,7 +187,23 @@ class Remon {
         }
       }
     });
-
+    var eventMsg = {
+      topic: &quot;log&quot;,
+      messages: {
+        log: &quot;Peer Id is created : &quot; + ctx.token,
+        logLevel: &quot;info&quot;,
+        os: platform.os.family,
+        osVersion: platform.os.version || &quot;0&quot;,
+        device: platform.name,
+        deviceVersion: platform.version || &quot;0&quot;,
+        networkType: Navigator.connection,
+        sdkVersion: this.version,
+        svcId: ctx.serviceId,
+        pId: ctx.token,
+        status: &quot;INIT&quot;
+      }
+    };
+    l.evt(JSON.stringify(eventMsg));
     ctx.signalingConnection = await SignalingConnection({
       url: Config.signalingServer.url,
       context: ctx
@@ -237,6 +257,7 @@ class Remon {
       ctx.currentVideoDeviceId = ctx.devices[0].deviceId;
     } catch (e) {
       console.log(e);
+      l.errorEvt(ctx, &quot;1007&quot;, &quot;failed to get media devices: &quot; + e);
     }
   }
 
@@ -381,6 +402,7 @@ class Remon {
           })
           .catch(err =&gt; {
             reject(err);
+            l.errorEvt(this.context, &quot;1008&quot;, &quot;search is  failed:&quot; + err);
           });
       });
     });
@@ -411,6 +433,7 @@ class Remon {
           })
           .catch(err =&gt; {
             reject(err);
+            l.errorEvt(this.context, &quot;1008&quot;, &quot;search is  failed:&quot; + err);
           });
       });
     });
@@ -427,7 +450,6 @@ class Remon {
     });
     l.d(&quot;Message -&gt;:&quot;, message);
     this.context.signalingConnection.send(JSON.stringify(message));
-    l.gEnd();
   }
 
   /**
@@ -456,16 +478,6 @@ class Remon {
         .getTracks()
         .forEach(track =&gt; track.stop());
     }
-    if (this.context.database) {
-      this.context.database
-        .ref(&quot;/msg/peer/&quot; + this.context.token)
-        .onDisconnect()
-        .remove();
-      this.context.database
-        .ref(&quot;/tokens/&quot; + this.context.serviceId + &quot;/&quot; + this.context.token)
-        .onDisconnect()
-        .remove();
-    }
     if (!this.context.signalingConnection) return;
     //this.context.localVideo.srcObject = null;
     // FIXME: Chrome, adapter does not support addTrack.
@@ -486,6 +498,19 @@ class Remon {
       this.context.peerConnection.close();
     this.context.peerConnection = null;
     this.context.signalingConnection.close();
+    var eventMsg = {
+      topic: &quot;log&quot;,
+      messages: {
+        log: &quot;remon is closed&quot;,
+        logLevel: &quot;info&quot;,
+        sdkVersion: this.version,
+        svcId: this.context.serviceId,
+        pId: this.context.token,
+        chId: this.context.channel.id,
+        status: &quot;CLOSE&quot;
+      }
+    };
+    l.evt(JSON.stringify(eventMsg));
   }
 
   wait(timeout) {
