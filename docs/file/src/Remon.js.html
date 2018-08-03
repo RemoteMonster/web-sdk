@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.18&quot;;
+    this.version = &quot;2.0.19&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -129,7 +129,6 @@ class Remon {
     var that = this;
     var ctx = this.context;
     var cfg = this.config;
-    l.errorEvt(ctx, &quot;1004&quot;, &quot;init failed:&quot;);
     var messageBody = {
       credential: { key: this.key, serviceId: this.serviceId },
       env: {
