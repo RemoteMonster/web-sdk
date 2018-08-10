@@ -1,7 +1,20 @@
+<a name="2.0.21"></a>
+## [2.0.21](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.20...v2.0.21) (2018-08-10)
+
+
+### Features
+
+* remove on-error event that is just for test on-error event works ([3604dbd](https://github.com/RemoteMonster/remon-web-sdk/commit/3604dbd))
+
+
+
+<a name="2.0.21"></a>
+
+## [2.0.21](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.20...v2.0.21) (2018-08-10)
+
 <a name="2.0.20"></a>
+
 ## [2.0.20](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.19...v2.0.20) (2018-08-06)
-
-
 
 <a name="2.0.20"></a>
 

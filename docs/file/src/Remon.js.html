@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.20&quot;;
+    this.version = &quot;2.0.21&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -248,9 +248,9 @@ class Remon {
         await this.wait(timeout);
       }
     }
-    if (ctx.eventManager.hasEventListener(&quot;onError&quot;)) {
-      ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;WebSocketFailedError&quot;);
-    }
+    // if (ctx.eventManager.hasEventListener(&quot;onError&quot;)) {
+    //   ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;Error is successfully dispatched&quot;);
+    // }
     try {
       ctx.devices = await navigator.mediaDevices.enumerateDevices();
       ctx.currentVideoDeviceId = ctx.devices[0].deviceId;
@@ -303,6 +303,12 @@ class Remon {
    */
   getHealth() {
     return this.context.health.result;
+  }
+  /**
+   * retrieve current remon state information
+   */
+  getState() {
+    return this.context.state;
   }
   /**
    * retrieve current sdk version
