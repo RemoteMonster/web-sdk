@@ -390,6 +390,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/remon.js~remon#getstate",
+    "class/src/Remon.js~Remon.html#instance-method-getState",
+    "src/Remon.js~Remon#getState",
+    "method"
+  ],
+  [
     "src/remon.js~remon#getversion",
     "class/src/Remon.js~Remon.html#instance-method-getVersion",
     "src/Remon.js~Remon#getVersion",
