@@ -1,11 +1,5 @@
-<a name="2.0.22"></a>
-## [2.0.22](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.20...v2.0.22) (2018-08-16)
-
-
-### Features
-
-* add signaling error code ([1e64c04](https://github.com/RemoteMonster/remon-web-sdk/commit/1e64c04))
-* remove on-error event that is just for test on-error event works ([3604dbd](https://github.com/RemoteMonster/remon-web-sdk/commit/3604dbd))
+<a name="2.0.23"></a>
+## [2.0.23](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.0.22...v2.0.23) (2018-08-16)
 
 
 
