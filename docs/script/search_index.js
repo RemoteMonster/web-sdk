@@ -474,6 +474,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/remon.js~remon#setvideoqulity",
+    "class/src/Remon.js~Remon.html#instance-method-setVideoQulity",
+    "src/Remon.js~Remon#setVideoQulity",
+    "method"
+  ],
+  [
     "src/remon.js~remon#uri",
     "class/src/Remon.js~Remon.html#instance-member-uri",
     "src/Remon.js~Remon#uri",
