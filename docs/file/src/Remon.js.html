@@ -62,12 +62,20 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.0.23&quot;;
+    this.version = &quot;2.1.0&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
+    this.context.logServer =
+      config.logServer &amp;&amp; config.logServer.url
+        ? config.logServer
+        : Config.logServer;
     this.context.eventManager = EventManager();
     this.config = config;
+    this.context.simulcast =
+      this.config.rtc &amp;&amp; this.config.rtc.simulcast
+        ? this.config.rtc.simulcast
+        : Config.rtc.simulcast;
     this.context.logLevel =
       this.config.dev &amp;&amp; this.config.dev.logLevel
         ? this.config.dev.logLevel
@@ -81,6 +89,7 @@ class Remon {
     this.context.key = this.key;
     this.context.serviceId = this.serviceId;
     this.context.state = &quot;INIT&quot;;
+
     l.init(this.context);
     if (listener) {
       Object.keys(listener).forEach(type =&gt; {
@@ -166,7 +175,9 @@ class Remon {
     Object.keys(responseJson).forEach(responseJsonKey =&gt; {
       switch (responseJsonKey) {
         case &quot;iceServers&quot;: {
-          Config.rtc.iceServers = responseJson[responseJsonKey];
+          responseJson[responseJsonKey].forEach(x =&gt;
+            Config.rtc.iceServers.push(x)
+          );
           break;
         }
         case &quot;token&quot;: {
@@ -203,7 +214,7 @@ class Remon {
       }
     };
     l.evt(JSON.stringify(eventMsg));
-    ctx.signalingConnection = await SignalingConnection({
+    ctx.signalingConnection = SignalingConnection({
       url: Config.signalingServer.url,
       context: ctx
     });
@@ -238,8 +249,8 @@ class Remon {
     for (let i = 5; i &lt;= MAX_RETRIES; i++) {
       // ctx.signalingConnection connection state&#xC640; localmedia &#xB4E4;&#xC5B4;&#xC654;&#xB294;&#xC9C0;, ctx.peerConnection&#xC774; &#xC81C;&#xB300;&#xB85C; &#xC0DD;&#xC131;&#xB418;&#xC5C8;&#xB294;&#xC9C0; &#xCCB4;&#xD06C; &#xD6C4; return
       if (
-        ctx.signalingConnection.isOpened() &amp;&amp;
-        ctx.mediaManager.isLocalPrepared()
+        ctx.signalingConnection.isOpened()
+        // ctx.mediaManager.isLocalPrepared()
       ) {
         return;
       } else {
@@ -375,6 +386,10 @@ class Remon {
   async fetchCalls(id) {
     return await this.search(id);
   }
+
+  setVideoQulity(quility) {
+    this.context.signalingConnection.setSimulcastPriority(quility);
+  }
   /**
    * search P2P channels by id.
    * @param (string) id for search. It can be part of full id
@@ -451,7 +466,8 @@ class Remon {
     l.g(&quot;Signaling: Send user message&quot;);
     const message = this.context.signalingConnection.createMessage({
       command: &quot;message&quot;,
-      body: userMessage
+      body: userMessage,
+      code: &quot;&quot;
     });
     l.d(&quot;Message -&gt;:&quot;, message);
     this.context.signalingConnection.send(JSON.stringify(message));

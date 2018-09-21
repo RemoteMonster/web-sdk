@@ -44,12 +44,13 @@ var configure = (function Configure() {
   var config = {
     rtc: {
       iceServers: [
-        { urls: &quot;stun:stun.services.mozilla.com&quot; },
+        // { urls: &quot;stun:stun.services.mozilla.com&quot; },
         { urls: &quot;stun:stun.l.google.com:19302&quot; }
       ],
       localStream: undefined,
       localVideo: undefined,
-      audioType: &quot;voice&quot;
+      audioType: &quot;voice&quot;,
+      simulcast: false
       /*
       iceTransportPolicy: undefined,
       bundlePolicy: undefined,
@@ -67,6 +68,9 @@ var configure = (function Configure() {
     appServer: {
       url: &quot;https://signal.remotemonster.com/rest&quot;
       //url: &apos;http://localhost:8081/rest&apos;,
+    },
+    logServer: {
+      url: &quot;https://signal.remotemonster.com:2001/topics&quot;
     },
     sdk: {
       logLevel: undefined,
