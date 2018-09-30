@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.1.0&quot;;
+    this.version = &quot;2.1.2&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -131,6 +131,17 @@ class Remon {
     if (this.config.credential.wsurl)
       Config.signalingServer.url = this.config.credential.wsurl;
     //this.init();
+    window.addEventListener(
+      &quot;offline&quot;,
+      () =&gt; {
+        l.i(&quot;Browser: offline&quot;);
+        if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
+          this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
+        }
+        this.close(&quot;UNKNOWN&quot;);
+      },
+      false
+    );
   }
 
   async init() {
@@ -476,7 +487,7 @@ class Remon {
   /**
    * close all Remon&apos;s resources
    */
-  close() {
+  close(closeType) {
     l.i(&quot;Remon.close&quot;);
     if (this.context.useRecord &amp;&amp; this.context.remoteRecorder) {
       this.context.remoteRecorder.stop();
@@ -515,10 +526,20 @@ class Remon {
     this.context.peerConnection.onsignalingstatechange = null;
     this.context.peerConnection.onicegatheringstatechange = null;
     this.context.peerConnection.onnegotiationneeded = null;
-    if (this.context.peerConnection.signalingState !== &quot;closed&quot;)
+    if (this.context.peerConnection.signalingState !== &quot;closed&quot;) {
       this.context.peerConnection.close();
+    }
     this.context.peerConnection = null;
     this.context.signalingConnection.close();
+    if (closeType) {
+      this.context.eventManager.dispatchEvent(&quot;onClose&quot;, {
+        closeType
+      });
+    } else {
+      this.context.eventManager.dispatchEvent(&quot;onClose&quot;, {
+        closeType: &quot;MINE&quot;
+      });
+    }
     var eventMsg = {
       topic: &quot;log&quot;,
       messages: {
