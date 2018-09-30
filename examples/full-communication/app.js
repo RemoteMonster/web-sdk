@@ -47,8 +47,8 @@ const listener = {
     l(`EVENT FIRED : onComplete: ${chid}`);
     statusEl.textContent = `${chid}`;
   },
-  onClose(message) {
-    l("EVENT FIRED : onClose", message);
+  onClose() {
+    l("EVENT FIRED : onClose");
     if (!bored) toggleBtn();
     statusEl.textContent = "";
     chid = "";
