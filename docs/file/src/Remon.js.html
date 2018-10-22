@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.1.2&quot;;
+    this.version = &quot;2.1.3&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -316,6 +316,7 @@ class Remon {
   async joinCast(roomid) {
     l.d(&quot;joinCast is called&quot;);
     this.config.rtc.audioType = &quot;music&quot;;
+    this.context.channel.type = &quot;VIEWER&quot;;
     await this.init();
     this.context.signalingConnection.createViewerChannel(roomid);
   }
