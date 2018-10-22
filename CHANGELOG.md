@@ -1,7 +1,16 @@
+<a name="2.1.3"></a>
+## [2.1.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.1.2...v2.1.3) (2018-10-22)
+
+
+### Bug Fixes
+
+* **broadcast:** fix channel type to VIEWER when call the joinCast method ([a859b05](https://github.com/RemoteMonster/remon-web-sdk/commit/a859b05))
+
+
+
 <a name="2.1.2"></a>
+
 ## [2.1.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.1.1-beta.2...v2.1.2) (2018-09-30)
-
-
 
 <a name="2.1.0"></a>
 

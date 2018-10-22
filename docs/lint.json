@@ -68,23 +68,23 @@
     "filePath": "src/Remon.js",
     "lines": [
       {
-        "lineNumber": 306,
+        "lineNumber": 307,
         "line": "  /**"
       },
       {
-        "lineNumber": 307,
+        "lineNumber": 308,
         "line": "   * mute local video"
       },
       {
-        "lineNumber": 308,
+        "lineNumber": 309,
         "line": "   * @param (bool)"
       },
       {
-        "lineNumber": 309,
+        "lineNumber": 310,
         "line": "   */"
       },
       {
-        "lineNumber": 310,
+        "lineNumber": 311,
         "line": "  pauseLocalVideo(bool) {"
       }
     ],
@@ -100,23 +100,23 @@
     "filePath": "src/Remon.js",
     "lines": [
       {
-        "lineNumber": 317,
+        "lineNumber": 318,
         "line": "  /**"
       },
       {
-        "lineNumber": 318,
+        "lineNumber": 319,
         "line": "   * mute remote video"
       },
       {
-        "lineNumber": 319,
+        "lineNumber": 320,
         "line": "   * @param (bool) bool"
       },
       {
-        "lineNumber": 320,
+        "lineNumber": 321,
         "line": "   */"
       },
       {
-        "lineNumber": 321,
+        "lineNumber": 322,
         "line": "  pauseRemoteVideo(bool) {"
       }
     ],
@@ -132,23 +132,23 @@
     "filePath": "src/Remon.js",
     "lines": [
       {
-        "lineNumber": 363,
+        "lineNumber": 364,
         "line": "  /**"
       },
       {
-        "lineNumber": 364,
+        "lineNumber": 365,
         "line": "   * search P2P channels by id."
       },
       {
-        "lineNumber": 365,
+        "lineNumber": 366,
         "line": "   * @param (string) id for search. It can be part of full id"
       },
       {
-        "lineNumber": 366,
+        "lineNumber": 367,
         "line": "   */"
       },
       {
-        "lineNumber": 367,
+        "lineNumber": 368,
         "line": "  search(id) {"
       }
     ],
@@ -164,23 +164,23 @@
     "filePath": "src/Remon.js",
     "lines": [
       {
-        "lineNumber": 431,
+        "lineNumber": 432,
         "line": "  /**"
       },
       {
-        "lineNumber": 432,
+        "lineNumber": 433,
         "line": "   * It's only function for P2P communication. send message to peer"
       },
       {
-        "lineNumber": 433,
+        "lineNumber": 434,
         "line": "   * @param (string) userMessage message to peer"
       },
       {
-        "lineNumber": 434,
+        "lineNumber": 435,
         "line": "   */"
       },
       {
-        "lineNumber": 435,
+        "lineNumber": 436,
         "line": "  sendMessage(userMessage) {"
       }
     ],
