@@ -1,13 +1,16 @@
-<a name="2.2.0"></a>
-# [2.2.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.0-beta.0...v2.2.0) (2018-10-29)
+<a name="2.2.1"></a>
+## [2.2.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.0...v2.2.1) (2018-10-29)
 
+
+
+<a name="2.2.0"></a>
+
+# [2.2.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.0-beta.0...v2.2.0) (2018-10-29)
 
 ### Features
 
-* **reconnect:** add reconnect feature ([3b09d2c](https://github.com/RemoteMonster/remon-web-sdk/commit/3b09d2c))
-* add cancel operation to websocket connector ([836656e](https://github.com/RemoteMonster/remon-web-sdk/commit/836656e))
-
-
+- **reconnect:** add reconnect feature ([3b09d2c](https://github.com/RemoteMonster/remon-web-sdk/commit/3b09d2c))
+- add cancel operation to websocket connector ([836656e](https://github.com/RemoteMonster/remon-web-sdk/commit/836656e))
 
 <a name="2.1.3"></a>
 
