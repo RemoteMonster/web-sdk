@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.2.1&quot;;
+    this.version = &quot;2.2.2&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -131,18 +131,6 @@ class Remon {
     if (this.config.credential.wsurl)
       Config.signalingServer.url = this.config.credential.wsurl;
     //this.init();
-    window.addEventListener(
-      &quot;offline&quot;,
-      () =&gt; {
-        l.i(&quot;Browser: offline&quot;);
-        // if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
-        //   this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
-        // }
-        // this.close(&quot;UNKNOWN&quot;);
-        this.context.signalingConnection.onOffline();
-      },
-      false
-    );
   }
 
   async init() {
@@ -237,6 +225,18 @@ class Remon {
     ctx.signalingConnection.on(&quot;disconnect&quot;, () =&gt; {
       this.onDisconnectSignalConnection();
     });
+    window.addEventListener(
+      &quot;offline&quot;,
+      () =&gt; {
+        l.i(&quot;Browser: offline&quot;);
+        // if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
+        //   this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
+        // }
+        // this.close(&quot;UNKNOWN&quot;);
+        this.context.signalingConnection.onOffline();
+      },
+      false
+    );
 
     if (cfg.rtc.audioType === &quot;music&quot;) {
       cfg.opt = {
