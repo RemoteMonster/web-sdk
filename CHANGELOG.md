@@ -1,7 +1,29 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.0-beta.0...v2.2.0) (2018-10-29)
+
+
+### Features
+
+* **reconnect:** add reconnect feature ([3b09d2c](https://github.com/RemoteMonster/remon-web-sdk/commit/3b09d2c))
+* add cancel operation to websocket connector ([836656e](https://github.com/RemoteMonster/remon-web-sdk/commit/836656e))
+
+
+
+<a name="2.1.3"></a>
+
+## [2.1.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.1.2...v2.1.3) (2018-10-22)
+
+### Bug Fixes
+
+- **broadcast:** fix channel type to VIEWER when call the joinCast method ([a859b05](https://github.com/RemoteMonster/remon-web-sdk/commit/a859b05))
+
+<a name="2.1.2"></a>
+
+## [2.1.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.1.1-beta.2...v2.1.2) (2018-09-30)
+
 <a name="2.1.0"></a>
+
 # [2.1.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.1.0-beta.20...v2.1.0) (2018-09-21)
-
-
 
 <a name="2.1.0-beta.14"></a>
 
