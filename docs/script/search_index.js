@@ -444,6 +444,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/remon.js~remon#ondisconnectsignalconnection",
+    "class/src/Remon.js~Remon.html#instance-method-onDisconnectSignalConnection",
+    "src/Remon.js~Remon#onDisconnectSignalConnection",
+    "method"
+  ],
+  [
+    "src/remon.js~remon#onreconnectsignalconnection",
+    "class/src/Remon.js~Remon.html#instance-method-onReconnectSignalConnection",
+    "src/Remon.js~Remon#onReconnectSignalConnection",
+    "method"
+  ],
+  [
     "src/remon.js~remon#pauselocalvideo",
     "class/src/Remon.js~Remon.html#instance-method-pauseLocalVideo",
     "src/Remon.js~Remon#pauseLocalVideo",

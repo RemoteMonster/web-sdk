@@ -62,7 +62,7 @@ class Remon {
    * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
    */
   constructor({ config, listener }) {
-    this.version = &quot;2.1.3&quot;;
+    this.version = &quot;2.2.0&quot;;
 
     this.context = new Context();
     this.context.sdkVersion = this.version;
@@ -135,10 +135,11 @@ class Remon {
       &quot;offline&quot;,
       () =&gt; {
         l.i(&quot;Browser: offline&quot;);
-        if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
-          this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
-        }
-        this.close(&quot;UNKNOWN&quot;);
+        // if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
+        //   this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
+        // }
+        // this.close(&quot;UNKNOWN&quot;);
+        this.context.signalingConnection.onOffline();
       },
       false
     );
@@ -225,10 +226,18 @@ class Remon {
       }
     };
     l.evt(JSON.stringify(eventMsg));
-    ctx.signalingConnection = SignalingConnection({
+    ctx.signalingConnection = new SignalingConnection({
       url: Config.signalingServer.url,
       context: ctx
     });
+    ctx.signalingConnection.connect();
+    ctx.signalingConnection.on(&quot;reconnect&quot;, () =&gt; {
+      this.onReconnectSignalConnection();
+    });
+    ctx.signalingConnection.on(&quot;disconnect&quot;, () =&gt; {
+      this.onDisconnectSignalConnection();
+    });
+
     if (cfg.rtc.audioType === &quot;music&quot;) {
       cfg.opt = {
         mandatory: {
@@ -317,6 +326,7 @@ class Remon {
     l.d(&quot;joinCast is called&quot;);
     this.config.rtc.audioType = &quot;music&quot;;
     this.context.channel.type = &quot;VIEWER&quot;;
+    this.config.media.recvonly = true;
     await this.init();
     this.context.signalingConnection.createViewerChannel(roomid);
   }
@@ -485,11 +495,25 @@ class Remon {
     this.context.signalingConnection.send(JSON.stringify(message));
   }
 
+  onReconnectSignalConnection() {
+    console.log(&quot;event: onReconnectSignalConnection&quot;);
+    this.context.signalingConnection.reconnectChannel();
+  }
+
+  onDisconnectSignalConnection() {
+    console.log(&quot;event: onDisconnectSignalConnection&quot;);
+    if (this.context.eventManager.hasEventListener(&quot;onStateChange&quot;)) {
+      this.context.eventManager.dispatchEvent(&quot;onStateChange&quot;, &quot;CLOSE&quot;);
+    }
+    this.close(&quot;UNKNOWN&quot;);
+  }
+
   /**
    * close all Remon&apos;s resources
    */
   close(closeType) {
     l.i(&quot;Remon.close&quot;);
+
     if (this.context.useRecord &amp;&amp; this.context.remoteRecorder) {
       this.context.remoteRecorder.stop();
       this.context.remoteRecorder = null;
@@ -532,6 +556,7 @@ class Remon {
     }
     this.context.peerConnection = null;
     this.context.signalingConnection.close();
+
     if (closeType) {
       this.context.eventManager.dispatchEvent(&quot;onClose&quot;, {
         closeType
@@ -541,6 +566,7 @@ class Remon {
         closeType: &quot;MINE&quot;
       });
     }
+
     var eventMsg = {
       topic: &quot;log&quot;,
       messages: {
