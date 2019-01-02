@@ -37,6 +37,10 @@ const config = {
   },
   dev: {
     logLevel: "VERBOSE"
+  },
+  rtc: {
+    simulcast: false,
+    sdpSemantics: "plan-b"
   }
 };
 
@@ -120,6 +124,10 @@ connectBtnEl.addEventListener(
       config.rtc.sdpSemantics = "unified-plan";
     }
 
+    if (simulcastInputEl.checked) {
+      config.rtc.simulcast = true;
+    }
+
     l("config:" + JSON.stringify(config));
     rtc = new Remon({ config, listener });
     rtc.connectCall(chid);
@@ -142,6 +150,15 @@ function connectCall(mChid) {
     config.media.video.frameRate.max = frameRateInputEl.value;
     config.media.video.frameRate.min = frameRateInputEl.value;
   }
+
+  if (unifiedPlanSDPInputEl.checked) {
+    config.rtc.sdpSemantics = "unified-plan";
+  }
+
+  if (simulcastInputEl.checked) {
+    config.rtc.simulcast = true;
+  }
+
   rtc = new Remon({ config, listener });
   rtc.connectCall(chid);
   toggleBtn();

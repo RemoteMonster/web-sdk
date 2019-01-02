@@ -33,6 +33,10 @@ const config = {
   },
   dev: {
     logLevel: "VERBOSE"
+  },
+  rtc: {
+    simulcast: false,
+    sdpSemantics: "plan-b"
   }
 };
 
@@ -150,6 +154,15 @@ function joinCast(mChid) {
     config.view.remote = "#videoView";
     delete config.view.local;
   }
+
+  if (unifiedPlanSDPInputEl.checked) {
+    config.rtc.sdpSemantics = "unified-plan";
+  }
+
+  if (simulcastInputEl.checked) {
+    config.rtc.simulcast = true;
+  }
+
   rtc = new Remon({ config, listener });
   rtc.joinCast(chid);
 }
