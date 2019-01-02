@@ -7,6 +7,8 @@ const heightSelEl = document.querySelector("#heightSel");
 const videoCodecSelEl = document.querySelector("#videoCodecSel");
 const frameRateInputEl = document.querySelector("#frameRateInput");
 const useVideoInputEl = document.querySelector("#useVideoInput");
+const unifiedPlanSDPInputEl = document.querySelector("#unifiedPlanSDPInput");
+const simulcastInputEl = document.querySelector("#simulcastInput");
 const logDialogContentsEl = document.querySelector("#logDialogContents");
 const connectBtnEl = document.querySelector("#connectBtn");
 const closeBtnEl = document.querySelector("#closeBtn");
@@ -112,6 +114,10 @@ connectBtnEl.addEventListener(
       config.media.video.codec = videoCodecSelEl.value;
       config.media.video.frameRate.max = frameRateInputEl.value;
       config.media.video.frameRate.min = frameRateInputEl.value;
+    }
+
+    if (unifiedPlanSDPInputEl.checked) {
+      config.rtc.sdpSemantics = "unified-plan";
     }
 
     l("config:" + JSON.stringify(config));

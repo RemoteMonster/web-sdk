@@ -29,8 +29,7 @@
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Remon.js~Remon.html">Remon</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-configure">configure</a></span></span></li>
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-configure">configure</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-remonEvents">remonEvents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-signalingStates">signalingStates</a></span></span></li>
 </ul>
@@ -50,7 +49,9 @@ var configure = (function Configure() {
       localStream: undefined,
       localVideo: undefined,
       audioType: &quot;voice&quot;,
-      simulcast: false
+      simulcast: false,
+      // sdpSemantics:&quot;unified-plan&quot;
+      sdpSemantics: &quot;plan-b&quot;
       /*
       iceTransportPolicy: undefined,
       bundlePolicy: undefined,
