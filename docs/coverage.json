@@ -1,34 +1,13 @@
 {
-  "coverage": "52.77%",
-  "expectCount": 36,
-  "actualCount": 19,
+  "coverage": "33.33%",
+  "expectCount": 3,
+  "actualCount": 1,
   "files": {
     "src/Configure.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
         3
-      ]
-    },
-    "src/Remon.js": {
-      "expectCount": 33,
-      "actualCount": 18,
-      "undocumentLines": [
-        25,
-        27,
-        34,
-        44,
-        46,
-        47,
-        48,
-        96,
-        254,
-        368,
-        372,
-        413,
-        458,
-        463,
-        545
       ]
     },
     "src/RemonEvents.js": {

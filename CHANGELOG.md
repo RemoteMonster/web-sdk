@@ -1,5 +1,4 @@
-<a name="2.2.2"></a>
-## [2.2.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.1...v2.2.2) (2018-10-29)
+## [2.2.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.1...v2.2.2) (2019-01-02)
 
 
 ### Bug Fixes
@@ -7,6 +6,19 @@
 * **offline:** offline signaling event code is moved to init ([a0c60f7](https://github.com/RemoteMonster/remon-web-sdk/commit/a0c60f7))
 
 
+### Features
+
+* add unified plan ([357a520](https://github.com/RemoteMonster/remon-web-sdk/commit/357a520))
+
+
+
+<a name="2.2.2"></a>
+
+## [2.2.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.2.1...v2.2.2) (2018-10-29)
+
+### Bug Fixes
+
+- **offline:** offline signaling event code is moved to init ([a0c60f7](https://github.com/RemoteMonster/remon-web-sdk/commit/a0c60f7))
 
 <a name="2.2.1"></a>
 
