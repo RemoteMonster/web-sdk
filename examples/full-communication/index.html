@@ -304,15 +304,17 @@
            aria-labelledby="my-dialog-title"
            aria-describedby="my-dialog-content">
         <div class="mdc-dialog__container">
-          <h2 class="mdc-dialog__title">Log</h2>
-          <div class="mdc-dialog__content" id="logDialogContents"></div>
-          <footer class="mdc-dialog__actions">
-            <button
-              type="button"
-              class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
-              Close
-            </button>
-          </footer>
+          <div class="mdc-dialog__surface">
+            <h2 class="mdc-dialog__title">Log</h2>
+            <div class="mdc-dialog__content" id="logDialogContents"></div>
+            <footer class="mdc-dialog__actions">
+              <button
+                type="button"
+                class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+                Close
+              </button>
+            </footer>
+          </div>
         </div>
         <div class="mdc-dialog__scrim"></div>
       </div>
@@ -347,7 +349,6 @@
       document
         .querySelector("#logBtn")
         .addEventListener("click", function(evt) {
-          dialog.lastFocusedTarget = evt.target;
           dialog.open();
         });
     </script>
