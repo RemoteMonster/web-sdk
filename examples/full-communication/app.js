@@ -276,6 +276,8 @@ document.addEventListener("DOMContentLoaded", ev => {
         ))
     : console.log("app/service/default");
 
+  $("#chidInput").value = Date.now();
+
   fetchCalls();
   [[P.get("chid"), $("#connectBtn")]].forEach(
     ([chid, el]) => _.isEmpty(chid) || ((el.value = chid), $.emit("click")(el))
@@ -294,6 +296,9 @@ $.all(".js-close-btn").forEach(el =>
 $.all(".js-connect-btn").forEach(el =>
   el.addEventListener("click", ev => {
     console.log("app/connect");
+    [$("#chidInput")].forEach(
+      el => _.isEmpty(el.value) && (el.value = Date.now())
+    );
     connectCall($("#chidInput").value);
     ev.preventDefault();
   })
