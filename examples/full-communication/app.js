@@ -22,7 +22,6 @@ _.path = x => o =>
     : Array.isArray(x)
     ? _.pathA(x)(o)
     : false;
-
 _.oCreatePath = (path, v) =>
   path.reduceRight(
     (acc, cur) =>
@@ -533,6 +532,12 @@ $.all("video").forEach(el =>
           }))
         ))
   )
+);
+
+[$("#lowQuality"), $("#mediumQuality"), $("#highQuality")].forEach(el =>
+  el.addEventListener("click", ev => {
+    rtc && rtc.setVideoQulity(ev.target.dataset.meta);
+  })
 );
 
 $("#sdkSel").addEventListener("focus", ev => {
