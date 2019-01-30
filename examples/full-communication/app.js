@@ -167,9 +167,11 @@ const listener = {
   onConnect(mChid) {
     $("#status").textContent = `WAIT - ${mChid}`;
     toggleBtn(false);
-    [{ config }, { devices }, { selectedDevice }].forEach(o =>
-      Object.entries(o).forEach(([k, v]) => S.save(k)(v))
-    );
+    platform.name === "Safari"
+      ? S.save("config")(config)
+      : [{ config }, { devices }, { selectedDevice }].forEach(o =>
+          Object.entries(o).forEach(([k, v]) => S.save(k)(v))
+        );
   },
   onComplete() {
     $("#status").textContent = `${chid}`;
@@ -210,8 +212,13 @@ document.addEventListener("DOMContentLoaded", ev => {
       : console.log("app/server/default");
   });
 
-  S.isExist("devices") && (devices = S("devices"));
-  S.isExist("selectedDevice") && (selectedDevice = S("selectedDevice"));
+  platform.name !== "Safari" &&
+    S.isExist("devices") &&
+    (devices = S("devices"));
+  platform.name !== "Safari" &&
+    S.isExist("selectedDevice") &&
+    (selectedDevice = S("selectedDevice"));
+
   [...$.all(".js-device-sel")].forEach(
     el =>
       _.isEmpty(selectedDevice[el.dataset.kind].deviceId) ||
@@ -226,6 +233,9 @@ document.addEventListener("DOMContentLoaded", ev => {
   );
 
   S.isExist("config") && (config = S("config"));
+  platform.name === "Safari" &&
+    (delete config.media.video.deviceId, delete config.media.audio.deviceId);
+
   $("#widthInput").value = _.path("media.video.width.exact")(config) || "";
   $("#heightInput").value = _.path("media.video.height.exact")(config) || "";
   _.isEmpty(config.media.video.codec) ||
@@ -345,6 +355,7 @@ $.all(".js-device-sel").forEach(el =>
         (config.media[ev.target.dataset.kind].deviceId =
           selectedDevice[ev.target.dataset.kind].deviceId),
         ev.target.dataset.kind === "video" &&
+          selectedDevice.video[el.dataset.meta] &&
           [
             $("#widthInput"),
             $("#heightInput"),
@@ -372,7 +383,8 @@ $("#resSel").addEventListener("focus", ev => {
       )
     );
   ev.target.length === 1 &&
-    (_.isEmpty(selectedDevice.video)
+    (_.isEmpty(selectedDevice.video.height) ||
+    _.isEmpty(selectedDevice.video.width)
       ? resolutions.forEach(t => tplToHtml(t))
       : getSupportedResolution(selectedDevice.video)(resolutions).forEach(t =>
           tplToHtml(t)
@@ -722,7 +734,9 @@ async function getDeviceCapabilities(kind, deviceId) {
     const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
     let capa;
     mediaStream.getTracks().forEach(track => {
-      capa = track.getCapabilities();
+      typeof track.getCapabilities === "function"
+        ? (capa = track.getCapabilities())
+        : (capa = { deviceId });
       track.stop();
     });
     console.log("app/getDeviceCapabilities/constraints", capa, constraints);
