@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: SignalingConnection.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: SignalingConnection.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Context from "./Context";
+import Config from "./Configure";
+import l from "./Logger";
+import EventEmitter from "events/events.js";
+
+function connector(url, timeoutMs, numRetries, callback) {
+  let t;
+  let ws;
+  let remainRetries = numRetries;
+  let isConnecting = true;
+  connect();
+
+  function connect() {
+    if (remainRetries &lt;= 0) {
+      callback("timeout", null);
+      isConnecting = false;
+      return;
+    }
+
+    l.i("try connect signaling");
+    ws = new WebSocket(url);
+    ws.onopen = () => {
+      clearTimeout(t);
+      callback(null, ws);
+      isConnecting = false;
+      return;
+    };
+    ws.onerror = () => {};
+    ws.onclose = () => {};
+
+    t = setTimeout(() => {
+      retry();
+    }, timeoutMs);
+  }
+
+  function retry() {
+    ws.onerror = null;
+    ws.onclose = null;
+    ws.close();
+    clearTimeout(t);
+
+    setTimeout(() => {
+      remainRetries--;
+      connect();
+    }, 0);
+  }
+
+  function cancel() {
+    if (isConnecting === false) return;
+
+    ws.onerror = null;
+    ws.onclose = null;
+    ws.close();
+    clearTimeout(t);
+    callback("cancel", null);
+    return;
+  }
+
+  return {
+    cancel: cancel
+  };
+}
+
+class SignalingConnection extends EventEmitter {
+  constructor({ url, context }) {
+    super();
+    l.init(context);
+
+    this.wsUrl = url;
+    this.connectTimeoutMs = 1000;
+    this.connectRetries = 5;
+    this.context = context;
+    this.ws = null;
+    this.connector;
+    this.onMessageHandler = null;
+    this.context.isConnectToSignal = false;
+    this.needReconnect = false;
+  }
+
+  connect() {
+    l.i("Signaling: Connect");
+
+    this.context.isConnectToSignal = false;
+    this.connector = connector(
+      this.wsUrl,
+      this.connectTimeoutMs,
+      this.connectRetries,
+      (error, ws) => {
+        if (error) {
+          console.log("websocket connection fail. error:" + error);
+          if (error === "timeout") {
+            this.emit("disconnect");
+          }
+          return;
+        }
+
+        this.ws = ws;
+        this.ws.onmessage = this.onMessageHandler;
+        this.ws.onopen = null;
+        this.ws.onclose = this.handleCloseEvent.bind(this);
+        this.ws.onerror = this.handleErrorEvent.bind(this);
+
+        if (this.needReconnect === false) {
+          l.i("Signaling: Success connect to the signaling server");
+          l.v("OpenEvent:", event);
+          this.context.isConnectToSignal = true;
+
+          if (this.context.eventManager.hasEventListener("onInit")) {
+            this.context.eventManager.dispatchEvent(
+              "onInit",
+              this.context.token
+            );
+          }
+          if (this.context.eventManager.hasEventListener("onStateChange")) {
+            this.context.eventManager.dispatchEvent("onStateChange", "INIT");
+          }
+          this.emit("connect");
+        } else {
+          l.i("Signaling: Success re-connect to the signaling server");
+          l.v("Re-OpenEvent:", event);
+          this.context.isConnectToSignal = true;
+
+          this.emit("reconnect");
+        }
+        this.needReconnect = true;
+      }
+    );
+  }
+
+  send(...args) {
+    if (this.ws === null || this.ws === undefined) return;
+
+    try {
+      this.ws.send(...args);
+    } catch (e) {}
+  }
+
+  setDisconnectHandler() {
+    const msg = { command: "disconnect" };
+    msg.peertype = this.context.channel.type;
+  }
+
+  /**
+   * 명시적인 close인 경우 처리
+   */
+  close() {
+    if (this.connector) {
+      this.connector.cancel();
+    }
+    this.needReconnect = false;
+    if (this.ws === null || this.ws === undefined) return;
+    if (this.ws.readyState === WebSocket.OPEN) {
+      // 'OPEN'
+      // client는 무조건 disconnectChannel를 전송하고 종료되야 한다.
+      const message = this.createMessage({ command: "disconnect" });
+      l.v("DisconnectCh Message ->:", message);
+      this.send(JSON.stringify(message));
+      console.log(
+        "DisconnectCh:" + JSON.stringify(message) + " " + this.ws.readyState
+      );
+    }
+    this.ws.close();
+    delete this.ws;
+  }
+
+  onOffline() {
+    if (this.needReconnect === false) return;
+    if (this.ws) {
+      this.ws.onclose = null;
+      this.ws.onerror = null;
+      this.ws.close();
+      delete this.ws;
+    }
+
+    this.connect();
+  }
+
+  onMessage(handler) {
+    this.onMessageHandler = handler;
+  }
+
+  handleCloseEvent(event) {
+    l.i("Signaling: Closed the signaling connection");
+    l.v("Event:", event);
+
+    this.context.isConnectToSignal = false;
+
+    if (this.needReconnect) {
+      // websocket이 종료되면 reconnect를 시도한다.
+      this.connect();
+    }
+  }
+
+  handleErrorEvent(event) {
+    l.i("Signaling: Error from the signaling connection.");
+    console.log("error event:" + JSON.stringify(event));
+    l.v("Event", event);
+
+    // TODO: 이건 어떻게 처리해야 하나???
+    // if (this.isConnectToSignal)
+    //   if (this.context.eventManager.hasEventListener("onError")) {
+    //     this.context.eventManager.dispatchEvent(
+    //       "onError",
+    //       "WebSocketFailedError"
+    //     )
+    //   }
+  }
+
+  createMessage({ command, body }) {
+    l.d("Signaling: Create Message %j", body);
+
+    const template = {
+      command,
+      token: this.context.token,
+      serviceId: this.context.serviceId,
+      channel: {
+        id: this.context.channel.id,
+        name: this.context.channel.name,
+        type: this.context.channel.type
+      }
+    };
+
+    if (body) {
+      template.body = body;
+    }
+    l.v("createMessage: " + JSON.stringify(template));
+    return template;
+  }
+
+  connectChannel(channelId) {
+    l.i("Signaling: Connect channel: As a caller");
+    this.context.startTime = new Date().getTime();
+    this.context.isCaller = true;
+    this.context.channel.id = channelId;
+
+    const message = this.createMessage({ command: "connect" });
+    l.v("ConnectCh Message ->:", message);
+
+    this.send(JSON.stringify(message));
+  }
+
+  reconnectChannel() {
+    l.i("Signaling: re-connect channel:");
+    const message = this.createMessage({ command: "reconnect" });
+    l.i("Re-Connect Ch Message ->:", message);
+    this.send(JSON.stringify(message));
+  }
+
+  createViewerChannel(channelId) {
+    l.i("Signaling: Create channel: As a viewer");
+    this.context.startTime = new Date().getTime();
+    this.context.isCaller = false;
+    this.context.channel.id = channelId;
+
+    const message = this.createMessage({ command: "create" });
+    message.channel.type = "VIEWER";
+    message.channel.id = channelId;
+    l.v("ConnectCh Message ->:", message);
+    this.send(JSON.stringify(message));
+  }
+
+  createBroadcastChannel(roomname) {
+    l.i("Signaling: Create channel: As a presenter");
+    this.context.startTime = new Date().getTime();
+    this.context.isCaller = false;
+    this.context.channel.name = roomname;
+
+    const message = this.createMessage({ command: "create" });
+    message.channel.type = "BROADCAST";
+    l.v("ConnectCh Message ->:", message);
+    l.i("channel id: " + this.context.channel.id);
+    this.send(JSON.stringify(message));
+  }
+
+  disconnectChannel() {
+    l.i("Signaling: Close channel:");
+    const message = this.createMessage({ command: "disconnect" });
+    l.v("DisconnectCh Message ->:", message);
+    console.log("DisconnectCh:" + JSON.stringify(message));
+    this.send(JSON.stringify(message));
+  }
+
+  setSimulcastPriority(priority) {
+    l.i("Signaling: Set Simulcast Priority", priority);
+    const message = this.createMessage({
+      command: "switchStream",
+      body:
+        priority === "HIGH" || "MEDIUM" || "LOW"
+          ? priority
+          : this.context.eventManager.dispatchEvent(
+              "onError",
+              "not_exist_simulcastPriority"
+            )
+    });
+    message.channel.type = "VIEVER";
+    message.channel.id = this.context.channel.id;
+    l.v("SetSimulcastPriority Message ->:", message);
+    this.send(JSON.stringify(message));
+  }
+
+  isOpened() {
+    return this.context.isConnectToSignal;
+  }
+}
+
+export default SignalingConnection;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Remon.html">Remon</a></li></ul><h3>Global</h3><ul><li><a href="global.html#remonEvents">remonEvents</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Feb 12 2019 18:42:47 GMT+0900 (KST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
