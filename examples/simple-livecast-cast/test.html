@@ -43,12 +43,15 @@
         muted
       ></video>
       <button id="channelBtn" class="btn btn-main">CREATE</button>
+      <button id="switchCamera">Switch</button>
     </main>
 
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script> -->
+    <script src="/remon.js"></script>
     <script>
       const channelBtnEl = document.querySelector("#channelBtn");
+      const switchBtn = document.querySelector("#switchCamera");
       let isConnected = false;
 
       const config = {
@@ -62,9 +65,16 @@
         media: {
           video: {
             width: 1280,
-            height: 720
+            height: 720,
+            maxBandwidth: "2000"
           },
           audio: true
+        },
+        rtc: {
+          audioType: "music"
+        },
+        sdk: {
+          logLevel: "VERBOSE"
         }
       };
 
@@ -108,6 +118,10 @@
         },
         false
       );
+      switchBtn.addEventListener("click", evt => {
+        remon.switchCamera();
+        evt.preventDefault();
+      });
     </script>
   </body>
 </html>

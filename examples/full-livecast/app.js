@@ -818,7 +818,7 @@ function loadSDK(url) {
 }
 
 function clearFetchCasts() {
-  !!fetchCastsInterval && clearInterval(fetchCastlsInterval);
+  !!fetchCastsInterval && clearInterval(fetchCastsInterval);
   !!castsFetcher && (castsFetcher.close(), (castsFetcher = null));
   console.log("app/clearFetchCasts");
 }
