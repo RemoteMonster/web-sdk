@@ -779,7 +779,7 @@ function clearCache() {
 
 function fetchSDKVersions() {
   return fetch(
-    `https://api.allorigins.ml/get?url=${encodeURIComponent(
+    `https://api.allorigins.win/get?url=${encodeURIComponent(
       "https://registry.npmjs.org/@remotemonster/sdk"
     )}`
   )
