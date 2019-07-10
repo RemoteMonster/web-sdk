@@ -16,11 +16,11 @@ const channelsEl = document.querySelector("#channels");
 let chid = "";
 let bored = true;
 let rtc;
-
+// please register your own service key from remotemonster site.
 const config = {
   credential: {
-    key: "e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03",
-    serviceId: "simpleapp"
+    key: "1234567890",
+    serviceId: "SERVICEID1"
   },
   view: {
     local: "#localVideo",
@@ -39,8 +39,7 @@ const config = {
     logLevel: "VERBOSE"
   },
   rtc: {
-    simulcast: false,
-    sdpSemantics: "plan-b"
+    simulcast: false 
   }
 };
 

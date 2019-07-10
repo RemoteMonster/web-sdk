@@ -15,28 +15,26 @@ const channelsEl = document.querySelector("#channels");
 let chid = "";
 let bored = true;
 let rtc;
-
+// please register your own service key from remotemonster site.
 const config = {
   credential: {
-    key: "e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03",
-    serviceId: "simpleapp"
+    key: "1234567890",
+    serviceId: "SERVICEID1"
   },
-  view: {},
   media: {
     audio: true,
     video: {
       width: { max: "320", min: "320" },
       height: { max: "240", min: "240" },
       codec: "H264",
-      frameRate: 15
+      frameRate: 20
     }
   },
   dev: {
     logLevel: "VERBOSE"
   },
   rtc: {
-    simulcast: false,
-    sdpSemantics: "plan-b"
+    simulcast: false
   }
 };
 
