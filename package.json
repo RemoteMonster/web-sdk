@@ -37,7 +37,7 @@
     "url": "git+https://github.com/RemoteMonster/web-sdk.git"
   },
   "devDependencies": {
-    "gh-pages": "^1.1.0"
+    "gh-pages": "^2.0.1"
   },
   "bugs": {
     "url": "https://github.com/RemoteMonster/web-sdk/issues"
