@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Simple Call</title>
+    <title>Voice Call</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Simple Call example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Voice Call example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -48,11 +48,11 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./simpleCall.html" target="_blank">site</a> on other tab or browser. Then
-                    click the connect button to connect to first page.
+                <li>Open the same <a href="./voiceCall.html" target="_blank">site</a> on other tab or browser. Then click
+                    the connect button to connect to first page.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simpleCall.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceCall.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -62,13 +62,8 @@
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <main>
-                                    <div>
-                                        <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay
-                                               style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%; transform: rotateY(180deg);"></video>
-                                        <video id="localVideo"
-                                               style="z-index:2;position:absolute; bottom: 70px;right:40px;width:30%;border-radius: 50px;transform: rotateY(180deg);"
-                                               autoplay muted></video>
-                                    </div>
+                                    <audio id="remoteVideo" autoplay></audio>
+                                    <audio id="localVideo" autoplay muted></audio>
                                     <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">
                                         CONNECT
                                     </a>
@@ -97,7 +92,11 @@
                     },
                     view: {
                         remote: '#remoteVideo',
-                        local: '#localVideo'
+                        local: '#localVieo',
+                    },
+                    media: {
+                        audio: true,
+                        video: false,
                     }
                 };
 
