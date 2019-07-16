@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Send Message</title>
+    <title>Camera Switch</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Send Message example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Camera Switch example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -48,11 +48,11 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Enter the channel name and click connect button.</li>
-                <li>Open the same <a href="./sendMessage.html" target="_blank">site</a> on other tab or browser. Then
+                <li>Open the same <a href="./cameraSwitch.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/sendMessage.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/cameraSwitch.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -83,15 +83,15 @@
                                             <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                                 style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                                 waiting</h6>
-                                            <div id="chatScroll"
-                                                 style="z-index:3; position: absolute; overflow:scroll; width:30%; height:20%; bottom: 50px; left:30px;">
-                                            </div>
-                                            <div id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center" style="z-index:3; position: absolute; width: 30%; bottom: 15px; left: 30px; visibility: hidden;">
-                                                Send Message</div>
+                                            <div id="cameraSwitchBtn" class="btn btn-primary btn-user text-center" style="z-index:3; position: absolute; width: 15%; bottom: 1%; right: 100px; visibility: hidden">
+                                                Camera Switch</div>
                                         </div>
                                         <input id="channelNameInput" class="form-control text-center" type="text"
                                                placeholder="channel name" autofocus>
-                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">CONNECT</a>
+                                        <a id="channelBtn" href="#"
+                                           class="btn btn-primary btn-user btn-block text-center">
+                                            CONNECT
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -112,14 +112,12 @@
                         const channelList = document.getElementById("lvChannel");
                         const channelNameInput = document.getElementById("channelNameInput");
                         const waitingTv = document.getElementById("waitingTv");
-                        const chatScroll = document.getElementById("chatScroll");
-                        const sendMessageBtn = document.getElementById("sendMessageBtn");
+                        const cameraSwitchBtn = document.getElementById("cameraSwitchBtn");
                         let isConnected = false;
                         let remon;
                         const key = '1234567890';
                         const serviceId = 'SERVICEID1';
                         var waitingLoop;
-                        var joinChannelId;
                         createDummyRemonForSearchLoop();
                         startSearchLoop();
 
@@ -136,39 +134,35 @@
                         };
 
                         const listener = {
-                            onConnect(chId) {
-                                joinChannelId = chId;
-                                console.log(`EVENT FIRED: onConnect: ${chId}`);
+                            onConnect(chid) {
+                                console.log(`EVENT FIRED: onConnect: ${chid}`);
                             },
                             onComplete() {
                                 console.log('EVENT FIRED: onComplete');
-                                setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden', false);
+                                setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden', 'visible');
                             },
                             onDisconnectChannel() {
                                 // is called when other peer hang up.
                                 remon.close();
                                 isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', 'hidden');
                             },
                             onClose() {
                                 // is called when remon.close() method is called.
                                 console.log('EVENT FIRED: onClose');
                                 remon.close();
                                 isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', 'hidden');
                             },
                             onError(error) {
                                 console.log(`EVENT FIRED: onError: ${error}`);
                             },
                             onStat(result) {
                                 console.log(`EVENT FIRED: onStat: ${result}`);
-                            },
-                            onMessage(msg) {
-                                addMesssage(false, msg);
                             }
                         };
 
-                        function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, isClearChatViews) {
+                        function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, cameraSwitchVisibility) {
                             localVideo.style.visibility = localVideoVisibility;
                             if (runWaitLoop) {
                                 waitingMsgLoop();
@@ -178,26 +172,17 @@
                             waitingTv.style.visibility = waitingTvVisibility;
                             channelBtnEl.innerHTML = btnText;
                             channelNameInput.style.visibility = inputVisiblility;
-                            if (isClearChatViews) {
-                                while (chatScroll.firstChild) {
-                                    chatScroll.removeChild(chatScroll.firstChild);
-                                }
-                                chatScroll.style.visibility = 'hidden';
-                                sendMessageBtn.style.visibility = 'hidden';
-                            } else {
-                                chatScroll.style.visibility = 'visible';
-                                sendMessageBtn.style.visibility = 'visible';
-                            }
+                            cameraSwitchBtn.style.visibility = cameraSwitchVisibility;
                         }
 
                         function start() {
                             if (isConnected) {
                                 isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', 'hidden');
                                 remon.close();
                             } else {
                                 isConnected = true;
-                                setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden', true);
+                                setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden', 'visible');
                                 remon = new Remon({config, listener});
                                 remon.connectCall(channelNameInput.value ? channelNameInput.value : getRandomId());
                             }
@@ -211,15 +196,11 @@
                             return text;
                         }
 
-                        function addMesssage(isMine, msg) {
-                            var msgItem = document.createElement("p");
-                            msgItem.style.textShadow = "0 0 7px #ffffff";
-                            msgItem.style.lineHeight = 0.5;
-                            if (!isMine) msgItem.style.color = "Blue";
-                            msgItem.innerHTML = isMine ? "Me : " + msg : "Opponent : " + msg;
-                            chatScroll.appendChild(msgItem);
-                            chatScroll.scroll(0, chatScroll.scrollHeight);
-                        }
+                        channelBtnEl.addEventListener('click', (evt) => {
+                            start();
+                            evt.preventDefault();
+                        }, false);
+
 
                         function createDummyRemonForSearchLoop() {
                             if (remon) remon.close();
@@ -239,7 +220,7 @@
                             waitingLoop = setInterval(async function () {
                                 pointStr = "";
                                 numOfPoint++;
-                                if (numOfPoint === 4) numOfPoint = 0;
+                                if(numOfPoint === 4) numOfPoint = 0;
                                 for (var i = 0; i < numOfPoint; i++) {
                                     pointStr += ".";
                                 }
@@ -256,35 +237,30 @@
                                     channelList.removeChild(channelList.firstChild);
                                 }
                                 searchResult.forEach((ch, i) => {
-                                    if (joinChannelId !== ch.id) {
-                                        ch.type = 'P2P';
-                                        if (ch.status === 'WAIT') {
-                                            var btn = document.createElement("input");
-                                            btn.type = "button";
-                                            btn.name = ch.id;
-                                            btn.value = ch.id;
-                                            btn.className = "btn btn-primary btn-user btn-block text-center";
-                                            btn.addEventListener('click', (evt) => {
-                                                channelNameInput.value = ch.id;
-                                                start();
-                                                evt.preventDefault();
-                                            }, false);
-                                            channelList.appendChild(btn);
-                                        }
+                                    ch.type = 'P2P';
+                                    if (ch.status === 'WAIT') {
+                                        var btn = document.createElement("input");
+                                        btn.type = "button";
+                                        btn.name = ch.id;
+                                        btn.value = ch.id;
+                                        btn.className = "btn btn-primary btn-user btn-block text-center";
+                                        btn.addEventListener('click', (evt) => {
+                                            channelNameInput.value = ch.id;
+                                            start();
+                                            evt.preventDefault();
+                                        }, false);
+
+                                        channelList.appendChild(btn);
                                     }
                                 });
                             }, 3000);
                         }
 
-                        channelBtnEl.addEventListener('click', (evt) => {
-                            start();
+                        cameraSwitchBtn.addEventListener("click", evt => {
+                            remon.switchCamera();
                             evt.preventDefault();
-                        }, false);
+                        });
 
-                        function sendMessage() {
-                            remon.sendMessage("Test Message");
-                            addMesssage(true, "Test Message");
-                        }
                     </script>
                 </div>
                 <!-- End of Main Content -->
