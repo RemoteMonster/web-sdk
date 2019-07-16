@@ -47,9 +47,9 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>Press the connect button.</li>
+                <li>Enter the channel name and click connect button.</li>
                 <li>Open the same <a href="./callList.html" target="_blank">site</a> on other tab or browser. Then
-                    click the connect button to connect to first page.
+                    click on channel you created in the channel list.
                 </li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/callList.html"
@@ -62,7 +62,7 @@
                     <div class="col-xl-12 col-md-12 mb-12">
                         <div class="card shadow mb-12">
                             <div class="card-group">
-                                <div class="col-2"  style="margin-left: -1rem; margin-right: -1rem">
+                                <div class="col-2" style="margin-left: -1rem; margin-right: -1rem">
                                     <!-- Custom Text Color Utilities -->
                                     <div class="card-header py-3">
                                         <h6 class="m-0 font-weight-bold text-primary text-center">Channel List</h6>
@@ -72,15 +72,20 @@
                                 </div>
 
                                 <div class="card">
-                                    <div class="col-xl-12 col-md-12 mb-12">
-                                        <div>
+                                    <div class="col-xl-12 col-md-12 mb-12" style="padding: 1rem">
+                                        <div style="position: relative;">
                                             <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay
                                                    style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%; transform: rotateY(180deg);"></video>
                                             <video id="localVideo"
-                                                   style="z-index:2;position:absolute; bottom: 70px;right:40px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
-                                                   autoplay muted></video>
+                                                   style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
+                                                   autoplay muted>
+                                            </video>
+                                            <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
+                                                style="z-index:3; position: absolute;bottom: 55px;right:35px; visibility: hidden;">
+                                                waiting</h6>
                                         </div>
-                                        <input id="channelNameInput" class="form-control text-center" type="text" placeholder="channel name" autofocus>
+                                        <input id="channelNameInput" class="form-control text-center" type="text"
+                                               placeholder="channel name" autofocus>
                                         <a id="channelBtn" href="#"
                                            class="btn btn-primary btn-user btn-block text-center">
                                             CONNECT
@@ -100,15 +105,18 @@
                     <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
                     <script>
+                        const localVideo = document.getElementById("localVideo");
                         const channelBtnEl = document.querySelector('#channelBtn');
                         const channelList = document.getElementById("lvChannel");
                         const channelNameInput = document.getElementById("channelNameInput");
+                        const waitingTv = document.getElementById("waitingTv");
                         let isConnected = false;
                         let remon;
                         const key = '1234567890';
                         const serviceId = 'SERVICEID1';
-                        createDummyRemonForSearchLoop ();
-                        startSearchLoop ();
+                        var waitingLoop;
+                        createDummyRemonForSearchLoop();
+                        startSearchLoop();
 
                         // please register your own service key from remotemonster site.
                         const config = {
@@ -128,23 +136,20 @@
                             },
                             onComplete() {
                                 console.log('EVENT FIRED: onComplete');
-                                channelBtnEl.innerHTML = 'CLOSE';
-                                channelNameInput.style.visibility = "hidden";
+                                setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
                             },
                             onDisconnectChannel() {
                                 // is called when other peer hang up.
                                 remon.close();
                                 isConnected = false;
-                                channelBtnEl.innerHTML = 'CONNECT';
-                                channelNameInput.style.visibility = "visible";
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
                             },
                             onClose() {
                                 // is called when remon.close() method is called.
                                 console.log('EVENT FIRED: onClose');
                                 remon.close();
                                 isConnected = false;
-                                channelBtnEl.innerHTML = 'CONNECT';
-                                channelNameInput.style.visibility = "visible";
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
                             },
                             onError(error) {
                                 console.log(`EVENT FIRED: onError: ${error}`);
@@ -154,19 +159,37 @@
                             }
                         };
 
+                        function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
+                            localVideo.style.visibility = localVideoVisibility;
+                            if (runWaitLoop) {
+                                waitingMsgLoop();
+                            } else {
+                                clearInterval(waitingLoop);
+                            }
+                            waitingTv.style.visibility = waitingTvVisibility;
+                            channelBtnEl.innerHTML = btnText;
+                            channelNameInput.style.visibility = inputVisiblility;
+                        }
+
                         function start() {
                             if (isConnected) {
                                 isConnected = false;
-                                channelBtnEl.innerHTML = 'CONNECT';
-                                channelNameInput.style.visibility = "visible";
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
                                 remon.close();
                             } else {
                                 isConnected = true;
-                                channelBtnEl.innerHTML = 'WAIT';
-                                channelNameInput.style.visibility = "hidden";
+                                setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
                                 remon = new Remon({config, listener});
-                                remon.connectCall(channelNameInput.value);
+                                remon.connectCall(channelNameInput.value ? channelNameInput.value : getRandomId());
                             }
+                        }
+
+                        function getRandomId() {
+                            var text = "";
+                            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                            for (var i = 0; i < 5; i++)
+                                text += possible.charAt(Math.floor(Math.random() * possible.length));
+                            return text;
                         }
 
                         channelBtnEl.addEventListener('click', (evt) => {
@@ -175,20 +198,33 @@
                         }, false);
 
 
-                        function createDummyRemonForSearchLoop () {
+                        function createDummyRemonForSearchLoop() {
                             if (remon) remon.close();
                             let cfg = {
-                                credential: { key: key, serviceId: serviceId },
-                                view: { local: '#localVideo1', remote: '#remoteVideo1' },
-                                media: { audio: true, video: true }
+                                credential: {key: key, serviceId: serviceId},
+                                view: {local: '#localVideo1', remote: '#remoteVideo1'},
+                                media: {audio: true, video: true}
                             };
                             cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
                             cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
-                            remon = new Remon({ config: cfg });
-                        };
+                            remon = new Remon({config: cfg});
+                        }
 
-                        function startSearchLoop () {
-                            var self = this;
+                        function waitingMsgLoop() {
+                            var numOfPoint = 0;
+                            var pointStr = "";
+                            waitingLoop = setInterval(async function () {
+                                pointStr = "";
+                                numOfPoint++;
+                                if(numOfPoint === 4) numOfPoint = 0;
+                                for (var i = 0; i < numOfPoint; i++) {
+                                    pointStr += ".";
+                                }
+                                waitingTv.innerText = "waiting" + pointStr;
+                            }, 1000);
+                        }
+
+                        function startSearchLoop() {
                             setInterval(async function () {
                                 remon.config.credential.serviceId = serviceId;
                                 remon.config.credential.key = key;
@@ -199,20 +235,18 @@
                                 searchResult.forEach((ch, i) => {
                                     ch.type = 'P2P';
                                     if (ch.status === 'WAIT') {
-                                        // self.roomList.push(ch);
                                         var btn = document.createElement("input");
                                         btn.type = "button";
                                         btn.name = ch.id;
                                         btn.value = ch.id;
-                                        btn.className="btn btn-primary btn-user btn-block text-center";
+                                        btn.className = "btn btn-primary btn-user btn-block text-center";
                                         btn.addEventListener('click', (evt) => {
+                                            channelNameInput.value = ch.id;
                                             start();
                                             evt.preventDefault();
                                         }, false);
 
                                         channelList.appendChild(btn);
-                                        // document.getElementById("lvChannel").appendChild(btn);
-                                        // document.getElementById("lvChannel").innerHTML = ch.id;
                                     }
                                 });
                             }, 3000);
@@ -258,7 +292,8 @@
                 $("#accordionSidebar").load("nav.html");
             });
         </script>
-
+    </div>
+</div>
 </body>
 
 </html>
