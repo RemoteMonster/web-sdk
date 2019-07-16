@@ -55,6 +55,21 @@
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceCall.html"
                         target="_blank">github page</a></li>
                 <br>
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-xl-12 col-md-12 mb-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Remote Audio</h6>
+                            </div>
+                            <div class="card-body">
+                                <main class="text-center">
+                                    <audio id="remoteVideo" autoplay controls playsinline></audio>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Content Row -->
                 <div class="row">
@@ -62,8 +77,6 @@
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <main>
-                                    <audio id="remoteVideo" autoplay></audio>
-                                    <audio id="localVideo" autoplay muted></audio>
                                     <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">
                                         CONNECT
                                     </a>
@@ -81,7 +94,7 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
             <script>
-                const channelBtnEl = document.querySelector('#channelBtn');
+                const channelButton = document.querySelector('#channelBtn');
                 let isConnected = false;
                 let remon;
                 // please register your own service key from remotemonster site.
@@ -106,20 +119,20 @@
                     },
                     onComplete() {
                         console.log('EVENT FIRED: onComplete');
-                        channelBtnEl.innerHTML = 'CLOSE';
+                        channelButton.innerHTML = 'CLOSE';
                     },
                     onDisconnectChannel() {
                         // is called when other peer hang up.
                         remon.close();
                         isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                        channelButton.innerHTML = 'CONNECT';
                     },
                     onClose() {
                         // is called when remon.close() method is called.
                         console.log('EVENT FIRED: onClose');
                         remon.close();
                         isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                        channelButton.innerHTML = 'CONNECT';
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
@@ -132,17 +145,17 @@
                 function start() {
                     if (isConnected) {
                         isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                        channelButton.innerHTML = 'CONNECT';
                         remon.close();
                     } else {
                         isConnected = true;
-                        channelBtnEl.innerHTML = 'WAIT';
+                        channelButton.innerHTML = 'WAIT';
                         remon = new Remon({config, listener});
                         remon.connectCall('simpleRemon');
                     }
                 }
 
-                channelBtnEl.addEventListener('click', (evt) => {
+                channelButton.addEventListener('click', (evt) => {
                     start();
                     evt.preventDefault();
                 }, false);
