@@ -47,7 +47,9 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>Enter the channel name and click connect button.</li>
+                <li>You can make calls by adjusting the video input, audio input, video codec, video fps, and so on.
+                    (You can also change various settings)</li>
+                <li>Other than setting change, usage is same as 'Call List' example.</li>
                 <li>Open the same <a href="./videoConfig.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
                 </li>
@@ -115,8 +117,8 @@
                                         <!--Video FPS-->
                                         <span class="col-lg-3 mg-2">
                                             <div class="small mb-1">Video FPS</div>
+                                            <label for="videoFPSInput"></label><input id="videoFPSInput" onchange="changeVideoFPS()" class="text-center mb-4" type="text" value=25>
                                         </span>
-                                            <input id="videoFPSInput" onchange="changeVideoFPS()" class="text-center mb-4" type="text" value=25 style="width: 50px;">
                                     </div>
 
                                     <div class="mt-4 text-center">
@@ -163,8 +165,8 @@
                 var waitingLoop;
                 let cameraList = [];
                 let micList = [];
-                // createDummyRemonForSearchLoop();
-                // startSearchLoop();
+                createDummyRemonForSearchLoop();
+                startSearchLoop();
 
                 // please register your own service key from remotemonster site.
                 let config = {
