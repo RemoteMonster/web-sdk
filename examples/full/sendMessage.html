@@ -71,6 +71,11 @@
                                     </div>
                                     <div id="lvChannel" class="card-body" style="margin: -0.5rem;">
                                     </div>
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary text-center">Chat log</h6>
+                                    </div>
+                                    <div id="chatLogDiv" class="card-body" style="margin: -0.5rem;">
+                                    </div>
                                 </div>
 
                                 <div class="card">
@@ -85,14 +90,26 @@
                                             <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                                 style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                                 waiting</h6>
-                                            <div id="chatScroll"
+                                            <!-- <div id="chatScroll"
                                                  style="z-index:3; position: absolute; overflow:scroll; width:30%; height:20%; bottom: 50px; left:30px;">
-                                            </div>
-                                            <div id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center" style="z-index:3; position: absolute; width: 30%; bottom: 15px; left: 30px; visibility: hidden;">
-                                                Send Message</div>
+                                            </div> -->
+                                            
                                         </div>
-                                        <input id="channelNameInput" class="form-control text-center" type="text"
+                                        <div class="mt-4 text-center">
+                                            <span class="mr-2">
+                                                <input id="channelNameInput" class="text-center" type="text"
                                                placeholder="channel name" autofocus>
+                                            </span>
+                                            <span class="mr-2">
+                                                <input id="chatMsg" class="form-control-user text-center" type="text"
+                                               placeholder="chat message">
+                                            </span>
+                                            <span class="mr-2">
+                                                <a id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center">
+                                                    Send Message</a>
+                                            </span>
+                                        </div>
+                                        <br>
                                         <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">CONNECT</a>
                                     </div>
                                 </div>
@@ -114,8 +131,10 @@
                         const channelList = document.getElementById("lvChannel");
                         const channelNameInput = document.getElementById("channelNameInput");
                         const waitingTv = document.getElementById("waitingTv");
-                        const chatScroll = document.getElementById("chatScroll");
+                        // const chatScroll = document.getElementById("chatScroll");
                         const sendMessageBtn = document.getElementById("sendMessageBtn");
+                        const chatLogDiv = document.getElementById("chatLogDiv");
+                        const chatMsg = document.getElementById("chatMsg");
                         let isConnected = false;
                         let remon;
                         const key = '1234567890';
@@ -181,13 +200,13 @@
                             channelBtnEl.innerHTML = btnText;
                             channelNameInput.style.visibility = inputVisiblility;
                             if (isClearChatViews) {
-                                while (chatScroll.firstChild) {
-                                    chatScroll.removeChild(chatScroll.firstChild);
-                                }
-                                chatScroll.style.visibility = 'hidden';
+                                // while (chatScroll.firstChild) {
+                                //     chatScroll.removeChild(chatScroll.firstChild);
+                                // }
+                                // chatScroll.style.visibility = 'hidden';
                                 sendMessageBtn.style.visibility = 'hidden';
                             } else {
-                                chatScroll.style.visibility = 'visible';
+                                // chatScroll.style.visibility = 'visible';
                                 sendMessageBtn.style.visibility = 'visible';
                             }
                         }
@@ -216,11 +235,12 @@
                         function addMesssage(isMine, msg) {
                             var msgItem = document.createElement("p");
                             msgItem.style.textShadow = "0 0 7px #ffffff";
-                            msgItem.style.lineHeight = 0.5;
+                            msgItem.style.lineHeight = 0.9;
                             if (!isMine) msgItem.style.color = "Blue";
-                            msgItem.innerHTML = isMine ? "Me : " + msg : "Opponent : " + msg;
-                            chatScroll.appendChild(msgItem);
-                            chatScroll.scroll(0, chatScroll.scrollHeight);
+                            msgItem.innerHTML = isMine ? "Me : " + msg : "Other : " + msg;
+                            //chatScroll.appendChild(msgItem);
+                            chatLogDiv.appendChild(msgItem);
+                            //chatScroll.scroll(0, chatScroll.scrollHeight);
                         }
 
                         function createDummyRemonForSearchLoop() {
@@ -283,9 +303,15 @@
                             evt.preventDefault();
                         }, false);
 
-                        function sendMessage() {
-                            remon.sendMessage("Test Message");
-                            addMesssage(true, "Test Message");
+                        function sendMessage(msg) {
+                            if (chatMsg.value){
+                                msg = chatMsg.value;
+                                chatMsg.value="";
+                            }else{
+                                if (!msg) msg = 'Test Message';
+                            }
+                            remon.sendMessage(msg);
+                            addMesssage(true, msg);
                         }
                     </script>
                 </div>
