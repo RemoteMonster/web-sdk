@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="RemoteMonster live media service demo">
+    <meta name="author" content="Lucas Choi">
+
+    <title>Demo for CGNTV</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style type="text/css">
+      video.remoteVideo {z-index:1;background: rgba(144, 0, 0, 0.5); width: 100%;}
+    </style>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+              <h3 class="h3 mb-4 text-gray-800">Demo for CGNTV</h3>
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Content Row -->
+          <div class="row">
+
+              <!-- Content Column -->
+              <div class="col-lg-6 mb-4">
+  
+                <!-- Project Card Example -->
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">자기 화면</h6>
+                  </div>
+                  <div class="card-body">
+                      <video id="localVideo" class="center" style="width:100%; transform: rotateY(180deg);" autoplay muted></video>
+                  </div>
+                </div>
+  
+                <!-- Color System -->
+                <div class="row">
+                  <div class="col-lg-6 mb-4">
+                    <div class="card bg-success text-white shadow">
+                      <a id="start" href="#" class="btn btn-block text-center text-white">시작</a>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="card bg-info text-white shadow">
+                      <a id="create" style="" href="#" class="btn btn-block text-center text-white">&nbsp;</a>
+                    </div>
+                  </div>
+                </div>
+  
+              </div>
+  
+              <div class="col-lg-6 mb-4">
+                <!-- Links -->
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">원격방송</h6>
+                  </div>
+                  <div id="roomlistDiv" class="card-body">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+          <!-- The webrtc adapter is required for browser compatibility -->
+          <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.6/remon.min.js"></script>
+
+<script>
+const startButton = document.querySelector('#start');
+const createButton = document.querySelector('#create');
+let casterRemon;
+const key = "e3ee6933a7c88446ba196b2c6eeca6762c3fdceaa6019f03";
+const serviceId = "simpleapp";
+let myRoomId;
+let r0; //remon for search
+let isStart=false;
+let isCreate=false;
+let remoteCount = 0;
+let remoteRemons = [];
+let remoteRooms = {};
+const casterConfig = {
+  credential: {
+    key,
+    serviceId ,
+  },
+  view: {
+    local: "#localVideo",
+    remote: "#remoteVideo1"
+  },
+  media: {
+    audio: {
+      channelCount:2,
+      echoCancellation: true,
+      autoGainControl: false,
+      noiseSuppression: false
+    },
+    video: {
+      width: { max: "640", min: "640" },
+      height: { max: "480", min: "480" },
+      maxBandwidth:1000
+    }
+  },
+  dev: {
+    logLevel: "DEBUG"
+  },
+  rtc: {
+    audioType: "music"
+  }
+};
+var viewerListener = {
+  onDisconnectChannel(e){
+    this.close();
+  }
+}
+var casterListener = {
+  onInit(token) {
+    console.log(`EVENT FIRED : onInit: ${token}`);
+  },
+  onCreateChannel(channelId) {
+    console.log(`EVENT FIRED : onCreateChannel: ${channelId}`);
+  },
+  onConnectChannel(channelId) {
+    console.log(`EVENT FIRED : onConnectChannel ${channelId}`);
+  },
+  onCreate(chid) {
+    console.log(chid);
+    myRoomId = chid;
+  },
+  onDisconnectChannel(e){
+      casterRemon.close();
+  },
+  onComplete() {
+    console.log("EVENT FIRED : onComplete");
+  },
+  onAddLocalStream(stream) {
+    console.log(`EVENT FIRED : onAddLocalStream: ${stream}`);
+  },
+  onStateChange(state) {
+    console.log(`EVENT FIRED : onStateChange: ${state}`);
+  },
+  onError(error) {
+    l(`EVENT FIRED : onError: ${error}`);
+    l(error);
+  }
+};
+startButton.addEventListener("click", event => {
+  if(isStart){
+    clean();
+    startButton.innerHTML='시작';
+    isStart = false;
+  }else{
+    isStart = true;
+    searchPoller();
+    setInterval(searchPoller, 5000);
+    startButton.innerHTML='종료';
+    createButton.innerHTML='방송송출시작';
+  }
+  event.preventDefault();
+}, false);
+createButton.addEventListener("click", event => {
+  if (!isStart)return;
+  if (isCreate){
+    casterRemon.close();
+    isCreate= false;
+    createButton.innerHTML='방송송출시작';
+  }else{
+    casterRemon = new Remon({ config: casterConfig, listener: casterListener });
+    casterRemon.createCast();
+    isCreate=true;
+    createButton.innerHTML='방송송출종료';
+  }
+  event.preventDefault();
+}, false);
+function clean() {
+  if (casterRemon) casterRemon.close();
+  remoteRemons.forEach(remonItem => {
+          remonItem.close();
+          });
+  remoteRemons = [];
+  remoteRooms = {};
+}
+function searchPoller() {
+  r0.fetchCasts().then(result => {
+  var search_list = document.querySelector("#roomlistDiv");
+                  
+  Object.keys(result).some(roomKey => {
+    console.log(result[roomKey].id);
+    var resultRoomName = result[roomKey].id;
+    if (resultRoomName === myRoomId || remoteRooms[resultRoomName]) return false;
+      const videoTag = document.createElement("video");
+      videoTag.id='remoteVideo'+ remoteCount;
+      videoTag.setAttribute('autoplay',"");
+      videoTag.setAttribute('controls',"");
+      videoTag.setAttribute('muted',"");
+      videoTag.setAttribute('playsinline', "");
+      videoTag.setAttribute('class', "remoteVideo");
+      search_list.appendChild(videoTag);
+      const remoteConfig = {credential:{serviceId, key}, view:{local:"#localVideo", remote:"#remoteVideo"+remoteCount}, media:{audio:true, video:true}};
+      remoteRooms[resultRoomName]="okay";
+      remoteRemons[remoteCount]= new Remon({config:remoteConfig, listener:viewerListener});
+      remoteRemons[remoteCount].joinCast(resultRoomName);
+      remoteCount++;
+      });
+    });
+}
+
+function l(msg) {
+  logElement.innerHTML = msg + "<br>" + logElement.innerHTML;
+}
+
+r0 = new Remon({ config: { credential: { key, serviceId },
+  media: {  audio: true,  video: false}}, listener: {} });
+</script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+</body>
+</html>

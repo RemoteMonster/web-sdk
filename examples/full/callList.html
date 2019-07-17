@@ -47,7 +47,10 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>Enter the channel name and click connect button.</li>
+                <li>Channel is the concept of a chat room in a RemoteMonster.</li>
+                <li>This sample show the multiple channel list and you can select a channel to call to other.</li>
+                <li>You can create a channel or join a channel.</li>
+                <li>To create a channel, please input a channel name and click connect button. And then you can make a channel with a name and other can find a your channel on other tab or browser.</li>
                 <li>Open the same <a href="./callList.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
                 </li>
@@ -58,242 +61,243 @@
 
                 <!-- Content Row -->
                 <div class="row">
-
-                    <div class="col-xl-12 col-md-12 mb-12">
-                        <div class="card shadow mb-12">
-                            <div class="card-group">
-                                <div class="col-2" style="margin-left: -1rem; margin-right: -1rem">
-                                    <!-- Custom Text Color Utilities -->
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary text-center">Channel List</h6>
-                                    </div>
-                                    <div id="lvChannel" class="card-body" style="margin: -0.5rem;">
-                                    </div>
-                                </div>
-
-                                <div class="card">
-                                    <div class="col-xl-12 col-md-12 mb-12" style="padding: 1rem">
-                                        <div style="position: relative;">
-                                            <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay
-                                                   style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                            <video id="localVideo"
-                                                   style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
-                                                   autoplay muted>
-                                            </video>
-                                            <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
-                                                style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
-                                                waiting</h6>
-                                        </div>
-                                        <input id="channelNameInput" class="form-control text-center" type="text"
-                                               placeholder="channel name" autofocus>
-                                        <a id="channelBtn" href="#"
-                                           class="btn btn-primary btn-user btn-block text-center">
-                                            CONNECT
-                                        </a>
-                                    </div>
-                                </div>
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
                             </div>
-
-
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <main id="lvChannel" class="text-center">
+                                </main>
+                            </div>
                         </div>
                     </div>
-                    <!-- /.container-fluid -->
-
-                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-                    <!-- The webrtc adapter is required for browser compatibility -->
-                    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
-
-                    <script>
-                        const localVideo = document.getElementById("localVideo");
-                        const channelBtnEl = document.querySelector('#channelBtn');
-                        const channelList = document.getElementById("lvChannel");
-                        const channelNameInput = document.getElementById("channelNameInput");
-                        const waitingTv = document.getElementById("waitingTv");
-                        let isConnected = false;
-                        let remon;
-                        const key = '1234567890';
-                        const serviceId = 'SERVICEID1';
-                        var waitingLoop;
-                        createDummyRemonForSearchLoop();
-                        startSearchLoop();
-
-                        // please register your own service key from remotemonster site.
-                        const config = {
-                            credential: {
-                                key: key,
-                                serviceId: serviceId
-                            },
-                            view: {
-                                remote: '#remoteVideo',
-                                local: '#localVideo'
-                            }
-                        };
-
-                        const listener = {
-                            onConnect(chid) {
-                                console.log(`EVENT FIRED: onConnect: ${chid}`);
-                            },
-                            onComplete() {
-                                console.log('EVENT FIRED: onComplete');
-                                setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
-                            },
-                            onDisconnectChannel() {
-                                // is called when other peer hang up.
-                                remon.close();
-                                isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
-                            },
-                            onClose() {
-                                // is called when remon.close() method is called.
-                                console.log('EVENT FIRED: onClose');
-                                remon.close();
-                                isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
-                            },
-                            onError(error) {
-                                console.log(`EVENT FIRED: onError: ${error}`);
-                            },
-                            onStat(result) {
-                                console.log(`EVENT FIRED: onStat: ${result}`);
-                            }
-                        };
-
-                        function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
-                            localVideo.style.visibility = localVideoVisibility;
-                            if (runWaitLoop) {
-                                waitingMsgLoop();
-                            } else {
-                                clearInterval(waitingLoop);
-                            }
-                            waitingTv.style.visibility = waitingTvVisibility;
-                            channelBtnEl.innerHTML = btnText;
-                            channelNameInput.style.visibility = inputVisiblility;
-                        }
-
-                        function start() {
-                            if (isConnected) {
-                                isConnected = false;
-                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
-                                remon.close();
-                            } else {
-                                isConnected = true;
-                                setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
-                                remon = new Remon({config, listener});
-                                remon.connectCall(channelNameInput.value ? channelNameInput.value : getRandomId());
-                            }
-                        }
-
-                        function getRandomId() {
-                            var text = "";
-                            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                            for (var i = 0; i < 5; i++)
-                                text += possible.charAt(Math.floor(Math.random() * possible.length));
-                            return text;
-                        }
-
-                        channelBtnEl.addEventListener('click', (evt) => {
-                            start();
-                            evt.preventDefault();
-                        }, false);
-
-
-                        function createDummyRemonForSearchLoop() {
-                            if (remon) remon.close();
-                            let cfg = {
-                                credential: {key: key, serviceId: serviceId},
-                                view: {local: '#localVideo1', remote: '#remoteVideo1'},
-                                media: {audio: true, video: true}
-                            };
-                            cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
-                            cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
-                            remon = new Remon({config: cfg});
-                        }
-
-                        function waitingMsgLoop() {
-                            var numOfPoint = 0;
-                            var pointStr = "";
-                            waitingLoop = setInterval(async function () {
-                                pointStr = "";
-                                numOfPoint++;
-                                if(numOfPoint === 4) numOfPoint = 0;
-                                for (var i = 0; i < numOfPoint; i++) {
-                                    pointStr += ".";
-                                }
-                                waitingTv.innerText = "waiting" + pointStr;
-                            }, 1000);
-                        }
-
-                        function startSearchLoop() {
-                            setInterval(async function () {
-                                remon.config.credential.serviceId = serviceId;
-                                remon.config.credential.key = key;
-                                var searchResult = await remon.fetchCalls();
-                                while (channelList.firstChild) {
-                                    channelList.removeChild(channelList.firstChild);
-                                }
-                                searchResult.forEach((ch, i) => {
-                                    ch.type = 'P2P';
-                                    if (ch.status === 'WAIT') {
-                                        var btn = document.createElement("input");
-                                        btn.type = "button";
-                                        btn.name = ch.id;
-                                        btn.value = ch.id;
-                                        btn.className = "btn btn-primary btn-user btn-block text-center";
-                                        btn.addEventListener('click', (evt) => {
-                                            channelNameInput.value = ch.id;
-                                            start();
-                                            evt.preventDefault();
-                                        }, false);
-
-                                        channelList.appendChild(btn);
-                                    }
-                                });
-                            }, 3000);
-                        }
-
-                    </script>
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">My Channel</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <main class="text-center">
+                                    <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+                                    <video id="localVideo"
+                                        style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
+                                        autoplay muted>
+                                    </video>
+                                    <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
+                                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
+                                        waiting</h6>
+                                
+                                    <input id="channelNameInput" class="form-control text-center" type="text"
+                                        placeholder="channel name" autofocus>
+                                    <a id="channelBtn" href="#"
+                                    class="btn btn-primary btn-user btn-block text-center">
+                                        CONNECT
+                                    </a>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- End of Main Content -->
-
-                <!-- Footer -->
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
-                        </div>
-                    </div>
-                </footer>
-                <!-- End of Footer -->
-
             </div>
-            <!-- End of Content Wrapper -->
+            <!-- /.container-fluid -->
 
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+            <!-- The webrtc adapter is required for browser compatibility -->
+            <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+
+            <script>
+const localVideo = document.getElementById("localVideo");
+const channelBtnEl = document.querySelector('#channelBtn');
+const channelList = document.getElementById("lvChannel");
+const channelNameInput = document.getElementById("channelNameInput");
+const waitingTv = document.getElementById("waitingTv");
+let isConnected = false;
+let remon;
+const key = '1234567890';
+const serviceId = 'SERVICEID1';
+let myChannelId;
+var waitingLoop;
+createDummyRemonForSearchLoop();
+startSearchLoop();
+
+// please register your own service key from remotemonster site.
+const config = {
+    credential: {
+        key, serviceId
+    },
+    view: {
+        remote: '#remoteVideo',
+        local: '#localVideo'
+    }
+};
+
+const listener = {
+    onConnect(chid) {
+        console.log(`EVENT FIRED: onConnect: ${chid}`);
+    },
+    onComplete() {
+        console.log('EVENT FIRED: onComplete');
+        setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
+    },
+    onDisconnectChannel() {
+        // is called when other peer hang up.
+        remon.close();
+        isConnected = false;
+        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+    },
+    onClose() {
+        // is called when remon.close() method is called.
+        console.log('EVENT FIRED: onClose');
+        remon.close();
+        isConnected = false;
+        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+    },
+    onError(error) {
+        console.log(`EVENT FIRED: onError: ${error}`);
+    },
+    onStat(result) {
+        console.log(`EVENT FIRED: onStat: ${result}`);
+    }
+};
+
+function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
+    localVideo.style.visibility = localVideoVisibility;
+    if (runWaitLoop) {
+        waitingMsgLoop();
+    } else {
+        clearInterval(waitingLoop);
+    }
+    waitingTv.style.visibility = waitingTvVisibility;
+    channelBtnEl.innerHTML = btnText;
+    channelNameInput.style.visibility = inputVisiblility;
+}
+
+function start() {
+    if (isConnected) {
+        isConnected = false;
+        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        remon.close();
+    } else {
+        isConnected = true;
+        setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
+        remon = new Remon({config, listener});
+        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId()
+        remon.connectCall(myChannelId);
+    }
+}
+
+function getRandomId() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}
+
+channelBtnEl.addEventListener('click', (evt) => {
+    start();
+    evt.preventDefault();
+}, false);
+
+
+function createDummyRemonForSearchLoop() {
+    if (remon) remon.close();
+    let cfg = {
+        credential: {key: key, serviceId: serviceId},
+        view: {local: '#localVideo1', remote: '#remoteVideo1'},
+        media: {audio: false, video: false}
+    };
+    remon = new Remon({config: cfg});
+}
+
+function waitingMsgLoop() {
+    var numOfPoint = 0;
+    var pointStr = "";
+    waitingLoop = setInterval(async function () {
+        pointStr = "";
+        numOfPoint++;
+        if(numOfPoint === 4) numOfPoint = 0;
+        for (var i = 0; i < numOfPoint; i++) {
+            pointStr += ".";
+        }
+        waitingTv.innerText = "waiting" + pointStr;
+    }, 1000);
+}
+
+function startSearchLoop() {
+    setInterval(async function () {
+        remon.config.credential.serviceId = serviceId;
+        remon.config.credential.key = key;
+        var searchResult = await remon.fetchCalls();
+        while (channelList.firstChild) {
+            channelList.removeChild(channelList.firstChild);
+        }
+        searchResult.forEach((ch, i) => {
+            ch.type = 'P2P';
+            if (ch.status === 'WAIT' && ch.id !== myChannelId) {
+                var btn = document.createElement("input");
+                btn.type = "button";
+                btn.name = ch.id;
+                btn.value = ch.id;
+                btn.className = "btn btn-primary btn-user btn-block text-center";
+                btn.addEventListener('click', (evt) => {
+                    channelNameInput.value = ch.id;
+                    start();
+                    evt.preventDefault();
+                }, false);
+
+                channelList.appendChild(btn);
+            }
+        });
+    }, 3000);
+}
+            </script>
         </div>
-        <!-- End of Page Wrapper -->
+        <!-- End of Main Content -->
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-        <!-- Custom scripts for all pages-->
-        <script src="js/sb-admin-2.min.js"></script>
-
-        <script>
-            $(document).ready(function () {
-                $("#accordionSidebar").load("nav.html");
-            });
-        </script>
     </div>
+    <!-- End of Content Wrapper -->
+
 </div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#accordionSidebar").load("nav.html");
+    });
+</script>
 </body>
 
 </html>
