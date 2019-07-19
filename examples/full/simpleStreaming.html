@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Simple Call</title>
+    <title>Simple Streaming</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Simple Call example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Simple Streaming example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -48,11 +48,11 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./simpleCall.html" target="_blank">site</a> on other tab or browser. Then
-                    click the connect button to connect to first page.
+                <li>Open the same <a href="./simpleStreaming.html" target="_blank">site</a> on other tab or browser. Then
+                    click the create button to connect to first page.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simpleCall.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simpleStreaming.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -63,14 +63,11 @@
                             <div class="card-body">
                                 <main>
                                     <div>
-                                        <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                        <video id="localVideo" class="remote-video center w-300 h-300" autoplay muted controls playsinline
                                                style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                        <video id="localVideo"
-                                               style="z-index:2;position:absolute; bottom: 70px;right:40px;width:30%;border-radius: 50px;transform: rotateY(180deg);"
-                                               autoplay muted></video>
                                     </div>
                                     <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">
-                                        CONNECT
+                                        CREATE
                                     </a>
                                 </main>
                             </div>
@@ -87,7 +84,7 @@
 
             <script>
                 const channelBtnEl = document.querySelector('#channelBtn');
-                let isConnected = false;
+                let isCreated = false;
                 let remon;
                 // please register your own service key from remotemonster site.
                 const config = {
@@ -96,8 +93,13 @@
                         serviceId: 'SERVICEID1'
                     },
                     view: {
-                        remote: '#remoteVideo',
+                        // remote: '#remoteVideo',
                         local: '#localVideo'
+                    },
+                    media: {
+                        sendonly: true,
+                        audio: true,
+                        video: true
                     }
                 };
 
@@ -112,15 +114,15 @@
                     onDisconnectChannel() {
                         // is called when other peer hang up.
                         remon.close();
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                        isCreated = false;
+                        channelBtnEl.innerHTML = 'CREATE';
                     },
                     onClose() {
                         // is called when remon.close() method is called.
                         console.log('EVENT FIRED: onClose');
                         remon.close();
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                        isCreated = false;
+                        channelBtnEl.innerHTML = 'CREATE';
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
@@ -131,15 +133,15 @@
                 };
 
                 function start() {
-                    if (isConnected) {
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
+                    if (isCreated) {
+                        isCreated = false;
+                        channelBtnEl.innerHTML = 'CREATE';
                         remon.close();
                     } else {
-                        isConnected = true;
-                        channelBtnEl.innerHTML = 'WAIT';
+                        isCreated = true;
+                        channelBtnEl.innerHTML = 'CLOSE';
                         remon = new Remon({config, listener});
-                        remon.connectCall('simpleRemon');
+                        remon.createCast('');
                     }
                 }
 
