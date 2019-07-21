@@ -80,76 +80,93 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.10/remon.min.js"></script>
 
-            <script>
-                const channelBtnEl = document.querySelector('#channelBtn');
-                let isCreated = false;
-                let remon;
-                // please register your own service key from remotemonster site.
-                const config = {
-                    credential: {
-                        key: '1234567890',
-                        serviceId: 'SERVICEID1'
-                    },
-                    view: {
-                        // remote: '#remoteVideo',
-                        local: '#localVideo'
-                    },
-                    media: {
-                        sendonly: true,
-                        audio: true,
-                        video: true
-                    }
-                };
+<script>
+const channelBtnEl = document.querySelector('#channelBtn');
+let isCreated = false;
+let remon;
+// please register your own service key from remotemonster site.
+const dummyConfig = {
+    credential: {key: '1234567890', serviceId: 'SERVICEID1'},
+    view: {}, media: {audio:false, video:false}
+}
+const config = {
+    credential: {
+        key: '1234567890',
+        serviceId: 'SERVICEID1'
+    },
+    view: {
+        // remote: '#remoteVideo',
+        local: '#localVideo'
+    },
+    media: {
+        audio: true,
+        video: true
+    }
+};
 
-                const listener = {
-                    onConnect(chid) {
-                        console.log(`EVENT FIRED: onConnect: ${chid}`);
-                    },
-                    onComplete() {
-                        console.log('EVENT FIRED: onComplete');
-                        channelBtnEl.innerHTML = 'CLOSE';
-                    },
-                    onDisconnectChannel() {
-                        // is called when other peer hang up.
-                        remon.close();
-                        isCreated = false;
-                        channelBtnEl.innerHTML = 'CREATE';
-                    },
-                    onClose() {
-                        // is called when remon.close() method is called.
-                        console.log('EVENT FIRED: onClose');
-                        remon.close();
-                        isCreated = false;
-                        channelBtnEl.innerHTML = 'CREATE';
-                    },
-                    onError(error) {
-                        console.log(`EVENT FIRED: onError: ${error}`);
-                    },
-                    onStat(result) {
-                        console.log(`EVENT FIRED: onStat: ${result}`);
-                    }
-                };
+const listener = {
+    onCreateChannel(chid) {
+        console.log(`EVENT FIRED: onConnect: ${chid}`);
+    },
+    onComplete() {
+        console.log('EVENT FIRED: onComplete');
+        channelBtnEl.innerHTML = 'CLOSE';
+    },
+    onDisconnectChannel() {
+        // is called when other peer hang up.
+        remon.close();
+        isCreated = false;
+        channelBtnEl.innerHTML = 'CREATE';
+    },
+    onClose() {
+        // is called when remon.close() method is called.
+        console.log('EVENT FIRED: onClose');
+        remon.close();
+        isCreated = false;
+        channelBtnEl.innerHTML = 'CREATE';
+    },
+    onError(error) {
+        console.log(`EVENT FIRED: onError: ${error}`);
+    },
+    onStat(result) {
+        console.log(`EVENT FIRED: onStat: ${result}`);
+    }
+};
 
-                function start() {
-                    if (isCreated) {
-                        isCreated = false;
-                        channelBtnEl.innerHTML = 'CREATE';
-                        remon.close();
-                    } else {
-                        isCreated = true;
-                        channelBtnEl.innerHTML = 'CLOSE';
-                        remon = new Remon({config, listener});
-                        remon.createCast('');
-                    }
-                }
+function start() {
+    if (isCreated) {
+        isCreated = false;
+        channelBtnEl.innerHTML = 'CREATE';
+        remon.close();
+    } else {
+        isCreated = true;
+        channelBtnEl.innerHTML = 'CLOSE';
+        remon = new Remon({config, listener});
+        remon.createCast('testchannel');
+    }
+}
 
-                channelBtnEl.addEventListener('click', (evt) => {
-                    start();
-                    evt.preventDefault();
-                }, false);
-            </script>
+channelBtnEl.addEventListener('click', (evt) => {
+    start();
+    evt.preventDefault();
+}, false);
+async function findRoom(){
+    remon = new Remon({config: dummyConfig, listener:{}});
+    var searchResult = await remon.fetchCasts();
+    searchResult.forEach((ch, i) => {
+        ch.type = 'BROADCAST';
+        if (ch.status === 'CONNECT' && ch.id === 'testchannel') {
+            console.log("------------------- find my channel -----------------");
+            config.view.remote = '#localVideo';
+            remon = new Remon({config, listener});
+            remon.joinCast('testchannel');
+        }
+    });
+}
+findRoom();
+</script>
         </div>
         <!-- End of Main Content -->
 
