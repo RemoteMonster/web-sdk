@@ -116,9 +116,7 @@ const listener = {
     },
     onDisconnectChannel() {
         // is called when other peer hang up.
-        remon.close();
-        isCreated = false;
-        channelBtnEl.innerHTML = 'CREATE';
+        console.log("some viewer is exited")
     },
     onClose() {
         // is called when remon.close() method is called.
