@@ -48,7 +48,8 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./voiceStreaming.html" target="_blank">site</a> on other tab or browser. Then click
+                <li>Open the same <a href="./voiceStreaming.html" target="_blank">site</a> on other tab or browser. Then
+                    click
                     the connect button to connect to first page.
                 </li>
                 <li>Source code: <a
@@ -64,7 +65,7 @@
                             </div>
                             <div class="card-body">
                                 <main class="text-center">
-                                    <audio id="localVideo" autoplay controls playsinline></audio>
+                                    <audio id="localVideo" autoplay muted controls playsinline></audio>
                                 </main>
                             </div>
                         </div>
@@ -78,7 +79,7 @@
                             <div class="card-body">
                                 <main>
                                     <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">
-                                        CONNECT
+                                        CREATE
                                     </a>
                                 </main>
                             </div>
@@ -92,75 +93,6 @@
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
-
-            <script>
-                const channelButton = document.querySelector('#channelBtn');
-                let isConnected = false;
-                let remon;
-                // please register your own service key from remotemonster site.
-                const config = {
-                    credential: {
-                        key: '1234567890',
-                        serviceId: 'SERVICEID1'
-                    },
-                    view: {
-                        // remote: '#remoteVideo',
-                        local: '#localVieo'
-                    },
-                    media: {
-                        sendonly: true,
-                        audio: true,
-                        video: false
-                    }
-                };
-
-                const listener = {
-                    onConnect(chid) {
-                        console.log(`EVENT FIRED: onConnect: ${chid}`);
-                    },
-                    onComplete() {
-                        console.log('EVENT FIRED: onComplete');
-                        channelButton.innerHTML = 'CLOSE';
-                    },
-                    onDisconnectChannel() {
-                        // is called when other peer hang up.
-                        remon.close();
-                        isConnected = false;
-                        channelButton.innerHTML = 'CREATE';
-                    },
-                    onClose() {
-                        // is called when remon.close() method is called.
-                        console.log('EVENT FIRED: onClose');
-                        remon.close();
-                        isConnected = false;
-                        channelButton.innerHTML = 'CREATE';
-                    },
-                    onError(error) {
-                        console.log(`EVENT FIRED: onError: ${error}`);
-                    },
-                    onStat(result) {
-                        console.log(`EVENT FIRED: onStat: ${result}`);
-                    }
-                };
-
-                function start() {
-                    if (isConnected) {
-                        isConnected = false;
-                        channelButton.innerHTML = 'CREATE';
-                        remon.close();
-                    } else {
-                        isConnected = true;
-                        channelButton.innerHTML = 'CLOSE';
-                        remon = new Remon({config, listener});
-                        remon.createCast('simpleRemon');
-                    }
-                }
-
-                channelButton.addEventListener('click', (evt) => {
-                    start();
-                    evt.preventDefault();
-                }, false);
-            </script>
         </div>
         <!-- End of Main Content -->
 
@@ -179,6 +111,96 @@
 
 </div>
 <!-- End of Page Wrapper -->
+
+<script>
+    const channelButton = document.querySelector('#channelBtn');
+    let isConnected = false;
+    let remon;
+    // please register your own service key from remotemonster site.
+    const dummyConfig = {
+        credential: {key: '1234567890', serviceId: 'SERVICEID1'},
+        view: {}, media: {audio: false, video: false}
+    };
+
+    const config = {
+        credential: {
+            key: '1234567890',
+            serviceId: 'SERVICEID1'
+        },
+        view: {
+            // remote: '#remoteVideo',
+            local: '#localVieo'
+        },
+        media: {
+            audio: true,
+            video: false
+        }
+    };
+
+    const listener = {
+        onConnect(chid) {
+            console.log(`EVENT FIRED: onConnect: ${chid}`);
+        },
+        onComplete() {
+            console.log('EVENT FIRED: onComplete');
+            channelButton.innerHTML = 'CLOSE';
+        },
+        onDisconnectChannel() {
+            // is called when other peer hang up.
+            remon.close();
+            isConnected = false;
+            channelButton.innerHTML = 'CREATE';
+        },
+        onClose() {
+            // is called when remon.close() method is called.
+            console.log('EVENT FIRED: onClose');
+            remon.close();
+            isConnected = false;
+            channelButton.innerHTML = 'CREATE';
+        },
+        onError(error) {
+            console.log(`EVENT FIRED: onError: ${error}`);
+        },
+        onStat(result) {
+            console.log(`EVENT FIRED: onStat: ${result}`);
+        }
+    };
+
+    function start() {
+        if (isConnected) {
+            isConnected = false;
+            channelButton.innerHTML = 'CREATE';
+            remon.close();
+        } else {
+            isConnected = true;
+            channelButton.innerHTML = 'CLOSE';
+            remon = new Remon({config, listener});
+            remon.createCast('voiceStreaming');
+        }
+    }
+
+    channelButton.addEventListener('click', (evt) => {
+        start();
+        evt.preventDefault();
+    }, false);
+
+    async function findRoom() {
+        remon = new Remon({config: dummyConfig, listener: {}});
+        var searchResult = await remon.fetchCasts();
+        searchResult.forEach((ch, i) => {
+            ch.type = 'BROADCAST';
+            if (ch.status === 'CONNECT' && ch.id === 'voiceStreaming') {
+                console.log("------------------- find my channel -----------------");
+                config.view.remote = '#localVideo';
+                remon = new Remon({config, listener});
+                remon.joinCast('voiceStreaming');
+                isCreated = true;
+            }
+        });
+    }
+
+    findRoom();
+</script>
 
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">

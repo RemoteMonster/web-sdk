@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Simple Streaming</title>
+    <title>Simple Cast</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Simple Streaming example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Simple Cast example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -48,7 +48,7 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./simpleStreaming.html" target="_blank">site</a> on other tab or browser. Then
+                <li>Open the same <a href="./simpleCast.html" target="_blank">site</a> on other tab or browser. Then
                     click the create button to connect to first page.
                 </li>
                 <li>Source code: <a
@@ -85,12 +85,13 @@
 <script>
 const channelBtnEl = document.querySelector('#channelBtn');
 let isCreated = false;
+let isCaster = false;
 let remon;
 // please register your own service key from remotemonster site.
 const dummyConfig = {
     credential: {key: '1234567890', serviceId: 'SERVICEID1'},
     view: {}, media: {audio:false, video:false}
-}
+};
 const config = {
     credential: {
         key: '1234567890',
@@ -123,7 +124,7 @@ const listener = {
         console.log('EVENT FIRED: onClose');
         remon.close();
         isCreated = false;
-        channelBtnEl.innerHTML = 'CREATE';
+        isCaster ? channelBtnEl.innerHTML = 'CREATE' : channelBtnEl.innerHTML = 'JOIN';
     },
     onError(error) {
         console.log(`EVENT FIRED: onError: ${error}`);
@@ -133,26 +134,39 @@ const listener = {
     }
 };
 
-function start() {
+async function start() {
     if (isCreated) {
         isCreated = false;
-        channelBtnEl.innerHTML = 'CREATE';
+        isCaster ? channelBtnEl.innerHTML = 'CREATE' : channelBtnEl.innerHTML = 'JOIN';
         remon.close();
     } else {
         isCreated = true;
+        isCaster = true;
         channelBtnEl.innerHTML = 'CLOSE';
         remon = new Remon({config, listener});
         remon.createCast('testchannel');
     }
 }
 
+async function checkForStart(){
+    if (channelBtnEl.innerHTML !== 'CLOSE') {
+        if (!await findRoom()) {
+            start();
+        }
+    } else start();
+}
+
+
+
 channelBtnEl.addEventListener('click', (evt) => {
-    start();
+    checkForStart();
     evt.preventDefault();
 }, false);
+
 async function findRoom(){
     remon = new Remon({config: dummyConfig, listener:{}});
     var searchResult = await remon.fetchCasts();
+    var isRoomExist = false;
     searchResult.forEach((ch, i) => {
         ch.type = 'BROADCAST';
         if (ch.status === 'CONNECT' && ch.id === 'testchannel') {
@@ -160,8 +174,13 @@ async function findRoom(){
             config.view.remote = '#localVideo';
             remon = new Remon({config, listener});
             remon.joinCast('testchannel');
+            isCaster = false;
+            isCreated = true;
+            isRoomExist = true;
+            return isRoomExist;
         }
     });
+    return isRoomExist;
 }
 findRoom();
 </script>
