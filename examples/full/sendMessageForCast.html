@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Screen Share for Cast</title>
+    <title>send Message for Cast</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Screen Share example for Cast</h3>
+                <h3 class="h3 mb-4 text-gray-800">send Message example for Cast</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -47,65 +47,73 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, and so on.
-                    (You can also change various settings)</li>
+                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, and
+                    so on.
+                    (You can also change various settings)
+                </li>
                 <li>Other than setting change, usage is same as 'channels' example.</li>
-                <li>Open the same <a href="./screenShareForCast.html" target="_blank">site</a> on other tab or browser. Then
+                <li>Open the same <a href="./sendMessageForCast.html" target="_blank">site</a> on other tab or browser.
+                    Then
                     click on channel you created in the channel list.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/screenShareForCast.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/sendMessageForCast.html"
                         target="_blank">github page</a></li>
                 <br>
 
                 <!-- Content Row -->
                 <div class="row">
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <main id="lvChannel" class="text-center">
-                                </main>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-8 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">My Channel</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <main class="text-center">
-                                    <video id="myVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
-                                           style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-
-                                    <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
-                                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
-                                        waiting</h6>
-
-                                    <div class="mt-4 text-center">
-                                        <span class="mr-2">
-                                            <input id="channelNameInput" class="text-center" type="text"
-                                                   placeholder="channel name" autofocus>
-                                        </span>
-                                        <span class="mr-2">
-                                            <a id="channelBtn" href="#"
-                                               class="btn btn-primary btn-user text-center">
-                                                CREATE
-                                            </a>
-                                        </span>
-                                        <span class="mr-2">
-                                            <a id="screenShareBtn" href="#" class="btn btn-primary btn-user" style="visibility:hidden;">ScreenShare</a>
-                                        </span>
+                    <div class="col-xl-12 col-md-12 mb-12">
+                        <div class="card shadow mb-12">
+                            <div class="card-group">
+                                <div class="col-2" style="margin-left: -1rem; margin-right: -1rem">
+                                    <!-- Custom Text Color Utilities -->
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary text-center">Channel List</h6>
                                     </div>
-                                </main>
+                                    <div id="lvChannel" class="card-body" style="margin: -0.5rem;">
+                                    </div>
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary text-center">Chat log</h6>
+                                    </div>
+                                    <div id="chatLogDiv" class="card-body" style="margin: -0.5rem;">
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="col-xl-12 col-md-12 mb-12" style="padding: 1rem">
+                                        <div style="position: relative;">
+                                            <video id="myVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                                   style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+                                            <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
+                                                style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
+                                                waiting</h6>
+                                        </div>
+                                        <div class="mt-4 text-center">
+                                            <span class="mr-2">
+                                                <input id="channelNameInput" class="text-center" type="text"
+                                                       placeholder="channel name" autofocus>
+                                            </span>
+                                            <span class="mr-2">
+                                                <input id="nameInput" class="form-control-user text-center" type="text" style="visibility: hidden"
+                                                       placeholder="write your name">
+                                            </span>
+                                            <span class="mr-2">
+                                                <input id="chatMsg" class="form-control-user text-center" type="text" style="visibility: hidden"
+                                                       placeholder="chat message">
+                                            </span>
+                                            <span class="mr-2">
+                                                <a id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center" style="visibility: hidden">
+                                                    Send Message</a>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">CONNECT</a>
+                                    </div>
+                                </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
@@ -122,10 +130,13 @@
                 const channelList = document.getElementById("lvChannel");
                 const channelNameInput = document.getElementById("channelNameInput");
                 const waitingTv = document.getElementById("waitingTv");
-                const screenShareBtn = document.getElementById("screenShareBtn");
+                const sendMessageBtn = document.getElementById("sendMessageBtn");
+                const chatLogDiv = document.getElementById("chatLogDiv");
+                const chatMsg = document.getElementById("chatMsg");
+                const nameInput = document.getElementById("nameInput");
                 let isConnected = false;
                 let isCaster = false;
-                let captured = false;
+                let name = "Person";
                 let myChannelId;
                 let remon;
                 let dummyRemon;
@@ -149,11 +160,11 @@
                         video: {
                             width: '640',
                             height: '480',
-                            codec : 'h264',
+                            codec: 'h264',
                             maxBandwidth: 1800,
                             frameRate: {max: 25, min: 25}
                         },
-                        audio : true
+                        audio: true
                     }
                 };
 
@@ -163,30 +174,33 @@
                     },
                     onComplete() {
                         console.log('EVENT FIRED: onComplete');
-                        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden','visible');
+                        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden', false);
                     },
                     onDisconnectChannel() {
                         // is called when other peer hang up.
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible','hidden');
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
                     },
                     onClose() {
                         // is called when remon.close() method is called.
                         console.log('EVENT FIRED: onClose');
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible','hidden');
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
                     },
                     onStat(result) {
                         console.log(`EVENT FIRED: onStat: ${result}`);
+                    },
+                    onMessage(msg) {
+                        addMesssage(false, msg);
                     }
                 };
 
-                function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, screenShareVisibility) {
+                function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, isClearChatViews) {
                     if (runWaitLoop) {
                         waitingMsgLoop();
                     } else {
@@ -195,10 +209,17 @@
                     waitingTv.style.visibility = waitingTvVisibility;
                     channelButton.innerHTML = btnText;
                     channelNameInput.style.visibility = inputVisiblility;
-                    if (isCaster) {
-                        screenShareBtn.style.visibility =screenShareVisibility;
+                    if (isClearChatViews) {
+                        while (chatLogDiv.firstChild) {
+                            chatLogDiv.removeChild(chatLogDiv.firstChild);
+                        }
+                        sendMessageBtn.style.visibility = 'hidden';
+                        chatMsg.style.visibility = 'hidden';
+                        nameInput.style.visibility = 'hidden';
                     } else {
-                        screenShareBtn.style.visibility ='hidden';
+                        sendMessageBtn.style.visibility = 'visible';
+                        chatMsg.style.visibility = 'visible';
+                        nameInput.style.visibility = 'visible';
                     }
                 }
 
@@ -206,20 +227,20 @@
                     if (isConnected) {
                         isConnected = false;
                         isCaster = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible','hidden');
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
                         remon.close();
                         myChannelId = "";
                     } else {
                         isConnected = true;
                         isCaster = !isViewer;
-                        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden','visible');
+                        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden', false);
                         if (!isCaster) {
                             config.view.remote = '#myVideo';
                         }
                         remon = new Remon({config, listener});
                         myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
                         channelNameInput.value = "";
-                        isCaster? remon.createCast(myChannelId): remon.joinCast(myChannelId);
+                        isCaster ? remon.createCast(myChannelId) : remon.joinCast(myChannelId);
                     }
                 }
 
@@ -255,7 +276,7 @@
                     waitingLoop = setInterval(async function () {
                         pointStr = "";
                         numOfPoint++;
-                        if(numOfPoint === 4) numOfPoint = 0;
+                        if (numOfPoint === 4) numOfPoint = 0;
                         for (var i = 0; i < numOfPoint; i++) {
                             pointStr += ".";
                         }
@@ -289,10 +310,30 @@
                     }, 3000);
                 }
 
-                screenShareBtn.addEventListener("click", evt => {
-                    captured = !captured;
-                    (captured) ? remon.captureScreen(640,480,false) : remon.stopCaptureScreen();
-                });
+                function addMesssage(isMine, msg) {
+                    var msgItem = document.createElement("p");
+                    msgItem.style.textShadow = "0 0 7px #ffffff";
+                    msgItem.style.lineHeight = 0.9;
+                    if (!isMine) msgItem.style.color = "Blue";
+
+                    msgItem.innerHTML = isMine ? "Me : " + msg : msg.split('-')[0] + " : " + msg.split('-')[1];
+                    chatLogDiv.appendChild(msgItem);
+                }
+
+                function sendMessage(msg) {
+                    if (nameInput.value) {
+                        name = nameInput.value;
+                    }
+
+                    if (chatMsg.value){
+                        msg = chatMsg.value;
+                        chatMsg.value="";
+                    }else{
+                        if (!msg) {}msg = "Test Message";
+                    }
+                    remon.sendMessage(name + '-' + msg);
+                    addMesssage(true, msg);
+                }
             </script>
         </div>
         <!-- End of Main Content -->
