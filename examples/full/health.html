@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Room List</title>
+    <title>Health</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Room List example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Health example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -51,11 +51,11 @@
                 <li>This sample show the multiple channel list and you can select a channel to call to other.</li>
                 <li>You can create a channel or join a channel.</li>
                 <li>To create a channel, please input a channel name and click connect button. And then you can make a channel with a name and other can find a your channel on other tab or browser.</li>
-                <li>Open the same <a href="./castList.html" target="_blank">site</a> on other tab or browser. Then
+                <li>Open the same <a href="./health.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/roomList.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/health.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -65,7 +65,7 @@
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
+                                <h6 id="headerText" class="m-0 font-weight-bold text-primary">Channels</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
@@ -113,6 +113,7 @@ const channelBtnEl = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
 const waitingTv = document.getElementById("waitingTv");
+const headerText = document.getElementById("headerText");
 let isConnected = false;
 let isCaster = false;
 let remon;
@@ -161,6 +162,12 @@ const listener = {
     },
     onStat(result) {
         console.log(`EVENT FIRED: onStat: ${result}`);
+        if (isConnected) {
+            channelList.innerHTML = "";
+            Object.keys(result).map(value => {
+                channelList.innerHTML = channelList.innerHTML + value + " = " + result[value] + "<br>";
+            })
+        }
     }
 };
 
@@ -177,12 +184,14 @@ function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputV
 
 function start(isViewer) {
     if (isConnected) {
+        headerText.innerHTML = 'Channels';
         isConnected = false;
         isCaster = false;
         setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
         remon.close();
         myChannelId = "";
     } else {
+        headerText.innerHTML = 'Stat Report';
         isConnected = true;
         isCaster = !isViewer;
         setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
@@ -236,28 +245,30 @@ function waitingMsgLoop() {
 
 function startSearchLoop() {
     setInterval(async function () {
-        remon.config.credential.serviceId = serviceId;
-        remon.config.credential.key = key;
-        var searchResult = await remon.fetchCasts();
-        while (channelList.firstChild) {
-            channelList.removeChild(channelList.firstChild);
-        }
-        searchResult.forEach((ch, i) => {
-            if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
-                var btn = document.createElement("input");
-                btn.type = "button";
-                btn.name = ch.id;
-                btn.value = ch.name;
-                btn.className = "btn btn-primary btn-user btn-block text-center";
-                btn.addEventListener('click', (evt) => {
-                    channelNameInput.value = ch.id;
-                    start(true);
-                    evt.preventDefault();
-                }, false);
-
-                channelList.appendChild(btn);
+        if (!isConnected) {
+            remon.config.credential.serviceId = serviceId;
+            remon.config.credential.key = key;
+            var searchResult = await remon.fetchCasts();
+            while (channelList.firstChild) {
+                channelList.removeChild(channelList.firstChild);
             }
-        });
+            searchResult.forEach((ch, i) => {
+                if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
+                    var btn = document.createElement("input");
+                    btn.type = "button";
+                    btn.name = ch.id;
+                    btn.value = ch.name;
+                    btn.className = "btn btn-primary btn-user btn-block text-center";
+                    btn.addEventListener('click', (evt) => {
+                        channelNameInput.value = ch.id;
+                        start(true);
+                        evt.preventDefault();
+                    }, false);
+
+                    channelList.appendChild(btn);
+                }
+            });
+        }
     }, 3000);
 }
             </script>
