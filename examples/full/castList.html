@@ -51,7 +51,7 @@
                 <li>This sample show the multiple channel list and you can select a channel to call to other.</li>
                 <li>You can create a channel or join a channel.</li>
                 <li>To create a channel, please input a channel name and click connect button. And then you can make a channel with a name and other can find a your channel on other tab or browser.</li>
-                <li>Open the same <a href="./roomList.html" target="_blank">site</a> on other tab or browser. Then
+                <li>Open the same <a href="./castList.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
                 </li>
                 <li>Source code: <a
@@ -109,7 +109,6 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
             <script>
-const localVideo = document.getElementById("localVideo");
 const channelBtnEl = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
@@ -154,6 +153,7 @@ const listener = {
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
+        myChannelId = "";
         setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onError(error) {
@@ -175,19 +175,24 @@ function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputV
     channelNameInput.style.visibility = inputVisiblility;
 }
 
-function start() {
+function start(isViewer) {
     if (isConnected) {
         isConnected = false;
         isCaster = false;
         setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
         remon.close();
+        myChannelId = "";
     } else {
         isConnected = true;
-        isCaster = true;
+        isCaster = !isViewer;
         setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
+        if (!isCaster) {
+            config.view.remote = '#localVideo';
+        }
         remon = new Remon({config, listener});
-        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId()
-        remon.createCast(myChannelId);
+        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
+        channelNameInput.value = "";
+        isCaster? remon.createCast(myChannelId): remon.joinCast(myChannelId);
     }
 }
 
@@ -200,7 +205,7 @@ function getRandomId() {
 }
 
 channelBtnEl.addEventListener('click', (evt) => {
-    start();
+    start(false);
     evt.preventDefault();
 }, false);
 
@@ -238,7 +243,7 @@ function startSearchLoop() {
             channelList.removeChild(channelList.firstChild);
         }
         searchResult.forEach((ch, i) => {
-            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
+            if (ch.status === 'CONNECT' && ch.id !== myChannelId && !isCaster) {
                 var btn = document.createElement("input");
                 btn.type = "button";
                 btn.name = ch.id;
@@ -246,7 +251,7 @@ function startSearchLoop() {
                 btn.className = "btn btn-primary btn-user btn-block text-center";
                 btn.addEventListener('click', (evt) => {
                     channelNameInput.value = ch.id;
-                    start();
+                    start(true);
                     evt.preventDefault();
                 }, false);
 
