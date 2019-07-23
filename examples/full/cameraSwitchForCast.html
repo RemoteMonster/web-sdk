@@ -47,15 +47,10 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, and
-                    so on.
-                    (You can also change various settings)
-                </li>
-                <li>Other than setting change, usage is same as 'channels' example.</li>
-                <li>Open the same <a href="./screenShareForCast.html" target="_blank">site</a> on other tab or browser.
-                    Then
-                    click on channel you created in the channel list.
-                </li>
+                <li>Channel is the concept of a chat room in a RemoteMonster.</li>
+                <li>Open the same <a href="./screenShareForCast.html" target="_blank">site</a> on other tab or browser. Then
+                    click on channel you created in the channel list.</li>
+                <li>During the broadcasting you can do 'Camera Switch' and if you have multiple cameras you will use them sequentially.</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/screenShareForCast.html"
                         target="_blank">github page</a></li>
@@ -276,7 +271,7 @@
                             channelList.removeChild(channelList.firstChild);
                         }
                         searchResult.forEach((ch, i) => {
-                            if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
+                            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
                                 var btn = document.createElement("input");
                                 btn.type = "button";
                                 btn.name = ch.id;

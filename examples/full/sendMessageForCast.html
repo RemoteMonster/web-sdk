@@ -47,15 +47,11 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, and
-                    so on.
-                    (You can also change various settings)
-                </li>
-                <li>Other than setting change, usage is same as 'channels' example.</li>
-                <li>Open the same <a href="./sendMessageForCast.html" target="_blank">site</a> on other tab or browser.
-                    Then
+                <li>Enter the channel name and click create button.</li>
+                <li>Open the same <a href="./sendMessageForCast.html" target="_blank">site</a> on other tab or browser. Then
                     click on channel you created in the channel list.
-                </li>
+                <li>The broadcast begins, Texting in the message input window, and the message is sent.</li>
+                <li>You can check the messages sent and received in the message list. (Can set the name and send the message by that name.)</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/sendMessageForCast.html"
                         target="_blank">github page</a></li>
@@ -293,7 +289,7 @@
                             channelList.removeChild(channelList.firstChild);
                         }
                         searchResult.forEach((ch, i) => {
-                            if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
+                            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
                                 var btn = document.createElement("input");
                                 btn.type = "button";
                                 btn.name = ch.id;

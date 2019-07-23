@@ -48,10 +48,7 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./voiceCast.html" target="_blank">site</a> on other tab or browser. Then
-                    click
-                    the connect button to connect to first page.
-                </li>
+                <li>Open the same <a href="./voiceCast.html" target="_blank">site</a> on other tab or browser. If the room is created, it is automatically entered.</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceStreaming.html"
                         target="_blank">github page</a></li>
@@ -200,7 +197,7 @@
         var isRoomExist = false;
         searchResult.forEach((ch, i) => {
             ch.type = 'BROADCAST';
-            if (ch.status === 'CONNECT' && ch.id === 'testVoiceCast') {
+            if (ch.status === 'COMPLETE' && ch.id === 'testVoiceCast') {
                 console.log("------------------- find my channel -----------------");
                 config.view.remote = '#localVideo';
                 remon = new Remon({config, listener});

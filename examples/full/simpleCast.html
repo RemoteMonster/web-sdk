@@ -48,9 +48,7 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./simpleCast.html" target="_blank">site</a> on other tab or browser. Then
-                    click the create button to connect to first page.
-                </li>
+                <li>Open the same <a href="./simpleCast.html" target="_blank">site</a> on other tab or browser. If the room is created, it is automatically entered.</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simpleStreaming.html"
                         target="_blank">github page</a></li>
@@ -167,7 +165,7 @@ async function findRoom(){
     var isRoomExist = false;
     searchResult.forEach((ch, i) => {
         ch.type = 'BROADCAST';
-        if (ch.status === 'CONNECT' && ch.id === 'testchannel') {
+        if (ch.status === 'COMPLETE' && ch.id === 'testchannel') {
             console.log("------------------- find my channel -----------------");
             config.view.remote = '#localVideo';
             remon = new Remon({config, listener});

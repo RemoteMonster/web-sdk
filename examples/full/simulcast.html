@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Video Config for Cast</title>
+    <title>Simulcast</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Video Config example for Cast</h3>
+                <h3 class="h3 mb-4 text-gray-800">Simulcast example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -47,12 +47,11 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, and so on.
-                    (You can also change various settings)</li>
-                <li>Other than setting change, usage is same as 'channels' example.</li>
+                <li>* 'simulcast' is a technique to selectively receive the same video stream at different resolutions when watching.</li>
+                <li>The usage scenario is the same as for 'cast List'.</li>
                 <li>Open the same <a href="./simulcast.html" target="_blank">site</a> on other tab or browser. Then
-                    click on channel you created in the channel list.
-                </li>
+                    click on channel you created in the channel list.</li>
+                <li>Viewers can select three 'Quality buttons' to receive different resolutions. (You can see the current resolution through the stat report.)</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simulcast.html"
                         target="_blank">github page</a></li>
@@ -298,7 +297,7 @@ function startSearchLoop() {
             channelList.removeChild(channelList.firstChild);
         }
         searchResult.forEach((ch, i) => {
-            if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
+            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
                 var btn = document.createElement("input");
                 btn.type = "button";
                 btn.name = ch.id;
