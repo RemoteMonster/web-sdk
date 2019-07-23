@@ -136,7 +136,7 @@
                                             <span class="mr-2">
                                                 <a id="channelBtn" href="#"
                                                    class="btn btn-primary btn-user text-center">
-                                                    CONNECT
+                                                    CREATE
                                                 </a>
                                             </span>
                                         </div>
@@ -155,7 +155,6 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.11/remon.min.js"></script>
 
             <script>
-const localVideo = document.getElementById("localVideo");
 const channelButton = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
@@ -166,7 +165,8 @@ const videoCodecSelect = document.getElementById("videoCodecSelect");
 const resolutionSelect = document.getElementById("resolutionSelect");
 const videoFPSInput = document.getElementById("videoFPSInput");
 let isConnected = false;
-let captured = false;
+let isCaster = false;
+let myChannelId;
 let remon;
 let dummyRemon;
 const key = '1234567890';
@@ -184,7 +184,7 @@ let config = {
         serviceId: serviceId
     },
     view: {
-        remote: '#myVideo',
+        remote: '#remoteVideo',
         local: '#myVideo'
     },
     media: {
@@ -205,20 +205,20 @@ const listener = {
     },
     onComplete() {
         console.log('EVENT FIRED: onComplete');
-        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
         // is called when other peer hang up.
         remon.close();
         isConnected = false;
-        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible', 'hidden');
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onClose() {
         // is called when remon.close() method is called.
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
-        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible', 'hidden');
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onError(error) {
         console.log(`EVENT FIRED: onError: ${error}`);
@@ -228,7 +228,7 @@ const listener = {
     }
 };
 
-function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, screenShareVisibility) {
+function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
     if (runWaitLoop) {
         waitingMsgLoop();
     } else {
@@ -239,21 +239,24 @@ function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputV
     channelNameInput.style.visibility = inputVisiblility;
 }
 
-function start() {
-    captured = false;
+function start(isViewer) {
     if (isConnected) {
         isConnected = false;
-        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible', 'hidden');
+        isCaster = false;
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
         remon.close();
+        myChannelId = "";
     } else {
         isConnected = true;
-        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden', 'visible');
-        try{
-            remon = new Remon({config, listener});
-        }catch(e){
-            console.log(config);
+        isCaster = !isViewer;
+        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
+        if (!isCaster) {
+            config.view.remote = '#myVideo';
         }
-        remon.createCast(channelNameInput.value ? channelNameInput.value : getRandomId());
+        remon = new Remon({config, listener});
+        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
+        channelNameInput.value = "";
+        isCaster? remon.createCast(myChannelId): remon.joinCast(myChannelId);
     }
 }
 
@@ -266,7 +269,7 @@ function getRandomId() {
 }
 
 channelButton.addEventListener('click', (evt) => {
-    start();
+    start(false);
     evt.preventDefault();
 }, false);
 
@@ -301,24 +304,22 @@ function startSearchLoop() {
     setInterval(async function () {
         dummyRemon.config.credential.serviceId = serviceId;
         dummyRemon.config.credential.key = key;
-        var searchResult = await dummyRemon.fetchCalls();
+        var searchResult = await dummyRemon.fetchCasts();
         while (channelList.firstChild) {
             channelList.removeChild(channelList.firstChild);
         }
         searchResult.forEach((ch, i) => {
-            ch.type = 'P2P';
-            if (ch.status === 'WAIT') {
+            if ((ch.status === 'COMPLETE' || ch.status === 'CONNECT') && ch.id !== myChannelId && !isCaster) {
                 var btn = document.createElement("input");
                 btn.type = "button";
                 btn.name = ch.id;
-                btn.value = ch.id;
+                btn.value = ch.name;
                 btn.className = "btn btn-primary btn-user btn-block text-center";
                 btn.addEventListener('click', (evt) => {
                     channelNameInput.value = ch.id;
-                    start();
+                    start(true);
                     evt.preventDefault();
                 }, false);
-
                 channelList.appendChild(btn);
             }
         });
@@ -358,7 +359,7 @@ function changeAudioInputDevice() {
     remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
 }
 function changeVideoCodec() {
-    // Object.assign(config.media.video, {codec: videoCodecSelect.options[videoCodecSelect.selectedIndex].value});
+    Object.assign(config.media.video, {codec: videoCodecSelect.options[videoCodecSelect.selectedIndex].value});
 }
 function changeVideoFPS() {
     Object.assign(config.media.video, {frameRate: {max: parseInt(videoFPSInput.value, 10)}});
