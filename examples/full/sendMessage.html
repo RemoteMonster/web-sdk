@@ -101,11 +101,11 @@
                                                placeholder="channel name" autofocus>
                                             </span>
                                             <span class="mr-2">
-                                                <input id="chatMsg" class="form-control-user text-center" type="text"
+                                                <input id="chatMsg" class="form-control-user text-center" type="text" style="visibility: hidden"
                                                placeholder="chat message">
                                             </span>
                                             <span class="mr-2">
-                                                <a id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center">
+                                                <a id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center" style="visibility: hidden">
                                                     Send Message</a>
                                             </span>
                                         </div>
@@ -123,7 +123,7 @@
                     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
                     <!-- The webrtc adapter is required for browser compatibility -->
                     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.12/remon.min.js"></script>
 
                     <script>
                         const localVideo = document.getElementById("localVideo");
@@ -131,7 +131,6 @@
                         const channelList = document.getElementById("lvChannel");
                         const channelNameInput = document.getElementById("channelNameInput");
                         const waitingTv = document.getElementById("waitingTv");
-                        // const chatScroll = document.getElementById("chatScroll");
                         const sendMessageBtn = document.getElementById("sendMessageBtn");
                         const chatLogDiv = document.getElementById("chatLogDiv");
                         const chatMsg = document.getElementById("chatMsg");
@@ -200,14 +199,11 @@
                             channelBtnEl.innerHTML = btnText;
                             channelNameInput.style.visibility = inputVisiblility;
                             if (isClearChatViews) {
-                                // while (chatScroll.firstChild) {
-                                //     chatScroll.removeChild(chatScroll.firstChild);
-                                // }
-                                // chatScroll.style.visibility = 'hidden';
                                 sendMessageBtn.style.visibility = 'hidden';
+                                chatMsg.style.visibility = 'hidden';
                             } else {
-                                // chatScroll.style.visibility = 'visible';
                                 sendMessageBtn.style.visibility = 'visible';
+                                chatMsg.style.visibility = 'visible';
                             }
                         }
 

@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Call List</title>
+    <title>Simulcast</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Call List example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Simulcast example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -47,15 +47,13 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>Channel is the concept of a chat room in a RemoteMonster.</li>
-                <li>This sample show the multiple channel list and you can select a channel to call to other.</li>
-                <li>You can create a channel or join a channel.</li>
-                <li>To create a channel, please input a channel name and click connect button. And then you can make a channel with a name and other can find a your channel on other tab or browser.</li>
-                <li>Open the same <a href="./callList.html" target="_blank">site</a> on other tab or browser. Then
-                    click on channel you created in the channel list.
-                </li>
+                <li>* 'simulcast' is a technique to selectively receive the same video stream at different resolutions when watching.</li>
+                <li>The usage scenario is the same as for 'cast List'.</li>
+                <li>Open the same <a href="./simulcast.html" target="_blank">site</a> on other tab or browser. Then
+                    click on channel you created in the channel list.</li>
+                <li>Viewers can select three 'Quality buttons' to receive different resolutions. (You can see the current resolution through the stat report.)</li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/callList.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simulcast.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -83,22 +81,49 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <main class="text-center">
-                                    <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
-                                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                    <video id="localVideo"
-                                        style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
-                                        autoplay muted>
-                                    </video>
+                                    <video id="myVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                           style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+
                                     <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                         style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                         waiting</h6>
-                                
-                                    <input id="channelNameInput" class="form-control text-center" type="text"
-                                        placeholder="channel name" autofocus>
-                                    <a id="channelBtn" href="#"
-                                    class="btn btn-primary btn-user btn-block text-center">
-                                        CONNECT
-                                    </a>
+                                    <div class="row">
+                                        <span class="col-lg-2 mg-2">
+                                            <h6 id="headerWidth" class="m-0 font-weight-bold text-primary">Width : ?</h6>
+                                        </span>
+
+                                        <span class="col-lg-2 mg-2">
+                                            <h6 id="headerHeight" class="m-0 font-weight-bold text-primary">Height : ?</h6>
+                                        </span>
+
+                                        <span class="col-lg-2 mg-2">
+                                             <a id="lowBtn" href="#" class="btn btn-primary btn-user text-center">Low Quality</a>
+                                        </span>
+
+
+                                        <span class="col-lg-2 mg-2">
+                                             <a id="mediumBtn" href="#" class="btn btn-primary btn-user text-center">Medium Quality</a>
+                                        </span>
+
+                                        <span class="col-lg-2 mg-2">
+                                             <a id="highBtn" href="#" class="btn btn-primary btn-user text-center">High Quality</a>
+                                        </span>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="mt-4 text-center" style="position: absolute; right: 50px">
+                                            <span class="mr-2">
+                                                <input id="channelNameInput" class="text-center" type="text"
+                                                       placeholder="channel name" autofocus>
+                                            </span>
+                                            <span class="mr-2">
+                                                <a id="channelBtn" href="#"
+                                                   class="btn btn-primary btn-user text-center">
+                                                    CREATE
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </main>
                             </div>
                         </div>
@@ -113,28 +138,50 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.12/remon.min.js"></script>
 
             <script>
-const localVideo = document.getElementById("localVideo");
-const channelBtnEl = document.querySelector('#channelBtn');
+const channelButton = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
+const lowBtn = document.getElementById("lowBtn");
+const mediumBtn = document.getElementById("mediumBtn");
+const highBtn = document.getElementById("highBtn");
 const waitingTv = document.getElementById("waitingTv");
+const headerWidth = document.getElementById("headerWidth");
+const headerHeight = document.getElementById("headerHeight");
 let isConnected = false;
+let isCaster = false;
+let myChannelId;
 let remon;
+let dummyRemon;
 const key = '1234567890';
 const serviceId = 'SERVICEID1';
-let myChannelId;
 var waitingLoop;
+let cameraList = [];
+let micList = [];
 createDummyRemonForSearchLoop();
 startSearchLoop();
 
 // please register your own service key from remotemonster site.
-const config = {
+let config = {
     credential: {
-        key, serviceId
+        key: key,
+        serviceId: serviceId
     },
     view: {
         remote: '#remoteVideo',
-        local: '#localVideo'
+        local: '#myVideo'
+    },
+    media: {
+        video: {
+            width: '1920',
+            height: '1080',
+            codec : 'VP8',
+            maxBandwidth: 4000,
+            frameRate: {max: 25, min: 25}
+        },
+        audio : true
+    },
+    rtc:{
+        simulcast: true
     }
 };
 
@@ -144,52 +191,60 @@ const listener = {
     },
     onComplete() {
         console.log('EVENT FIRED: onComplete');
-        setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
+        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
         // is called when other peer hang up.
         remon.close();
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onClose() {
         // is called when remon.close() method is called.
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onError(error) {
         console.log(`EVENT FIRED: onError: ${error}`);
     },
     onStat(result) {
         console.log(`EVENT FIRED: onStat: ${result}`);
+        headerHeight.innerText = "Height : " + result.remoteFrameHeight;
+        headerWidth.innerText = "Width : " + result.remoteFrameWidth;
     }
 };
 
-function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
-    localVideo.style.visibility = localVideoVisibility;
+function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
     if (runWaitLoop) {
         waitingMsgLoop();
     } else {
         clearInterval(waitingLoop);
     }
     waitingTv.style.visibility = waitingTvVisibility;
-    channelBtnEl.innerHTML = btnText;
+    channelButton.innerHTML = btnText;
     channelNameInput.style.visibility = inputVisiblility;
 }
 
-function start() {
+function start(isViewer) {
     if (isConnected) {
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        isCaster = false;
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
         remon.close();
+        myChannelId = "";
     } else {
         isConnected = true;
-        setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
+        isCaster = !isViewer;
+        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
+        if (!isCaster) {
+            config.view.remote = '#myVideo';
+        }
         remon = new Remon({config, listener});
-        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId()
-        remon.connectCall(myChannelId);
+        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
+        channelNameInput.value = "";
+        isCaster? remon.createCast(myChannelId): remon.joinCast(myChannelId);
     }
 }
 
@@ -201,20 +256,22 @@ function getRandomId() {
     return text;
 }
 
-channelBtnEl.addEventListener('click', (evt) => {
-    start();
+channelButton.addEventListener('click', (evt) => {
+    start(false);
     evt.preventDefault();
 }, false);
 
 
 function createDummyRemonForSearchLoop() {
-    if (remon) remon.close();
+    if (dummyRemon) dummyRemon.close();
     let cfg = {
         credential: {key: key, serviceId: serviceId},
         view: {local: '#localVideo1', remote: '#remoteVideo1'},
-        media: {audio: false, video: false}
+        media: {audio: true, video: true}
     };
-    remon = new Remon({config: cfg});
+    cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
+    cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
+    dummyRemon = new Remon({config: cfg});
 }
 
 function waitingMsgLoop() {
@@ -233,32 +290,46 @@ function waitingMsgLoop() {
 
 function startSearchLoop() {
     setInterval(async function () {
-        remon.config.credential.serviceId = serviceId;
-        remon.config.credential.key = key;
-        var searchResult = await remon.fetchCalls();
+        dummyRemon.config.credential.serviceId = serviceId;
+        dummyRemon.config.credential.key = key;
+        var searchResult = await dummyRemon.fetchCasts();
         while (channelList.firstChild) {
             channelList.removeChild(channelList.firstChild);
         }
         searchResult.forEach((ch, i) => {
-            ch.type = 'P2P';
-            if (ch.status === 'WAIT' && ch.id !== myChannelId) {
+            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
                 var btn = document.createElement("input");
                 btn.type = "button";
                 btn.name = ch.id;
-                btn.value = ch.id;
+                btn.value = ch.name;
                 btn.className = "btn btn-primary btn-user btn-block text-center";
                 btn.addEventListener('click', (evt) => {
                     channelNameInput.value = ch.id;
-                    start();
+                    start(true);
                     evt.preventDefault();
                 }, false);
-
                 channelList.appendChild(btn);
             }
         });
     }, 3000);
+
+
+    lowBtn.addEventListener('click', (evt) => {
+        remon.setVideoQuality('LOW');
+        evt.preventDefault();
+    });
+
+    mediumBtn.addEventListener('click', (evt) => {
+        remon.setVideoQuality('MEDIUM');
+        evt.preventDefault();
+    });
+
+    highBtn.addEventListener('click', (evt) => {
+        remon.setVideoQuality('HIGH');
+        evt.preventDefault();
+    });
 }
-            </script>
+</script>
         </div>
         <!-- End of Main Content -->
 
@@ -277,7 +348,6 @@ function startSearchLoop() {
 
 </div>
 <!-- End of Page Wrapper -->
-
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>

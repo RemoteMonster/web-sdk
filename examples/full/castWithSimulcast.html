@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Simple Call</title>
+    <title>SIMULCAST Test</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Simple Call example</h3>
+                <h3 class="h3 mb-4 text-gray-800">SIMULCAST Test</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -48,11 +48,11 @@
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
                 <li>Press the connect button.</li>
-                <li>Open the same <a href="./simpleCall.html" target="_blank">site</a> on other tab or browser. Then
-                    click the connect button to connect to first page.
+                <li>Open the same <a href="./castWithSimulcast.html" target="_blank">site</a> on other tab or browser. Then
+                    click the create button to connect to first page.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/simpleCall.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/castWithSimulcast.html"
                         target="_blank">github page</a></li>
                 <br>
 
@@ -63,15 +63,21 @@
                             <div class="card-body">
                                 <main>
                                     <div>
-                                        <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                        <video id="localVideo" class="remote-video center w-300 h-300" autoplay muted controls playsinline
                                                style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                        <video id="localVideo"
-                                               style="z-index:2;position:absolute; bottom: 70px;right:40px;width:30%;border-radius: 50px;transform: rotateY(180deg);"
-                                               autoplay muted></video>
                                     </div>
-                                    <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">
-                                        CONNECT
-                                    </a>
+                                    <div class="mt-4 text-center">
+                                      <span class="mr-2">
+                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user text-center">
+                                            CREATE
+                                        </a>
+                                      </span>
+                                      <span class="mr-2">
+                                          <a id="simulcastBtn" href="#" class="btn btn-primary btn-user text-center">
+                                              Low resolution
+                                          </a>
+                                        </span>
+                                    </div>
                                 </main>
                             </div>
                         </div>
@@ -85,69 +91,98 @@
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.12/remon.min.js"></script>
 
-            <script>
-                const channelBtnEl = document.querySelector('#channelBtn');
-                let isConnected = false;
-                let remon;
-                // please register your own service key from remotemonster site.
-                const config = {
-                    credential: {
-                        key: '1234567890',
-                        serviceId: 'SERVICEID1'
-                    },
-                    view: {
-                        remote: '#remoteVideo',
-                        local: '#localVideo'
-                    }
-                };
+<script>
+const channelBtnEl = document.querySelector('#channelBtn');
+const simulcastBtnEl = document.querySelector('#simulcastBtn');
+let isCreated = false;
+let remon;
+// please register your own service key from remotemonster site.
+const dummyConfig = {
+    credential: {key: '1234567890', serviceId: 'SERVICEID1'},
+    view: {}, media: {audio:false, video:false}
+}
+const config = {
+    credential: {
+        key: '1234567890',
+        serviceId: 'SERVICEID1'
+    },
+    view: {
+        // remote: '#remoteVideo',
+        local: '#localVideo'
+    },
+    media: {
+        audio: true,
+        video: {width:'1280', height:'720'}
+    },
+    rtc:{
+      simulcast: true
+    }
+};
 
-                const listener = {
-                    onConnect(chid) {
-                        console.log(`EVENT FIRED: onConnect: ${chid}`);
-                    },
-                    onComplete() {
-                        console.log('EVENT FIRED: onComplete');
-                        channelBtnEl.innerHTML = 'CLOSE';
-                    },
-                    onDisconnectChannel() {
-                        // is called when other peer hang up.
-                        remon.close();
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
-                    },
-                    onClose() {
-                        // is called when remon.close() method is called.
-                        console.log('EVENT FIRED: onClose');
-                        remon.close();
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
-                    },
-                    onError(error) {
-                        console.log(`EVENT FIRED: onError: ${error}`);
-                    },
-                    onStat(result) {
-                        console.log(`EVENT FIRED: onStat: ${result}`);
-                    }
-                };
+const listener = {
+    onCreateChannel(chid) {
+        console.log(`EVENT FIRED: onConnect: ${chid}`);
+    },
+    onComplete() {
+        console.log('EVENT FIRED: onComplete');
+        channelBtnEl.innerHTML = 'CLOSE';
+    },
+    onDisconnectChannel() {
+        // is called when other peer hang up.
+        console.log("some viewer is exited")
+    },
+    onClose() {
+        // is called when remon.close() method is called.
+        console.log('EVENT FIRED: onClose');
+        remon.close();
+        isCreated = false;
+        channelBtnEl.innerHTML = 'CREATE';
+    },
+    onError(error) {
+        console.log(`EVENT FIRED: onError: ${error}`);
+    },
+    onStat(result) {
+        console.log(`EVENT FIRED: onStat: ${result}`);
+    }
+};
 
-                function start() {
-                    if (isConnected) {
-                        isConnected = false;
-                        channelBtnEl.innerHTML = 'CONNECT';
-                        remon.close();
-                    } else {
-                        isConnected = true;
-                        channelBtnEl.innerHTML = 'WAIT';
-                        remon = new Remon({config, listener});
-                        remon.connectCall('simpleRemon');
-                    }
-                }
+function start() {
+    if (isCreated) {
+        isCreated = false;
+        channelBtnEl.innerHTML = 'CREATE';
+        remon.close();
+    } else {
+        isCreated = true;
+        channelBtnEl.innerHTML = 'CLOSE';
+        remon = new Remon({config, listener});
+        remon.createCast('simulcastchannel');
+    }
+}
 
-                channelBtnEl.addEventListener('click', (evt) => {
-                    start();
-                    evt.preventDefault();
-                }, false);
-            </script>
+channelBtnEl.addEventListener('click', (evt) => {
+    start();
+    evt.preventDefault();
+}, false);
+simulcastBtnEl.addEventListener('click', (evt) => {
+  remon.setVideoQuality('LOW');
+  evt.preventDefault();
+})
+async function findRoom(){
+    remon = new Remon({config: dummyConfig, listener:{}});
+    var searchResult = await remon.fetchCasts();
+    searchResult.forEach((ch, i) => {
+        ch.type = 'BROADCAST';
+        if (ch.status === 'CONNECT' && ch.id === 'simulcastchannel') {
+            console.log("------------------- find my channel -----------------");
+            config.view.remote = '#localVideo';
+            remon = new Remon({config, listener});
+            remon.joinCast('simulcastchannel');
+            isCreated = true;
+        }
+    });
+}
+findRoom();
+</script>
         </div>
         <!-- End of Main Content -->
 
