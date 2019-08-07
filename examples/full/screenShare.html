@@ -308,7 +308,7 @@ screenShareBtn.addEventListener("click", evt => {
     (captured) ? remon.captureScreen(screenShareOptipon.width, screenShareOptipon.height, screenShareOptipon.frameRate, false) : remon.stopCaptureScreen();
 });
 function changeVideoFPS() {
-    Object.assign(screenShareOptipon.frameRate, parseInt(videoFPSInput.value, 10));
+    screenShareOptipon.frameRate = parseInt(videoFPSInput.value, 10);
 }
 function changeResolution() {
     resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split('-');
