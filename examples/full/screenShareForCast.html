@@ -104,6 +104,22 @@
                                             <a id="screenShareBtn" href="#" class="btn btn-primary btn-user" style="visibility:hidden;">ScreenShare</a>
                                         </span>
                                     </div>
+                                    <div class="row bg-primary rounded mt-3">
+                                        <!--Video FPS-->
+                                        <span class="col-lg-6 mg-6">
+                                            <div class="small mb-1">Screen Share FPS</div>
+                                            <input id="videoFPSInput" onchange="changeVideoFPS()" class="form-control-sm form-control text-center mb-4" type="text" value=30>
+                                        </span>
+
+                                        <!--Video Resolution-->
+                                        <span class="col-lg-6 mg-6">
+                                            <div class="small mb-1">Screen Share Resolution</div>
+                                            <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
+                                                <option value="480">640-480</option>
+                                                <option value="720">1280-720</option>
+                                            </select>
+                                        </span>
+                                    </div>
                                 </main>
                             </div>
                         </div>
@@ -115,7 +131,7 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.12/remon.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.14/remon.min.js"></script>
 
             <script>
                 const channelButton = document.querySelector('#channelBtn');
@@ -155,6 +171,12 @@
                         },
                         audio : true
                     }
+                };
+
+                const screenShareOptipon = {
+                    width: '640',
+                    height: '480',
+                    frameRate: 30,
                 };
 
                 const listener = {
@@ -291,8 +313,16 @@
 
                 screenShareBtn.addEventListener("click", evt => {
                     captured = !captured;
-                    (captured) ? remon.captureScreen(640,480,false) : remon.stopCaptureScreen();
+                    (captured) ? remon.captureScreen(screenShareOptipon.width, screenShareOptipon.height, screenShareOptipon.frameRate, false) : remon.stopCaptureScreen();
                 });
+                function changeVideoFPS() {
+                    Object.assign(screenShareOptipon.frameRate, parseInt(videoFPSInput.value, 10));
+                }
+                function changeResolution() {
+                    resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split('-');
+                    screenShareOptipon.width= resolution[0];
+                    screenShareOptipon.height = resolution[1]
+                }
             </script>
         </div>
         <!-- End of Main Content -->
