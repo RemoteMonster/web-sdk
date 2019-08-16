@@ -123,6 +123,7 @@
                                             <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
                                                 <option value="480">640-480</option>
                                                 <option value="720">1280-720</option>
+                                                <option value="720">1920-1080</option>
                                             </select>
                                         </span>
 
@@ -192,8 +193,8 @@ let config = {
             width: '640',
             height: '480',
             codec : 'h264',
-            maxBandwidth: 1800,
-            frameRate: {max: 25, min: 25}
+            maxBandwidth: 5000,
+            frameRate: 25
         },
         audio : true
     }
@@ -362,7 +363,8 @@ function changeVideoCodec() {
     Object.assign(config.media.video, {codec: videoCodecSelect.options[videoCodecSelect.selectedIndex].value});
 }
 function changeVideoFPS() {
-    Object.assign(config.media.video, {frameRate: {max: parseInt(videoFPSInput.value, 10)}});
+    config.media.video.frameRate = parseInt(videoFPSInput.value, 10);
+    // Object.assign(config.media.video, {frameRate: {max: parseInt(videoFPSInput.value, 10)}});
 }
 function changeResolution() {
     resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split('-');
