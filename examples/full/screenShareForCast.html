@@ -117,6 +117,7 @@
                                             <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
                                                 <option value="480">640-480</option>
                                                 <option value="720">1280-720</option>
+                                                <option value="1080">1920-1080</option>
                                             </select>
                                         </span>
                                     </div>
@@ -166,7 +167,7 @@
                             width: '640',
                             height: '480',
                             codec : 'h264',
-                            maxBandwidth: 1800,
+                            maxBandwidth: 8000,
                             frameRate: {max: 25, min: 25}
                         },
                         audio : true
