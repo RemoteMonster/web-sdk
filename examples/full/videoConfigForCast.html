@@ -47,12 +47,13 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>You can make live cast room by adjusting the video input, audio input, video codec, video fps, resolution and so on.
-                    (You can also change various settings)</li>
-                <li>Other than setting change, usage is same as 'channels' example.</li>
-                <li>Open the same <a href="./videoConfigForCast.html" target="_blank">page</a>on other tab or browser. Then
-                    click on channel you created in the channel list.
+                <li>Here, you can make a live cast room and adjust the video input, audio input, video codec, video fps, resolution and other various settings.</li>
+                <li>This example shows how to change video configuration setting for a video broadcast but can be applied for video calls as well.</li>
+                <li>Other than changing the setting of the video, this example is the same as the 'cast list' example.</li>
+                <li>Open this <a href="./videoConfigForCast.html" target="_blank">link</a> in another tab or a browser. Then
+                    click on the channel you created from the channel list.
                 </li>
+                <li>If you only see blanks from drop down menus, you need to click the "CREATE" button to allow mic and camera usage first.</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/videoConfigForCast.html"
                         target="_blank">github page</a></li>
@@ -123,7 +124,8 @@
                                             <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
                                                 <option value="480">640-480</option>
                                                 <option value="720">1280-720</option>
-                                                <option value="720">1920-1080</option>
+                                                <option value="1080">1920-1080</option>
+                                                <option value="4096">4096-2160</option>
                                             </select>
                                         </span>
 
@@ -193,7 +195,7 @@ let config = {
             width: '640',
             height: '480',
             codec : 'vp8',
-            maxBandwidth: 5000,
+            maxBandwidth: 9000,
             frameRate: 25
         },
         audio : true
