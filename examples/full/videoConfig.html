@@ -344,13 +344,13 @@
                     }
                 }
                 function changeVideoInputDevice() {
-                    remon.setVideoDevice(videoInputSelect.options[videoInputSelect.selectedIndex].value);
+                    config.media.video.deviceId = videoInputSelect.options[videoInputSelect.selectedIndex].value;
+                }
+                function changeVideoCodec() {
+                    config.media.video.codec = videoCodecSelect.options[videoCodecSelect.selectedIndex].value;
                 }
                 function changeAudioInputDevice() {
                     remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
-                }
-                function changeVideoCodec() {
-                    Object.assign(config.media.video, {codec: videoCodecSelect.options[videoCodecSelect.selectedIndex].value});
                 }
                 function changeVideoFPS() {
                     Object.assign(config.media.video, {frameRate: {max: parseInt(videoFPSInput.value, 10)}});

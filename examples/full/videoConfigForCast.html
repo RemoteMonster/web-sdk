@@ -192,13 +192,15 @@ let config = {
     },
     media: {
         video: {
-            width: '640',
-            height: '480',
-            codec : 'vp8',
+            width: '1920',
+            height: '1080',
+            codec: 'vp8',
             maxBandwidth: 9000,
-            frameRate: 25
+            frameRate: 30,
         },
-        audio : true
+        audio : {
+            deviceId: 'default'
+        }
     }
 };
 
@@ -333,6 +335,7 @@ async function getDevices () {
     var devices = await navigator.mediaDevices.enumerateDevices();
     for (let i = 0; i < devices.length; i++) {
         let device = devices[i];
+        console.log(JSON.stringify(device));
         if (device.kind === 'videoinput') {
             cameraList.push({ text: device.label, id: device.deviceId })
         } else if (device.kind === 'audioinput') {
@@ -356,17 +359,18 @@ async function getDevices () {
     }
 }
 function changeVideoInputDevice() {
-    remon.setVideoDevice(videoInputSelect.options[videoInputSelect.selectedIndex].value);
-}
-function changeAudioInputDevice() {
-    remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
+    config.media.video.deviceId = videoInputSelect.options[videoInputSelect.selectedIndex].value;
 }
 function changeVideoCodec() {
-    Object.assign(config.media.video, {codec: videoCodecSelect.options[videoCodecSelect.selectedIndex].value});
+    config.media.video.codec = videoCodecSelect.options[videoCodecSelect.selectedIndex].value;
+}
+function changeAudioInputDevice() {
+    config.media.audio.deviceId = audioInputSelect.options[audioInputSelect.selectedIndex].value;
+    console.log(JSON.stringify(config));
+    // remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
 }
 function changeVideoFPS() {
     config.media.video.frameRate = parseInt(videoFPSInput.value, 10);
-    // Object.assign(config.media.video, {frameRate: {max: parseInt(videoFPSInput.value, 10)}});
 }
 function changeResolution() {
     resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split('-');
