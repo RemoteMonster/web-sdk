@@ -61,20 +61,15 @@
             <!-- Page Heading -->
             <h4 class="font-weight-bold">가이드</h4>
             <li>본 예제로 RemoteMonster서버로 게임방송을 송출할 수 있습니다.</li>
-            <li>
-              2가지 방식으로 게임방송을 송출할 수 있습니다.
-            </li>
-            <li>
-              첫번째 방법은 단지 파란색 버튼을 클릭하고 송출할 게임 화면을 '전체화면' 단위로 선택하고 꼭 '오디오 공유' 옵션을 선택해주세요.
-            </li>
-            <li>
-              두번째 방법은 OBS에 <a href="https://obsproject.com/forum/resources/obs-virtualcam.539/">VirtualCam</a> 플러그인을 설치하고 게임화면을 OBS에서 구성한 후
-              Virtual Camera를 생성합니다. 그리고 나서 본 예제에서 'Camera Input'에서 Virtual Camera를 선택한 후 파란색 버튼을 클릭하세요.
-            </li>
-            <li>
-              If you started sharing, your opponent can see your screen
-              together.
-            </li>
+            <li>2가지 방식으로 게임방송을 송출할 수 있습니다.</li>
+            <li>첫번째 방법</li>
+            <ul style="line-height: 15px">파란색 'Create' 버튼을 클릭하고 송출할 게임 화면을 '전체화면' 단위로 선택하고 꼭 '오디오 공유' 옵션을 선택해주세요.</ul>
+            <li>두번째 방법</li>
+            <ul style="line-height: 15px">두번째 방법은 OBS에 <a href="https://obsproject.com/forum/resources/obs-virtualcam.539/">VirtualCam</a> 플러그인을 설치하고 게임화면을 OBS에서 구성한 후
+              Virtual Camera를 생성합니다.</ul>
+            <ul style="line-height: 5px">그리고 나서 본 예제에서 'Camera Input'에서 Virtual Camera를 선택한 후 파란색 버튼을 클릭하세요.</ul>
+            <li>각 방법의 시청은 <a href="./castList.html" target="_blank">link</a> 에 들어가서 'Channels'에 생성된 파란색 버튼을 누르시면 시청할 수 있습니다.</li>
+
             <li>
               Source code:
               <a
@@ -87,20 +82,6 @@
 
             <!-- Content Row -->
             <div class="row">
-              <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Dropdown -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <main id="lvChannel" class="text-center"></main>
-                  </div>
-                </div>
-              </div>
               <div class="col-xl-8 col-lg-7">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
@@ -161,7 +142,7 @@
                               id="videoInputSelect"
                               onchange="changeVideoInputDevice()"
                               class="custom-select custom-select-sm form-control form-control-sm"
-                            ><option value='0'>Select camera</option></select>
+                            ><option value='0'>game screen</option></select>
                           </span>
                           <!--Audio Input-->
                           <span class="col-lg-2 mg-2">
@@ -214,7 +195,6 @@
 
           <script>
             const channelButton = document.querySelector("#channelBtn");
-            const channelList = document.getElementById("lvChannel");
             const channelNameInput = document.getElementById(
               "channelNameInput"
             );
@@ -232,7 +212,6 @@
             let myChannelId;
             let remon;
             let remonCam;
-            let dummyRemon;
             let cameraList = [];
             let micList = [];
             const key = "1234567890";
@@ -240,8 +219,6 @@
             var waitingLoop;
             let screenWidth = 640;
             let screenHeight = 480;
-            createDummyRemonForSearchLoop();
-            startSearchLoop();
 
             // please register your own service key from remotemonster site.
             let config = {
@@ -451,68 +428,6 @@
               false
             );
 
-            function createDummyRemonForSearchLoop() {
-              if (dummyRemon) dummyRemon.close();
-              let cfg = {
-                credential: { key: key, serviceId: serviceId },
-                view: { local: "#localVideo1", remote: "#remoteVideo1" },
-                media: { audio: true, video: true }
-              };
-              cfg.credential.wsurl = "wss://signal.remotemonster.com/ws";
-              cfg.credential.resturl = "https://signal.remotemonster.com/rest";
-              dummyRemon = new Remon({ config: cfg });
-            }
-
-            function waitingMsgLoop() {
-              var numOfPoint = 0;
-              var pointStr = "";
-              waitingLoop = setInterval(async function() {
-                pointStr = "";
-                numOfPoint++;
-                if (numOfPoint === 4) numOfPoint = 0;
-                for (var i = 0; i < numOfPoint; i++) {
-                  pointStr += ".";
-                }
-                waitingTv.innerText = "waiting" + pointStr;
-              }, 1000);
-            }
-
-            function startSearchLoop() {
-              setInterval(async function() {
-                dummyRemon.config.credential.serviceId = serviceId;
-                dummyRemon.config.credential.key = key;
-                var searchResult = await dummyRemon.fetchCasts();
-                while (channelList.firstChild) {
-                  channelList.removeChild(channelList.firstChild);
-                }
-                searchResult.forEach((ch, i) => {
-                  if (
-                    ch.status === "COMPLETE" &&
-                    ch.id !== myChannelId &&
-                    !isCaster &&
-                    ch.id.indexOf("cam") === -1
-                  ) {
-                    var btn = document.createElement("input");
-                    btn.type = "button";
-                    btn.name = ch.id;
-                    btn.value = ch.name;
-                    btn.className =
-                      "btn btn-primary btn-user btn-block text-center";
-                    btn.addEventListener(
-                      "click",
-                      evt => {
-                        channelNameInput.value = ch.id;
-                        start(true);
-                        evt.preventDefault();
-                      },
-                      false
-                    );
-                    channelList.appendChild(btn);
-                  }
-                });
-              }, 3000);
-            }
-
             async function getDevices() {
               var devices = await navigator.mediaDevices.enumerateDevices();
               for (let i = 0; i < devices.length; i++) {
@@ -565,8 +480,7 @@
             <div class="copyright text-center my-auto">
               <span
                 >Copyright &copy;
-                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
-              >
+                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span>
             </div>
           </div>
         </footer>
