@@ -46,14 +46,10 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h4 class="font-weight-bold">How to use</h4>
-                <li>Channel is a concept of a cast room in RemoteMonster SDK</li>
-                <li>You can create a channel or join a channel.</li>
-                <li>"Channels" shows the list of channels you can join. The channel you create from this page doesn't show on the list.</li>
-                <li>To create a channel, please enter a channel name and click the "CREATE" button. </li>
-                <li>Open this <a href="./castList.html" target="_blank">link</a> in another tab or a browser. To join the channel you created,
-                    click on the channel name from the channel list.
-                </li>
+                <h4 class="font-weight-bold">시청방법</h4>
+                <li>방송을 송출하고 이 화면에 들어왔다면, 'Channels'에 생성된 생방송 채널이 보이게 됩니다.</li>
+                <li>파란색 버튼으로 생성된 채널을 눌러서 시청을 할 수 있습니다.</li>
+                <li>시청중 파란색 'Close'버튼을 누르면 시청을 종료하게 됩니다.</li>
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/castList.html"
                         target="_blank">github page</a></li>
@@ -93,9 +89,9 @@
                                         waiting</h6>
 
                                     <input id="channelNameInput" class="form-control text-center" type="text"
-                                        placeholder="room name" autofocus>
+                                        placeholder="room name" autofocus style="visibility: hidden;">
                                     <a id="channelBtn" href="#"
-                                    class="btn btn-primary btn-user btn-block text-center">
+                                    class="btn btn-primary btn-user btn-block text-center" style="visibility: hidden;">
                                         CREATE
                                     </a>
                                 </main>
@@ -190,7 +186,12 @@ function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputV
     }
     waitingTv.style.visibility = waitingTvVisibility;
     channelBtnEl.innerHTML = btnText;
-    channelNameInput.style.visibility = inputVisiblility;
+    if (btnText === 'CREATE') {
+        channelBtnEl.style.visibility = 'hidden';
+    } else {
+        channelBtnEl.style.visibility = 'visible';
+    }
+
 }
 
 function start(isViewer) {
