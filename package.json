@@ -12,7 +12,7 @@
     "package": "npm run prepackage && npm run package:examples && npm run package:docs",
     "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run deploy:gh-pages && npm run clean",
-    "deployStudio": "scp -rp ./examples/full/* ubuntu@demo.remotemonster.com:/var/www/studio.remotemonster.com"
+    "deployStudio": "scp -rp ./examples/smilegate/* ubuntu@demo.remotemonster.com:/var/www/studio.remotemonster.com"
   },
   "keywords": [
     "WebRTC",
