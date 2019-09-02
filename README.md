@@ -38,7 +38,7 @@ From [jsDelivr](https://www.jsdelivr.com)
 
 ### Studio
 
-- [demo](https://studio.remotemonster.com/)
+- [demo](https://sample.remotemonster.com/)
 - [source](https://github.com/RemoteMonster/remon-studio)
 
 ### Full features - Livecast
