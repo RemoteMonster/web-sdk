@@ -25,7 +25,7 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet"/>
-    <script src="js/newwbs2.js"></script>
+    <script src="js/wbs.js"></script>
 </head>
 
 <body id="page-top">
@@ -120,8 +120,8 @@
                 let isCaster = false;
                 let myChannelId;
                 let remon;
-                const key = "1234567890";
-                const serviceId = "SERVICEID1";
+                const key = "b4a7c3cbe6fc9041e259e4916d1e75f25df10ecb944536b5";
+                const serviceId = "spoon";
 
                 // please register your own service key from remotemonster site.
                 let config = {
@@ -283,6 +283,15 @@
     $(document).ready(function () {
         $("#accordionSidebar").load("nav.html");
     });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
 </script>
 </body>
 </html>

@@ -158,6 +158,7 @@
                             <div class="small mb-1">Screen Share FPS</div>
                             <input
                               id="videoFPSInput"
+                              onchange="changeVideoFPS()"
                               class="form-control-sm form-control text-center"
                               type="text"
                               value="60"
@@ -214,8 +215,8 @@
             let remonCam;
             let cameraList = [];
             let micList = [];
-            const key = "1234567890";
-            const serviceId = "SERVICEID1";
+            const key = "b4a7c3cbe6fc9041e259e4916d1e75f25df10ecb944536b5";
+            const serviceId = "spoon";
             var waitingLoop;
             let screenWidth = 640;
             let screenHeight = 480;
@@ -232,7 +233,9 @@
                   maxBandwidth: 9000,
                   frameRate: 60
                 },
-                audio: true,
+                audio: {
+                    deviceId: 'default'
+                },
                 screen: true
               },
               // rtc: { simulcast: true}
@@ -344,11 +347,6 @@
               inputVisiblility,
               screenShareVisibility
             ) {
-              if (runWaitLoop) {
-                waitingMsgLoop();
-              } else {
-                clearInterval(waitingLoop);
-              }
               waitingTv.style.visibility = waitingTvVisibility;
               channelButton.innerHTML = btnText;
               channelNameInput.style.visibility = inputVisiblility;
@@ -455,11 +453,9 @@
               }
             }
             function changeResolution() {
-              const resolution = resolutionSelect.options[
-                resolutionSelect.selectedIndex
-              ].text.split("-");
-              screenWidth = resolution[0];
-              screenHeight = resolution[1];
+              const resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split("-");
+              config.media.video.width= resolution[0];
+              config.media.video.height = resolution[1];
             }
             function changeVideoInputDevice() {
               if (isConnected)
@@ -468,6 +464,9 @@
             function changeAudioInputDevice() {
               if (isConnected)
                 remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
+            }
+            function changeVideoFPS() {
+                config.media.video.frameRate = parseInt(videoFPSInput.value, 10);
             }
             getDevices();
           </script>
@@ -508,6 +507,15 @@
       $(document).ready(function() {
         $("#accordionSidebar").load("nav.html");
       });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-84812645-1');
     </script>
   </body>
 </html>

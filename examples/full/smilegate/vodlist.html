@@ -8,7 +8,7 @@
 	<script src="https://unpkg.com/axios/dist/axios.js" type="text/javascript"></script>
 	<link href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://unpkg.com/bootstrap-vue@2.0.0-rc.28/dist/bootstrap-vue.css" rel="stylesheet"/>
-  
+
 	<script type="text/x-template" id="mytable-template">
 	  <b-card>
       <div>
@@ -55,7 +55,7 @@
 		<b-alert :show="uploading" variant="danger">Uploading... {{uploadPercent}} </b-alert>
 		<b-button v-on:click="submitFile()" variant="success" :disabled="fileselected">Upload Video</b-button>
   </b-card>
-  
+
 </div>
 
 <script>
@@ -152,7 +152,7 @@ window.onload = () => {
 						console.log(error);
 					});
 			}
-			
+
 		},
     },
     created() {
@@ -255,6 +255,15 @@ Vue.component('my-table', {
 	},
   }
 })
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
 </script>
 </body>
 </html>
