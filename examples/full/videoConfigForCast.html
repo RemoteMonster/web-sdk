@@ -61,6 +61,19 @@
 
                 <!-- Content Row -->
                 <div class="row">
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <main id="lvChannel" class="text-center">
+                                </main>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
@@ -143,19 +156,6 @@
                                             </span>
                                         </div>
                                     </div>
-                                </main>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <main id="lvChannel" class="text-center">
                                 </main>
                             </div>
                         </div>
@@ -363,14 +363,14 @@ async function getDevices () {
         const videoInputOption = document.createElement('option');
         videoInputOption.value= cameraList[i].id;
         // videoInputOption.text = cameraList[i].text;
-        videoInputOption.text = cameraList[i].text ? cameraList[i].text : ("Device" + cameraList[i].id);
+        videoInputOption.text = cameraList[i].text ? cameraList[i].text : ("Device " + cameraList[i].id);
         videoInputSelect.appendChild(videoInputOption);
     }
     for (let i=0; i< micList.length; i++){
         const audioInputOption = document.createElement('option');
         audioInputOption.value= micList[i].id;
         // audioInputOption.text = micList[i].text;
-        audioInputOption.text = micList[i].text ? micList[i].text : ("Device" + micList[i].id);
+        audioInputOption.text = micList[i].text ? micList[i].text : ("Device " + micList[i].id);
         audioInputSelect.appendChild(audioInputOption);
     }
 }
@@ -433,44 +433,6 @@ getDevices();
         $("#accordionSidebar").load("nav.html");
     });
 </script>
-
-<script type="application/json">
-
-if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-  console.log("enumerateDevices() not supported.");
-  return;
-}
-
-// List cameras and microphones.
-
-navigator.mediaDevices.enumerateDevices()
-.then(function(devices) {
-  devices.forEach(function(device) {
-    console.log(device.kind + ": " + device.label +
-                " id = " + device.deviceId);
-  });
-})
-.catch(function(err) {
-  console.log(err.name + ": " + err.message);
-});
-
-
-
-
-function getPermissionsFirst() {
-  console.log("trying to get permissions");
-  navigator.mediaDevices.getUserMedia({audio: true, video: true})
-  .then(function(stream) {
-    console.log("acquired permissions");
-  })
-  .catch(function(err) {
-    console.log("could not acquire permissions");
-  });
-};
-getPermissionsFirst();
-</script>
-
-
 </body>
 
 </html>
