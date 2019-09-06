@@ -83,51 +83,63 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <main class="text-center">
-                                    <video id="myVideo" class="remote-video center w-300 h-300" autoplay muted controls playsinline
-                                           style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-
-                                    <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
-                                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
-                                        waiting</h6>
                                     <div class="row">
-                                        <!--Video Input-->
-                                        <span class="col-lg-2 mg-2">
-                                            <div class="small mb-1">Video Input</div>
-                                            <select id="videoInputSelect" onchange="changeVideoInputDevice()" class="custom-select custom-select-sm form-control form-control-sm"></select>
-                                        </span>
+                                      <video id="myVideo" class="remote-video center w-300 h-300" autoplay muted controls playsinline
+                                             style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+  
+                                      <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
+                                          style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
+                                          waiting</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-3">
+                                          <!--Video Input-->
+                                          <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video Input</div>
+                                              <select id="videoInputSelect" onchange="changeVideoInputDevice()" class="custom-select custom-select-sm form-control form-control-sm"></select>
+                                          </span>
+                                        </div>
 
-                                        <!--Audio Input-->
-                                        <span class="col-lg-2 mg-2">
-                                            <div class="small mb-1">Audio Input</div>
-                                            <select id="audioInputSelect" onchange="changeAudioInputDevice()" class="custom-select custom-select-sm form-control form-control-sm"></select>
-                                        </span>
-
-                                        <!--Video Codec-->
-                                        <span class="col-lg-2 mg-2">
-                                            <div class="small mb-1">Video Codec</div>
-                                            <select id="videoCodecSelect" onchange="changeVideoCodec()" class="custom-select custom-select-sm form-control form-control-sm">
-                                                <option value="h264">H.264</option>
-                                                <option value="vp8">VP8</option>
-                                                <option value="vp9">VP9</option>
-                                            </select>
-                                        </span>
-
-                                        <!--Video FPS-->
-                                        <span class="col-lg-2 mg-2">
-                                            <div class="small mb-1">Video FPS</div>
-                                            <input id="videoFPSInput" onchange="changeVideoFPS()" class="form-control-sm form-control text-center mb-4" type="text" value=25>
-                                        </span>
-
-                                        <!--Video FPS-->
-                                        <span class="col-lg-2 mg-2">
-                                            <div class="small mb-1">Resolution</div>
-                                            <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
-                                                <option value="480">640-480</option>
-                                                <option value="720">1280-720</option>
-                                                <option value="1080">1920-1080</option>
-                                                <option value="4096">4096-2160</option>
-                                            </select>
-                                        </span>
+                                        <div class="col-sm-12 col-md-3">
+                                          <!--Audio Input-->
+                                          <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Audio Input</div>
+                                              <select id="audioInputSelect" onchange="changeAudioInputDevice()" class="custom-select custom-select-sm form-control form-control-sm"></select>
+                                          </span>
+                                        </div>
+  
+                                        <div class="col-sm-12 col-md-2">
+                                          <!--Video Codec-->
+                                          <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video Codec</div>
+                                              <select id="videoCodecSelect" onchange="changeVideoCodec()" class="custom-select custom-select-sm form-control form-control-sm">
+                                                  <option value="h264">H.264</option>
+                                                  <option value="vp8">VP8</option>
+                                                  <option value="vp9">VP9</option>
+                                              </select>
+                                          </span>
+                                        </div>
+  
+                                        <div class="col-sm-12 col-md-2">
+                                          <!--Video FPS-->
+                                          <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video FPS</div>
+                                              <input id="videoFPSInput" onchange="changeVideoFPS()" class="form-control-sm form-control text-center mb-4" type="text" value=25>
+                                          </span>
+                                        </div>
+  
+                                        <div class="col-sm-12 col-md-2">
+                                          <!--Video FPS-->
+                                          <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Resolution</div>
+                                              <select id="resolutionSelect" onchange="changeResolution()" class="custom-select custom-select-sm form-control form-control-sm">
+                                                  <option value="480">640-480</option>
+                                                  <option value="720">1280-720</option>
+                                                  <option value="1080">1920-1080</option>
+                                                  <option value="4096">4096-2160</option>
+                                              </select>
+                                          </span>
+                                        </div>
 
                                     </div>
                                     <div class="row">
@@ -158,6 +170,8 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
 
             <script>
+
+
 const channelButton = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
@@ -348,13 +362,15 @@ async function getDevices () {
     for (let i=0; i< cameraList.length; i++){
         const videoInputOption = document.createElement('option');
         videoInputOption.value= cameraList[i].id;
-        videoInputOption.text = cameraList[i].text;
+        // videoInputOption.text = cameraList[i].text;
+        videoInputOption.text = cameraList[i].text ? cameraList[i].text : ("Device " + cameraList[i].id);
         videoInputSelect.appendChild(videoInputOption);
     }
     for (let i=0; i< micList.length; i++){
         const audioInputOption = document.createElement('option');
         audioInputOption.value= micList[i].id;
-        audioInputOption.text = micList[i].text;
+        // audioInputOption.text = micList[i].text;
+        audioInputOption.text = micList[i].text ? micList[i].text : ("Device " + micList[i].id);
         audioInputSelect.appendChild(audioInputOption);
     }
 }
