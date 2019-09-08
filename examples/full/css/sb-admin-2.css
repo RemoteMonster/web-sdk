@@ -385,6 +385,9 @@ h2, .h2 {
 
 h3, .h3 {
   font-size: 1.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 h4, .h4 {
@@ -590,8 +593,10 @@ pre code {
   width: 100%;
   padding-right: 0.75rem;
   padding-left: 0.75rem;
-  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
   margin-left: auto;
+  margin-right: auto;
 }
 
 .row {
@@ -8549,7 +8554,7 @@ button.bg-dark:focus {
 
 .mb-4,
 .my-4 {
-  margin-bottom: 1.5rem !important;
+  /* margin-bottom: 1.5rem !important; */
 }
 
 .ml-4,
