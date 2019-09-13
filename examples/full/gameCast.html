@@ -161,7 +161,7 @@
                               onchange="changeVideoFPS()"
                               class="form-control-sm form-control text-center"
                               type="text"
-                              value="60"
+                              value="30"
                             />
                           </span>
                           <!--Video Resolution-->
@@ -174,9 +174,9 @@
                               onchange="changeResolution()"
                               class="custom-select custom-select-sm form-control form-control-sm"
                             >
-                              <option value="480" >640-480</option>
+                              <option value="480" selected>640-480</option>
                               <option value="720">1280-720</option>
-                              <option value="1080" selected>1920-1080</option>
+                              <option value="1080">1920-1080</option>
                             </select>
                           </span>
                         </div>
@@ -215,8 +215,8 @@
             let remonCam;
             let cameraList = [];
             let micList = [];
-            const key = "b4a7c3cbe6fc9041e259e4916d1e75f25df10ecb944536b5";
-            const serviceId = "spoon";
+            const key = "1234567890";
+            const serviceId = "SERVICEID1";
             var waitingLoop;
             let screenWidth = 640;
             let screenHeight = 480;
@@ -227,11 +227,11 @@
               view: { remote: "#myVideo", local: "#myVideo" },
               media: {
                 video: {
-                  width: 1920,
-                  height: 1080,
+                  width: 640,
+                  height: 480,
                   codec: "VP8",
-                  maxBandwidth: 9000,
-                  frameRate: 60
+                  maxBandwidth: 2000,
+                  frameRate: 30
                 },
                 audio: {
                     deviceId: 'default'
