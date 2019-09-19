@@ -65,6 +65,11 @@
                                 <main class="text-center">
                                     <audio id="localVideo" autoplay muted controls playsinline></audio>
                                 </main>
+                                <main id="connectAlert" style="visibility: hidden; " class="text-center">
+                                    <div class="alert alert-danger" style="display: inline-block" role="alert">
+                                        on Air!
+                                    </div>
+                                </main>
                             </div>
                         </div>
                     </div>
@@ -112,6 +117,7 @@
 
 <script>
     const channelBtnEl = document.querySelector('#channelBtn');
+    const connectAlert = document.getElementById("connectAlert");
     const headerText = document.getElementById('headerText');
     let isCreated = false;
     let remon;
@@ -139,18 +145,22 @@
     const listener = {
         onCreateChannel(chid) {
             console.log(`EVENT FIRED: onConnect: ${chid}`);
+            connectAlert.style.visibility = 'visible';
         },
         onComplete() {
             console.log('EVENT FIRED: onComplete');
             channelBtnEl.innerHTML = 'CLOSE';
+            connectAlert.style.visibility = 'visible';
         },
         onDisconnectChannel() {
             // is called when other peer hang up.
             console.log("some viewer is exited")
+            connectAlert.style.visibility = 'hidden';
         },
         onClose() {
             // is called when remon.close() method is called.
             console.log('EVENT FIRED: onClose');
+            connectAlert.style.visibility = 'hidden';
             remon.close();
             isCreated = false;
             isCaster ? channelBtnEl.innerHTML = 'CREATE' : channelBtnEl.innerHTML = 'JOIN';

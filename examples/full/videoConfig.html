@@ -333,13 +333,13 @@
                     for (let i=0; i< cameraList.length; i++){
                         const videoInputOption = document.createElement('option');
                         videoInputOption.value= cameraList[i].id;
-                        videoInputOption.text = cameraList[i].text;
+                        videoInputOption.text = cameraList[i].text ? cameraList[i].text : ("Device " + cameraList[i].id);
                         videoInputSelect.appendChild(videoInputOption);
                     }
                     for (let i=0; i< micList.length; i++){
                         const audioInputOption = document.createElement('option');
                         audioInputOption.value= micList[i].id;
-                        audioInputOption.text = micList[i].text;
+                        audioInputOption.text = micList[i].text ? micList[i].text : ("Device " + micList[i].id);
                         audioInputSelect.appendChild(audioInputOption);
                     }
                 }
