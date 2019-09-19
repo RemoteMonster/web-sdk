@@ -67,6 +67,11 @@
                                 <main class="text-center">
                                     <audio id="remoteVideo" autoplay controls playsinline></audio>
                                 </main>
+                                <main id="connectAlert" style="visibility: hidden; " class="text-center">
+                                    <div class="alert alert-primary" style="display: inline-block" role="alert">
+                                        voice call is connected!
+                                    </div>
+                                </main>
                             </div>
                         </div>
                     </div>
@@ -96,6 +101,7 @@
 
             <script>
                 const channelButton = document.querySelector('#channelBtn');
+                const connectAlert = document.getElementById("connectAlert");
                 let isConnected = false;
                 let remon;
                 // please register your own service key from remotemonster site.
@@ -121,12 +127,14 @@
                     onComplete() {
                         console.log('EVENT FIRED: onComplete');
                         channelButton.innerHTML = 'CLOSE';
+                        connectAlert.style.visibility = 'visible';
                     },
                     onDisconnectChannel() {
                         // is called when other peer hang up.
                         remon.close();
                         isConnected = false;
                         channelButton.innerHTML = 'CONNECT';
+                        connectAlert.style.visibility = 'hidden';
                     },
                     onClose() {
                         // is called when remon.close() method is called.
@@ -134,6 +142,7 @@
                         remon.close();
                         isConnected = false;
                         channelButton.innerHTML = 'CONNECT';
+                        connectAlert.style.visibility = 'hidden';
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
