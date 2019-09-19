@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="RemoteMonster live media service demo">
+  <meta name="author" content="Lucas Choi">
+
+  <title>Voice Call with VolumeBar</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  </ul>
+  <!-- End of Sidebar -->
+
+  <!-- Content Wrapper -->
+  <div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Topbar -->
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h3 class="h3 mb-4 text-gray-800">Voice Call with VolumeBar example</h3>
+      </nav>
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- Page Heading -->
+        <h4 class="font-weight-bold">How to use</h4>
+        <li>Press the connect button.</li>
+        <li>
+          Open the same
+          <a href="./voiceCallWithVolumeBar.html" target="_blank">site</a> on other tab
+          or browser. Then click the connect button to connect to first
+          page.
+        </li>
+        <li>
+          Source code:
+          <a
+                  href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceCallWithVolumeBar.html"
+                  target="_blank"
+          >github page</a
+          >
+        </li>
+        <br />
+        <!-- Content Row -->
+        <div class="row">
+          <div class="col-xl-12 col-md-12 mb-12">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                  Remote Audio
+                </h6>
+              </div>
+              <div class="card-body">
+                <main class="text-center">
+                  <audio id="remoteVideo" autoplay controls playsinline></audio>
+                  <h4 class="small font-weight-bold">
+                    Volume <span id="localVolumeValue" class="float-right"></span>
+                  </h4>
+                  <div id="audioWave" class="progress mb-4">
+                    <div id="audioVolumeBar"
+                         class="progress-bar bg-danger"
+                         role="progressbar"
+                         style="width: 100%"
+                         aria-valuenow="20"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                    ></div>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row">
+          <div class="col-xl-12 col-md-12 mb-12">
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                <main>
+                  <a
+                          id="channelBtn"
+                          href="#"
+                          class="btn btn-primary btn-user btn-block text-center"
+                  >
+                    CONNECT
+                  </a>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+      <!-- The webrtc adapter is required for browser compatibility -->
+      <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
+
+    </div>
+    <!-- End of Main Content -->
+
+    <script>
+        const channelButton = document.querySelector("#channelBtn");
+        const localVolumeValue = document.querySelector("#localVolumeValue");
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const meter = VolumeMeter(audioCtx, { tweenIn: 2, tweenOut:6 }, function (volume) {
+            $('#audioVolumeBar').width(volume +'%').attr('aria-valuenow', volume);
+            localVolumeValue.innerHTML = volume;
+        });
+        var timerId;
+
+        let localStream;
+        let isConnected = false;
+        let remon;
+        // please register your own service key from remotemonster site.
+        const config = {
+            credential: {
+                key: "1234567890",
+                serviceId: "SERVICEID1"
+            },
+            view: {
+                remote: "#remoteVideo",
+                local: "#localVieo"
+            },
+            media: {
+                audio: true,
+                video: false
+            }
+        };
+
+        const listener = {
+            onComplete() {
+                console.log("EVENT FIRED: onComplete");
+                channelButton.innerHTML = "CLOSE";
+            },
+            onAddLocalStream(stream) {
+                let src = audioCtx.createMediaStreamSource(stream);
+                src.connect(meter);
+                src.connect(audioCtx.destination);
+                stream.onended = meter.stop.bind(meter);
+            },
+            onDisconnectChannel() {
+                // is called when other peer hang up.
+                remon.close();
+                if (timerId){
+                    clearInterval(timerId);
+                }
+                isConnected = false;
+                channelButton.innerHTML = "CONNECT";
+            },
+            onClose() {
+                // is called when remon.close() method is called.
+                console.log("EVENT FIRED: onClose");
+                remon.close();
+                isConnected = false;
+                channelButton.innerHTML = "CONNECT";
+                if (timerId){
+                    clearInterval(timerId);
+                }
+            },
+            onError(error) {
+                console.log(`EVENT FIRED: onError: ${error}`);
+            },
+            onStat(result) {
+                console.log(`EVENT FIRED: onStat: ${result}`);
+            }
+        };
+
+        function start() {
+            if (isConnected) {
+                isConnected = false;
+                channelButton.innerHTML = "CONNECT";
+                remon.close();
+            } else {
+                isConnected = true;
+                channelButton.innerHTML = "WAIT";
+                remon = new Remon({ config, listener });
+                remon.connectCall("simpleRemon");
+            }
+        }
+
+        channelButton.addEventListener(
+            "click",
+            evt => {
+                start();
+                evt.preventDefault();
+            },
+            false
+        );
+        // import from volume-meter project https://github.com/common-tater/volume-meter
+        function VolumeMeter (context, opts, onenterframe) {
+            if (typeof opts === 'function') {
+                onenterframe = opts
+                opts = null
+            }
+            opts = opts || {}
+            opts.fftSize = opts.fftSize || 32
+            opts.tweenIn = opts.tweenIn || 1.618
+            opts.tweenOut = opts.tweenOut || opts.tweenIn * 3
+
+            var buffer, self = this
+            var range, next, tween, last = 0
+            var analyser = context.createAnalyser()
+
+            analyser.stop = function () {
+                this.ended = true
+            }
+
+            // the fftSize property governs the sample size even
+            // when we are not requesting frequency domain data
+            analyser.fftSize = opts.fftSize
+            buffer = new Uint8Array(opts.fftSize)
+
+            function render () {
+                if (analyser.ended) return
+                analyser.getByteTimeDomainData(buffer)
+                range = getDynamicRange(buffer) * (Math.E - 1)
+                next = Math.floor(Math.log1p(range) * 100)
+                tween = next > last ? opts.tweenIn : opts.tweenOut
+                next = last = last + (next - last) / tween
+
+                onenterframe(next)
+                // requestAnimationFrame(render)
+            }
+            timerId = setInterval(render, 100);
+            // render()
+
+            return analyser
+        }
+
+        function getDynamicRange(buffer) {
+            var len = buffer.length
+            var min = 128
+            var max = 128
+
+            for (var i = 0; i < len; i++) {
+                var sample = buffer[i]
+                if (sample < min) min = sample
+                else if (sample > max) max = sample
+            }
+
+            return (max - min) / 255
+        }
+    </script>
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
+
+  </div>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#accordionSidebar").load("nav.html");
+    });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
+</script>
+
+</body>
+
+</html>
