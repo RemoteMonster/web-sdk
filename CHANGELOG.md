@@ -1,3 +1,7 @@
+## [2.4.24](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.24) (2019-10-02)
+
+
+
 ## [2.4.23](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.22...v2.4.23) (2019-09-26)
 
 
