@@ -1,3 +1,25 @@
+## [2.4.25](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.25) (2019-10-23)
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
+## [2.4.24](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.24) (2019-10-23)
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
 ## [2.4.24](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.24) (2019-10-02)
 
 
