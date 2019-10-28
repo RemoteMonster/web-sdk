@@ -55,6 +55,7 @@
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/screenShare.html"
                         target="_blank">github page</a></li>
+                <li class="text-danger">Please use a unique channel name.</li>
                 <br>
 
                 <!-- Content Row -->
@@ -239,7 +240,7 @@ function getRandomId() {
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+    return Date.now() + "_" + text;
 }
 
 channelButton.addEventListener('click', (evt) => {
