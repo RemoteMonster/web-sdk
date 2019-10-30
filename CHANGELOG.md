@@ -1,3 +1,12 @@
+## [2.5.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.0...v2.5.1) (2019-10-30)
+
+
+### Bug Fixes
+
+* **deepcopy:** mediastream is not able to deepcopy ([ca94b6f](https://github.com/RemoteMonster/remon-web-sdk/commit/ca94b6f))
+
+
+
 # [2.5.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.25...v2.5.0) (2019-10-30)
 
 
