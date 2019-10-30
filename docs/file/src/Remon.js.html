@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/Remon.js | @remotemonster/sdk</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="RemoteMonster Web SDK"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="@remotemonster/sdk"><meta property="twitter:description" content="RemoteMonster Web SDK"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Remon.js~Remon.html">Remon</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-configure">configure</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-remonEvents">remonEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-signalingStates">signalingStates</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/Remon.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// import &quot;webrtc-adapter&quot;;
+import platform from &quot;platform&quot;;
+import Config from &quot;./Configure&quot;;
+import Context from &quot;./Context&quot;;
+import Media from &quot;./Media&quot;;
+import EventManager from &quot;./EventManager&quot;;
+import signalingStates from &quot;./SignalingStates&quot;;
+import bindPeerConnectionEvents from &quot;./PeerConnectionHandler&quot;;
+import SignalingConnection from &quot;./SignalingConnection&quot;;
+import bindSignalingConnectionEvents from &quot;./SignalingConnectionHandler&quot;;
+import RemonRecorder from &quot;./RemonRecorder&quot;;
+import util from &quot;./Util&quot;;
+import l from &quot;./Logger&quot;;
+import adapter from &quot;webrtc-adapter&quot;;
+
+/**
+ * Most important class for using RemoteMonster API. It can be use to P2P communication and broadcast. You can receive callback events from listener.
+ */
+class Remon {
+  /**
+   * create Remon object with config object and listener object.
+   * example: var v = new Remon({config: rtcConfig, listener: rtcListener});
+   */
+  constructor({ config, listener }) {
+    this.version = &quot;2.3.0-beta.1&quot;;
+
+    this.context = new Context();
+    this.context.sdkVersion = this.version;
+    this.context.logServer =
+      config.logServer &amp;&amp; config.logServer.url
+        ? config.logServer
+        : Config.logServer;
+    this.context.eventManager = EventManager();
+    this.config = config;
+    this.context.simulcast =
+      this.config.rtc &amp;&amp; this.config.rtc.simulcast
+        ? this.config.rtc.simulcast
+        : Config.rtc.simulcast;
+    this.context.logLevel =
+      this.config.dev &amp;&amp; this.config.dev.logLevel
+        ? this.config.dev.logLevel
+        : &quot;INFO&quot;;
+    util.validateConfig(this.context, this.config);
+    this.media = new Media(this.context);
+    this.context.mediaManager = this.media;
+    this.uri = Config.appServer.url;
+    this.key = this.config.credential.key;
+    this.serviceId = this.config.credential.serviceId;
+    this.context.key = this.key;
+    this.context.serviceId = this.serviceId;
+    this.context.state = &quot;INIT&quot;;
+
+    l.init(this.context);
+    if (listener) {
+      Object.keys(listener).forEach(type =&gt; {
+        const listenerItem = listener[type];
+        this.context.eventManager.addEventListener({ type, listenerItem });
+      });
+    }
+    if (!this.config.rtc) this.config.rtc = Config.rtc;
+    if (!this.config.media)
+      this.config.media = { audio: true, video: true, record: false };
+    if (this.config.media.record) {
+      this.context.useRecord = this.config.media.record;
+      if (this.config.media.recordUrl)
+        this.context.recordUrl = this.config.media.recordUrl;
+      else
+        this.context.recordUrl = &quot;https://demo.remotemonster.com/rest/record&quot;;
+    }
+    Config.media = this.config.media;
+    Config.view = this.config.view;
+
+    if (this.config.media.video.codec)
+      this.context.videoCodec = this.config.media.video.codec;
+    if (this.config.media.audio.codec)
+      this.context.audioCodec = this.config.media.audio.codec;
+    if (this.config.media.video === false) this.context.useVideo = false;
+    if (this.config.media.audio === false) this.context.useAudio = false;
+    if (this.config.media.video.maxBandwidth)
+      this.context.videoBandwidth = this.config.media.video.maxBandwidth;
+    if (this.config.media.audio.maxBandwidth)
+      this.context.audioBandwidth = this.config.media.audio.maxBandwidth;
+    if (this.config.credential.resturl) {
+      this.config.credential.resturl = this.config.credential.resturl.replace(
+        &quot;/init&quot;,
+        &quot;&quot;
+      );
+      Config.appServer.url = this.config.credential.resturl;
+      this.uri = Config.appServer.url;
+    }
+    if (this.config.credential.wsurl)
+      Config.signalingServer.url = this.config.credential.wsurl;
+    //this.init();
+  }
+
+  async init() {
+    l.d(&quot;init is called&quot;);
+    var that = this;
+    var ctx = this.context;
+    var cfg = this.config;
+    var messageBody = {
+      credential: { key: this.key, serviceId: this.serviceId },
+      env: {
+        os: platform.os.family,
+        osVersion: platform.os.version || &quot;0&quot;,
+        device: platform.name,
+        deviceVersion: platform.version || &quot;0&quot;,
+        networkType: Navigator.connection,
+        sdkVersion: this.version
+      }
+    };
+    if (this.config.sdk &amp;&amp; this.config.sdk.country)
+      messageBody.env.country = this.config.sdk.country;
+    if (this.config.media.roomid) messageBody.id = this.config.media.roomid;
+    var message = {
+      method: &quot;POST&quot;,
+      headers: {
+        Accept: &quot;application/json, text/plain, */*&quot;,
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+      },
+      body: JSON.stringify(messageBody)
+    };
+    try {
+      var response = await fetch(this.uri + &quot;/init&quot;, message);
+      var responseJson = await response.json();
+    } catch (e) {
+      if (ctx.eventManager.hasEventListener(&quot;onError&quot;)) {
+        ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;WebSocketFailedError&quot;);
+      }
+      l.e(&quot;Init: failed:&quot;, error);
+      l.errorEvt(ctx, &quot;1004&quot;, &quot;init failed:&quot; + error);
+    }
+    l.d(&quot;-&gt; Message:&quot;, responseJson);
+
+    Object.keys(responseJson).forEach(responseJsonKey =&gt; {
+      switch (responseJsonKey) {
+        case &quot;iceServers&quot;: {
+          responseJson[responseJsonKey].forEach(x =&gt;
+            Config.rtc.iceServers.push(x)
+          );
+          break;
+        }
+        case &quot;token&quot;: {
+          ctx.token = responseJson[responseJsonKey];
+          break;
+        }
+        case &quot;key&quot;: {
+          ctx.channel.id = responseJson[responseJsonKey];
+          break;
+        }
+        case &quot;name&quot;: {
+          ctx.channel.name = responseJson[responseJsonKey];
+          break;
+        }
+        default: {
+          // l.e(&quot;Init: Unknown property:&quot; + responseJsonKey);
+        }
+      }
+    });
+    var eventMsg = {
+      topic: &quot;log&quot;,
+      messages: {
+        log: &quot;Peer Id is created : &quot; + ctx.token,
+        logLevel: &quot;info&quot;,
+        os: platform.os.family,
+        osVersion: platform.os.version || &quot;0&quot;,
+        device: platform.name,
+        deviceVersion: platform.version || &quot;0&quot;,
+        networkType: Navigator.connection,
+        sdkVersion: this.version,
+        svcId: ctx.serviceId,
+        pId: ctx.token,
+        status: &quot;INIT&quot;
+      }
+    };
+    l.evt(JSON.stringify(eventMsg));
+    ctx.signalingConnection = new SignalingConnection({
+      url: Config.signalingServer.url,
+      context: ctx
+    });
+    ctx.signalingConnection.connect();
+    ctx.signalingConnection.on(&quot;reconnect&quot;, () =&gt; {
+      this.onReconnectSignalConnection();
+    });
+    ctx.signalingConnection.on(&quot;disconnect&quot;, () =&gt; {
+      this.onDisconnectSignalConnection();
+    });
+    window.addEventListener(
+      &quot;offline&quot;,
+      () =&gt; {
+        l.i(&quot;Browser: offline&quot;);
+        // if (this.context.eventManager.hasEventListener(&quot;onError&quot;)) {
+        //   this.context.eventManager.dispatchEvent(&quot;onError&quot;, &quot;disconnected&quot;);
+        // }
+        // this.close(&quot;UNKNOWN&quot;);
+        this.context.signalingConnection.onOffline();
+      },
+      false
+    );
+
+    if (cfg.rtc.audioType === &quot;music&quot;) {
+      cfg.opt = {
+        mandatory: {
+          googHighpassFilter: false,
+          googEchoCancellation: false,
+          googNoiseSuppression: false
+        },
+        optional: [{ googCpuOveruseDetection: false }]
+      };
+    }
+    ctx.peerConnection = new RTCPeerConnection(Config.rtc, cfg.opt);
+    ctx.hasAddTrack = ctx.peerConnection.addTrack !== undefined;
+    bindSignalingConnectionEvents({
+      context: ctx,
+      media: that.media,
+      config: cfg
+    });
+    bindPeerConnectionEvents({ context: ctx, media: that.media });
+    if (cfg.view &amp;&amp; typeof cfg.view.local !== &quot;undefined&quot;)
+      Config.rtc.localVideo = document.querySelector(`${cfg.view.local}`);
+    if (cfg.view &amp;&amp; typeof cfg.view.remote !== &quot;undefined&quot;) {
+      ctx.remoteVideo = document.querySelector(`${cfg.view.remote}`);
+    }
+    if (cfg.media.recvonly) {
+      ctx.remoteVideo = document.querySelector(`${cfg.view.remote}`);
+    }
+
+    const MAX_RETRIES = 11;
+    for (let i = 5; i &lt;= MAX_RETRIES; i++) {
+      // ctx.signalingConnection connection state&#xC640; localmedia &#xB4E4;&#xC5B4;&#xC654;&#xB294;&#xC9C0;, ctx.peerConnection&#xC774; &#xC81C;&#xB300;&#xB85C; &#xC0DD;&#xC131;&#xB418;&#xC5C8;&#xB294;&#xC9C0; &#xCCB4;&#xD06C; &#xD6C4; return
+      if (
+        ctx.signalingConnection.isOpened()
+        // ctx.mediaManager.isLocalPrepared()
+      ) {
+        return;
+      } else {
+        const timeout = Math.pow(2, i);
+        l.v(&quot;wating for init %i&quot;, i);
+        await this.wait(timeout);
+      }
+    }
+    // if (ctx.eventManager.hasEventListener(&quot;onError&quot;)) {
+    //   ctx.eventManager.dispatchEvent(&quot;onError&quot;, &quot;Error is successfully dispatched&quot;);
+    // }
+    try {
+      ctx.devices = await navigator.mediaDevices.enumerateDevices();
+      ctx.currentVideoDeviceId = ctx.devices[0].deviceId;
+    } catch (e) {
+      console.log(e);
+      l.errorEvt(ctx, &quot;1007&quot;, &quot;failed to get media devices: &quot; + e);
+    }
+  }
+
+  async connectCall(...args) {
+    l.d(&quot;connect is called&quot;);
+    await this.connectChannel(...args);
+  }
+
+  /**
+   * Create P2P channel, if there is no P2P channel with the id. Join the P2P channel, if there is P2P channel with the id.
+   * example: remon.connectChannel(&quot;roomname1&quot;);
+   */
+  async connectChannel(...args) {
+    l.d(&quot;createChannel is called&quot;);
+    this.config.rtc.audioType = &quot;voice&quot;;
+    await this.init();
+    return this.context.signalingConnection.connectChannel(...args);
+  }
+
+  /**
+   * Create a broadcast room
+   * @param (string) roomname name of broadcast room. it is no id but name. You can take a real room id from onCreateChannel event
+   */
+  async createCast(roomname) {
+    l.d(&quot;createCast is called&quot;);
+    this.config.rtc.audioType = &quot;music&quot;;
+    await this.init();
+    this.context.signalingConnection.createBroadcastChannel(roomname);
+  }
+
+  /**
+   * Join a room by room id.
+   * @param (string) room id
+   */
+  async joinCast(roomid) {
+    l.d(&quot;joinCast is called&quot;);
+    this.config.rtc.audioType = &quot;music&quot;;
+    this.context.channel.type = &quot;VIEWER&quot;;
+    this.config.media.recvonly = true;
+    await this.init();
+    this.context.signalingConnection.createViewerChannel(roomid);
+  }
+
+  /**
+   * retrieve current stream health information
+   */
+  getHealth() {
+    return this.context.health.result;
+  }
+  /**
+   * retrieve current remon state information
+   */
+  getState() {
+    return this.context.state;
+  }
+  /**
+   * retrieve current sdk version
+   */
+  getVersion() {
+    return this.version;
+  }
+  /**
+   * get channel id
+   */
+  getChannelId() {
+    return this.context.channel.id;
+  }
+  /**
+   * mute local video
+   * @param (bool)
+   */
+  pauseLocalVideo(bool) {
+    l.d(&quot;pauseLocalVideo is called&quot;);
+    this.media
+      .mediaStreamTrackSwitch(Config.rtc.localStream)
+      .type(&quot;Video&quot;)
+      .enabled(!!bool);
+  }
+  /**
+   * mute remote video
+   * @param (bool) bool
+   */
+  pauseRemoteVideo(bool) {
+    l.d(&quot;pauseRemoteVideo is called&quot;);
+    this.media
+      .mediaStreamTrackSwitch(this.context.remoteStream)
+      .type(&quot;Video&quot;)
+      .enabled(!!bool);
+  }
+
+  /**
+   * switch camera between fore and back
+   */
+  cameraSwitch() {
+    l.d(&quot;cameraSwitch is called&quot;);
+    this.media.setUserDevices(null, this.context.devices[1].deviceId);
+  }
+  /**
+   * mute local audio and mic stream
+   * @param {bool} bool
+   */
+  muteLocalAudio(bool) {
+    this.media
+      .mediaStreamTrackSwitch(Config.rtc.localStream)
+      .type(&quot;Audio&quot;)
+      .enabled(!!bool);
+  }
+  /**
+   * mute remote audio stream
+   * @param {*} bool
+   */
+  muteRemoteAudio(bool) {
+    this.media
+      .mediaStreamTrackSwitch(this.context.remoteStream)
+      .type(&quot;Audio&quot;)
+      .enabled(!!bool);
+  }
+  async fetchCalls(id) {
+    return await this.search(id);
+  }
+
+  setVideoQulity(quility) {
+    this.context.signalingConnection.setSimulcastPriority(quility);
+  }
+  /**
+   * search P2P channels by id.
+   * @param (string) id for search. It can be part of full id
+   */
+  search(id) {
+    l.d(&quot;search by&quot; + id);
+    // const message = {
+    //   command: &quot;search&quot;, token: this.context.token,
+    //   serviceId: this.context.serviceId, body: id
+    // };
+    // this.context.signalingConnection.send(JSON.stringify(message));
+    const message = {
+      method: &quot;GET&quot;,
+      headers: {
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+      }
+    };
+    return new Promise((resolve, reject) =&gt; {
+      fetch(
+        this.uri + &quot;/call/&quot; + this.config.credential.serviceId,
+        message
+      ).then(response =&gt; {
+        response
+          .json()
+          .then(responseJson =&gt; {
+            if (this.context.eventManager.hasEventListener(&quot;onSearch&quot;)) {
+              this.context.eventManager.dispatchEvent(&quot;onSearch&quot;, responseJson);
+            }
+            resolve(responseJson);
+          })
+          .catch(err =&gt; {
+            reject(err);
+            l.errorEvt(this.context, &quot;1008&quot;, &quot;search is  failed:&quot; + err);
+          });
+      });
+    });
+  }
+
+  async fetchCasts() {
+    return await this.liveRooms();
+  }
+  /**
+   * Retrieve all broadcast rooms information
+   */
+  liveRooms() {
+    const message = {
+      method: &quot;GET&quot;,
+      headers: {
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+      }
+    };
+    return new Promise((resolve, reject) =&gt; {
+      fetch(
+        this.uri + &quot;/room/&quot; + this.config.credential.serviceId,
+        message
+      ).then(response =&gt; {
+        response
+          .json()
+          .then(responseJson =&gt; {
+            resolve(responseJson);
+          })
+          .catch(err =&gt; {
+            reject(err);
+            l.errorEvt(this.context, &quot;1008&quot;, &quot;search is  failed:&quot; + err);
+          });
+      });
+    });
+  }
+  /**
+   * It&apos;s only function for P2P communication. send message to peer
+   * @param (string) userMessage message to peer
+   */
+  sendMessage(userMessage) {
+    l.g(&quot;Signaling: Send user message&quot;);
+    const message = this.context.signalingConnection.createMessage({
+      command: &quot;message&quot;,
+      body: userMessage,
+      code: &quot;&quot;
+    });
+    l.d(&quot;Message -&gt;:&quot;, message);
+    this.context.signalingConnection.send(JSON.stringify(message));
+  }
+
+  onReconnectSignalConnection() {
+    console.log(&quot;event: onReconnectSignalConnection&quot;);
+    this.context.signalingConnection.reconnectChannel();
+  }
+
+  onDisconnectSignalConnection() {
+    console.log(&quot;event: onDisconnectSignalConnection&quot;);
+    if (this.context.eventManager.hasEventListener(&quot;onStateChange&quot;)) {
+      this.context.eventManager.dispatchEvent(&quot;onStateChange&quot;, &quot;CLOSE&quot;);
+    }
+    this.close(&quot;UNKNOWN&quot;);
+  }
+
+  /**
+   * close all Remon&apos;s resources
+   */
+  close(closeType) {
+    l.i(&quot;Remon.close&quot;);
+
+    if (this.context.useRecord &amp;&amp; this.context.remoteRecorder) {
+      this.context.remoteRecorder.stop();
+      this.context.remoteRecorder = null;
+    }
+    if (this.context.useRecord &amp;&amp; this.context.localRecorder) {
+      this.context.localRecorder.stop();
+      this.context.localRecorder = null;
+      this.context.useRecord = false;
+    }
+    if (this.context.remoteVideo &amp;&amp; this.context.remoteVideo.srcObject) {
+      this.context.remoteVideo.srcObject
+        .getTracks()
+        .forEach(track =&gt; track.stop());
+      this.context.remoteVideo.srcObject = null;
+    }
+
+    if (Config.rtc.localVideo &amp;&amp; Config.rtc.localVideo.srcObject) {
+      Config.rtc.localVideo.srcObject
+        .getTracks()
+        .forEach(track =&gt; track.stop());
+    }
+    if (!this.context.signalingConnection) return;
+    //this.context.localVideo.srcObject = null;
+    // FIXME: Chrome, adapter does not support addTrack.
+    if (!this.context.peerConnection) return;
+    if (this.context.health) this.context.health.stop();
+    if (this.context.hasAddTrack) {
+      this.context.peerConnection.ontrack = null;
+    } else {
+      this.context.peerConnection.onaddstream = null;
+    }
+    this.context.peerConnection.onremovestream = null;
+    this.context.peerConnection.onicecandidate = null;
+    this.context.peerConnection.oniceconnectionstatechange = null;
+    this.context.peerConnection.onsignalingstatechange = null;
+    this.context.peerConnection.onicegatheringstatechange = null;
+    this.context.peerConnection.onnegotiationneeded = null;
+    if (this.context.peerConnection.signalingState !== &quot;closed&quot;) {
+      this.context.peerConnection.close();
+    }
+    this.context.peerConnection = null;
+    this.context.signalingConnection.close();
+
+    if (closeType) {
+      this.context.eventManager.dispatchEvent(&quot;onClose&quot;, {
+        closeType
+      });
+    } else {
+      this.context.eventManager.dispatchEvent(&quot;onClose&quot;, {
+        closeType: &quot;MINE&quot;
+      });
+    }
+
+    var eventMsg = {
+      topic: &quot;log&quot;,
+      messages: {
+        log: &quot;remon is closed&quot;,
+        logLevel: &quot;info&quot;,
+        sdkVersion: this.version,
+        svcId: this.context.serviceId,
+        pId: this.context.token,
+        chId: this.context.channel.id,
+        status: &quot;CLOSE&quot;
+      }
+    };
+    l.evt(JSON.stringify(eventMsg));
+  }
+
+  wait(timeout) {
+    return new Promise(resolve =&gt; {
+      setTimeout(() =&gt; {
+        resolve();
+      }, timeout);
+    });
+  }
+}
+
+export default Remon;
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
