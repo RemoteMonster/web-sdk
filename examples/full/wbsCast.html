@@ -219,7 +219,7 @@
                         text += possible.charAt(
                             Math.floor(Math.random() * possible.length)
                         );
-                    return text;
+                    return Date.now() + "_" + text;
                 }
 
                 function stopAll() {

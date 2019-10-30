@@ -57,6 +57,7 @@
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/videoConfigForCast.html"
                         target="_blank">github page</a></li>
+                <li class="text-danger">Please use a unique channel name.</li>
                 <br>
 
                 <!-- Content Row -->
@@ -86,7 +87,7 @@
                                     <div class="row">
                                       <video id="myVideo" class="remote-video center w-300 h-300" autoplay muted controls playsinline
                                              style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-  
+
                                       <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                           style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                           waiting</h6>
@@ -107,7 +108,7 @@
                                               <select id="audioInputSelect" onchange="changeAudioInputDevice()" class="custom-select custom-select-sm form-control form-control-sm"></select>
                                           </span>
                                         </div>
-  
+
                                         <div class="col-sm-12 col-md-2">
                                           <!--Video Codec-->
                                           <span class="col-lg-2 mg-2">
@@ -119,7 +120,7 @@
                                               </select>
                                           </span>
                                         </div>
-  
+
                                         <div class="col-sm-12 col-md-2">
                                           <!--Video FPS-->
                                           <span class="col-lg-2 mg-2">
@@ -127,7 +128,7 @@
                                               <input id="videoFPSInput" onchange="changeVideoFPS()" class="form-control-sm form-control text-center mb-4" type="text" value=25>
                                           </span>
                                         </div>
-  
+
                                         <div class="col-sm-12 col-md-2">
                                           <!--Video FPS-->
                                           <span class="col-lg-2 mg-2">
@@ -284,7 +285,7 @@ function getRandomId() {
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+    return Date.now() + "_" + text;
 }
 
 channelButton.addEventListener('click', (evt) => {

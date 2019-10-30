@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Voice Cast</title>
+    <title>여의도순복음교회 테스트앱</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,11 +22,6 @@
 
 <!-- Page Wrapper -->
 <div id="wrapper">
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-    </ul>
-    <!-- End of Sidebar -->
-
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -38,7 +33,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Voice Cast example</h3>
+                <h3 class="h3 mb-4 text-gray-800">여의도순복음교회 예배통역서비스</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -46,12 +41,10 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h4 class="font-weight-bold">How to use</h4>
-                <li>Press the "CREATE" button.</li>
-                <li>Open this <a href="./voiceCast.html" target="_blank">link</a> in another tab or a browser. When the room is created, you can enter the room automatically.</li>
-                <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceCast.html"
-                        target="_blank">github page</a></li>
+                <h4 class="font-weight-bold">사용법</h4>
+                <li>통역사의 경우 'Create'버튼을 클릭하여 통역 방송을 시작합니다.</li>
+                <li>이 웹사이트의 <a href="./fgtv.html" target="_blank">주소</a> 를 복사하여 다른 시청자에게 전달합니다.</li>
+                <li>시청자는 이 페이지를 크롬이나 사파리 브라우저를 통해 열면 바로 시청이 가능하거나 플레이 버튼을 클릭하면 시청할 수 있습니다.</li>
                 <br>
 
                 <!-- Content Row -->
@@ -134,7 +127,7 @@
         },
         view: {
             // remote: '#remoteVideo',
-            local: '#localVieo'
+            local: '#localVideo'
         },
         media: {
             audio: true,
@@ -183,7 +176,7 @@
             isCaster = true;
             channelBtnEl.innerHTML = 'CLOSE';
             remon = new Remon({config, listener});
-            remon.createCast('testVoiceCast');
+            remon.createCast('fgtv');
         }
     }
 
@@ -203,16 +196,23 @@
     }, false);
 
     async function findRoom(){
-        remon = new Remon({config: dummyConfig, listener:{}});
+        remon = new Remon({config: dummyConfig, listener:{
+            onComplete() {
+            console.log('EVENT FIRED: onComplete');
+            document.getElementById("localVideo").play();
+        },
+        }});
         var searchResult = await remon.fetchCasts();
         var isRoomExist = false;
         searchResult.forEach((ch, i) => {
             ch.type = 'BROADCAST';
-            if (ch.status === 'COMPLETE' && ch.id === 'testVoiceCast') {
+            if (ch.status === 'COMPLETE' && ch.id === 'fgtv') {
                 console.log("------------------- find my channel -----------------");
                 config.view.remote = '#localVideo';
+                const audioTag = document.getElementById("localVideo");
+                audioTag.muted = false;
                 remon = new Remon({config, listener});
-                remon.joinCast('testVoiceCast');
+                remon.joinCast('fgtv');
                 headerText.innerHTML = 'Remote Audio';
                 isCaster = false;
                 isCreated = true;
@@ -240,21 +240,8 @@
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $("#accordionSidebar").load("nav.html");
-    });
-</script>
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-84812645-1');
-</script>
-
 </body>
 
 </html>

@@ -57,6 +57,7 @@
                 <li>Source code: <a
                         href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/castList.html"
                         target="_blank">github page</a></li>
+                <li class="text-danger">Please use a unique channel name.</li>
                 <br>
 
                 <!-- Content Row -->
@@ -106,7 +107,7 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
             <script>
 const channelBtnEl = document.querySelector('#channelBtn');
@@ -201,7 +202,7 @@ function getRandomId() {
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (var i = 0; i < 5; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return text;
+    return Date.now() + "_" + text;
 }
 
 channelBtnEl.addEventListener('click', (evt) => {
