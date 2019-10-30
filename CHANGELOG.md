@@ -1,3 +1,21 @@
+## [2.5.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.1...v2.5.2) (2019-10-30)
+
+
+### Bug Fixes
+
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+
+
+
+## [2.5.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.1...v2.5.2) (2019-10-30)
+
+
+### Bug Fixes
+
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+
+
+
 ## [2.5.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.0...v2.5.1) (2019-10-30)
 
 
