@@ -1,3 +1,12 @@
+# [2.5.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.25...v2.5.0) (2019-10-30)
+
+
+### Bug Fixes
+
+* **Remon:** change merge method to deepmerge ([96f3c09](https://github.com/RemoteMonster/remon-web-sdk/commit/96f3c09))
+
+
+
 ## [2.4.25](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.25) (2019-10-23)
 
 
