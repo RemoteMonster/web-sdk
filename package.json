@@ -11,8 +11,7 @@
     "package:docs": "cp -r docs cache",
     "package": "npm run prepackage && npm run package:examples && npm run package:docs",
     "deploy:gh-pages": "gh-pages --dist cache",
-    "deploy": "npm run package && npm run deploy:gh-pages && npm run clean",
-    "deployStudio": "scp -rp ./examples/smilegate/* ubuntu@demo.remotemonster.com:/var/www/studio.remotemonster.com"
+    "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
   "keywords": [
     "WebRTC",
