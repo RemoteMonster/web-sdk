@@ -127,6 +127,7 @@
                   <!-- Card Body -->
                   <div class="card-body">
                     <main class="text-center">
+                      <!-- 음성만 사용시 video가 아닌 audio로 설정. remote audio에 대하여 모두 개별적인 audio를 사용해야함.-->
                       <video
                         id="myVideo"
                         class="remote-video center w-300 h-300"
@@ -293,7 +294,7 @@
                 local: "#myVideo"
               },
               media: {
-                video: {
+                video: {// 음성만 사용시 video: false
                   width: "640",
                   height: "480",
                   codec: "h264",
