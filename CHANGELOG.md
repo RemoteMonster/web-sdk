@@ -1,3 +1,17 @@
+## [2.5.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.2...v2.5.3) (2019-11-20)
+
+
+### Bug Fixes
+
+* **wsurl:** force config.wsurl settting ([f16f001](https://github.com/RemoteMonster/remon-web-sdk/commit/f16f001))
+
+
+### Features
+
+* **conference:** add conference sample ([8a36ab1](https://github.com/RemoteMonster/remon-web-sdk/commit/8a36ab1))
+
+
+
 ## [2.5.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.1...v2.5.2) (2019-10-30)
 
 

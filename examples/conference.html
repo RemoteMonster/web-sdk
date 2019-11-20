@@ -108,7 +108,7 @@
                   <!-- Card Body -->
                   <div class="card-body">
                     <main class="text-center">
-                      <div class="row" id="otherVideos">
+                      <div class="row" style="width:250px;" id="otherVideos">
                       </div>
                     </main>
                   </div>
@@ -504,7 +504,7 @@
                       muted : true,
                       controls: true,
                       playsinline: true,
-                      style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 120px;"
+                      style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 300px;"
                     }
                     let newVideo = document.createElement('video')
                     Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
@@ -517,6 +517,7 @@
                     btn.name = id;
                     btn.value = id;
                     btn.className = "btn btn-primary btn-user btn-block text-center";
+                    
                     btn.addEventListener(
                       "click",
                       evt => {
