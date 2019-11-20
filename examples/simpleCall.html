@@ -125,10 +125,10 @@
           <script>
             const channelBtnEl = document.querySelector("#channelBtn");
             let isConnected = false;
-            let wsurl="wss://matiz.remotemonster.com/ws";
-            let resturl = "https://matiz.remotemonster.com/rest";
-            let serviceId= 'healthchecker';
-            let key = 'ee1761b003084b5431bf918fa87b850bc499467bdfaf4bdf';
+            // let wsurl="wss://matiz.remotemonster.com/ws";
+            // let resturl = "https://matiz.remotemonster.com/rest";
+            let serviceId= '1d444759-3054-4b23-8b89-8e253cb1a0c2';
+            let key = 'f2aad78eb278b0ffa03b6b0a0ccc1142bc96f5328676af13896c190489d2c2e3';
             let remon;
             // please register your own service key from remotemonster site.
             const config = {
@@ -138,8 +138,8 @@
               credential: {
                 key,
                 serviceId,
-                resturl,
-                wsurl
+                // resturl,
+                // wsurl
               },
               view: {
                 remote: "#remoteVideo",
