@@ -1,3 +1,143 @@
+## [2.5.4](https://github.com/RemoteMonster/remon-web-sdk/compare/v3.5.3...v2.5.4) (2019-11-22)
+
+
+### Features
+
+* **conference:** add conference event ([fe4fbe7](https://github.com/RemoteMonster/remon-web-sdk/commit/fe4fbe7))
+
+
+
+## [2.5.4](https://github.com/RemoteMonster/remon-web-sdk/compare/v3.5.3...v2.5.4) (2019-11-22)
+
+
+### Features
+
+* **conference:** add conference event ([fe4fbe7](https://github.com/RemoteMonster/remon-web-sdk/commit/fe4fbe7))
+
+
+
+## [2.5.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.22...v2.5.3) (2019-11-27)
+
+
+### Bug Fixes
+
+* **deepcopy:** mediastream is not able to deepcopy ([ca94b6f](https://github.com/RemoteMonster/remon-web-sdk/commit/ca94b6f))
+* **Remon:** change merge method to deepmerge ([96f3c09](https://github.com/RemoteMonster/remon-web-sdk/commit/96f3c09))
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+* **wsurl:** force config.wsurl settting ([f16f001](https://github.com/RemoteMonster/remon-web-sdk/commit/f16f001))
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** add conference event ([fe4fbe7](https://github.com/RemoteMonster/remon-web-sdk/commit/fe4fbe7))
+* **conference:** add conference sample ([8a36ab1](https://github.com/RemoteMonster/remon-web-sdk/commit/8a36ab1))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
+## [2.5.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.22...v2.5.3) (2019-11-27)
+
+
+### Bug Fixes
+
+* **deepcopy:** mediastream is not able to deepcopy ([ca94b6f](https://github.com/RemoteMonster/remon-web-sdk/commit/ca94b6f))
+* **Remon:** change merge method to deepmerge ([96f3c09](https://github.com/RemoteMonster/remon-web-sdk/commit/96f3c09))
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+* **wsurl:** force config.wsurl settting ([f16f001](https://github.com/RemoteMonster/remon-web-sdk/commit/f16f001))
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** add conference event ([fe4fbe7](https://github.com/RemoteMonster/remon-web-sdk/commit/fe4fbe7))
+* **conference:** add conference sample ([8a36ab1](https://github.com/RemoteMonster/remon-web-sdk/commit/8a36ab1))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
+## [2.5.3](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.2...v2.5.3) (2019-11-20)
+
+
+### Bug Fixes
+
+* **wsurl:** force config.wsurl settting ([f16f001](https://github.com/RemoteMonster/remon-web-sdk/commit/f16f001))
+
+
+### Features
+
+* **conference:** add conference sample ([8a36ab1](https://github.com/RemoteMonster/remon-web-sdk/commit/8a36ab1))
+
+
+
+## [2.5.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.1...v2.5.2) (2019-10-30)
+
+
+### Bug Fixes
+
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+
+
+
+## [2.5.2](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.1...v2.5.2) (2019-10-30)
+
+
+### Bug Fixes
+
+* **url:** signalurl bug ([d4997b4](https://github.com/RemoteMonster/remon-web-sdk/commit/d4997b4))
+
+
+
+## [2.5.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.0...v2.5.1) (2019-10-30)
+
+
+### Bug Fixes
+
+* **deepcopy:** mediastream is not able to deepcopy ([ca94b6f](https://github.com/RemoteMonster/remon-web-sdk/commit/ca94b6f))
+
+
+
+# [2.5.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.25...v2.5.0) (2019-10-30)
+
+
+### Bug Fixes
+
+* **Remon:** change merge method to deepmerge ([96f3c09](https://github.com/RemoteMonster/remon-web-sdk/commit/96f3c09))
+
+
+
+## [2.4.25](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.25) (2019-10-23)
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
+## [2.4.24](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.24) (2019-10-23)
+
+
+### Features
+
+* **auth:** add token to new auth system ([1104fb9](https://github.com/RemoteMonster/remon-web-sdk/commit/1104fb9))
+* **conference:** Add method for conference ([420f586](https://github.com/RemoteMonster/remon-web-sdk/commit/420f586))
+* **room:** add searchRoom method ([91d5f88](https://github.com/RemoteMonster/remon-web-sdk/commit/91d5f88))
+
+
+
+## [2.4.24](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.23...v2.4.24) (2019-10-02)
+
+
+
+## [2.4.23](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.22...v2.4.23) (2019-09-26)
+
+
+
 ## [2.4.21](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.4.20...v2.4.21) (2019-09-13)
 
 

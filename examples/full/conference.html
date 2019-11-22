@@ -94,6 +94,24 @@
                     <main id="lvChannel" class="text-center"></main>
                   </div>
                 </div>
+
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      My Channel
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <div class="row" id="myChannel">
+                      </div>
+                    </main>
+                  </div>
+                </div>
               </div>
               <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
@@ -108,7 +126,7 @@
                   <!-- Card Body -->
                   <div class="card-body">
                     <main class="text-center">
-                      <div class="row" id="otherVideos">
+                      <div class="row" style="width:250px;" id="otherVideos">
                       </div>
                     </main>
                   </div>
@@ -127,7 +145,6 @@
                   <!-- Card Body -->
                   <div class="card-body">
                     <main class="text-center">
-                      <!-- 음성만 사용시 video가 아닌 audio로 설정. remote audio에 대하여 모두 개별적인 audio를 사용해야함.-->
                       <video
                         id="myVideo"
                         class="remote-video center w-300 h-300"
@@ -214,7 +231,7 @@
                               type="text"
                               placeholder="channel name"
                               autofocus
-                              value="abc"
+                              value="fOllJjRgsqZi8BMvCRi2PIQJINi1"
                             />
                           </span>
                           <span class="mr-2">
@@ -246,6 +263,7 @@
           <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
           <script>
+            const myChannel= document.getElementById('myChannel');
             const channelButton = document.querySelector("#channelBtn");
             const channelList = document.getElementById("lvChannel");
             const channelNameInput = document.getElementById(
@@ -285,8 +303,8 @@
               credential: {
                 key: key,
                 serviceId: serviceId,
-                wsurl : "wss://conf-dev.remotemonster.com/ws",
-                resturl : "https://conf-dev.remotemonster.com/rest",
+                wsurl : "wss://conference.remotemonster.com/ws",
+                resturl : "https://conference.remotemonster.com/rest",
 
             },
               view: {
@@ -294,7 +312,7 @@
                 local: "#myVideo"
               },
               media: {
-                video: {// 음성만 사용시 video: false
+                video: {
                   width: "640",
                   height: "480",
                   codec: "h264",
@@ -311,6 +329,14 @@
               },
               onComplete() {
                 console.log("remon.listener.onComplete " + remon.getChannelId());
+                let id = remon.getChannelId();
+                let btn = document.createElement("input");
+                    btn.type = "button";
+                    btn.id = "btn-"+id
+                    btn.name = id;
+                    btn.value = id;
+                    btn.className = "btn btn-primary btn-user btn-block text-center";
+                    myChannel.appendChild(btn);
                 setViewsViaParameters(false, "hidden", "CLOSE", "hidden");
               },
               onDisconnectChannel() {
@@ -325,6 +351,7 @@
                 console.log(`remon.listener.onClose: ${remon.getChannelId()}`);
                 remon.close();
                 isConnected = false;
+                document.getElementById('myChannel').removeChild(document.getElementById(`btn-${remon.getChannelId()}`));
                 setViewsViaParameters(false, "hidden", "CREATE", "visible");
               },
               onError(error) {
@@ -338,8 +365,8 @@
               credential: {
                 key: key,
                 serviceId: serviceId,
-                wsurl : "wss://conf-dev.remotemonster.com/ws",
-                resturl : "https://conf-dev.remotemonster.com/rest",
+                wsurl : "wss://conference.remotemonster.com/ws",
+                resturl : "https://conference.remotemonster.com/rest",
 
               },
               view: {
@@ -458,8 +485,8 @@
               };
               // cfg.credential.wsurl = "ws://localhost:8082/ws";
               // cfg.credential.resturl = "http://localhost:8081/rest";
-              cfg.credential.wsurl = "wss://conf-dev.remotemonster.com/ws";
-              cfg.credential.resturl = "https://conf-dev.remotemonster.com/rest";
+              cfg.credential.wsurl = "wss://conference.remotemonster.com/ws";
+              cfg.credential.resturl = "https://conference.remotemonster.com/rest";
 
               dummyRemon = new Remon({ config: cfg });
             }
@@ -505,7 +532,7 @@
                       muted : true,
                       controls: true,
                       playsinline: true,
-                      style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 120px;"
+                      style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 300px;"
                     }
                     let newVideo = document.createElement('video')
                     Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
@@ -518,6 +545,7 @@
                     btn.name = id;
                     btn.value = id;
                     btn.className = "btn btn-primary btn-user btn-block text-center";
+                    
                     btn.addEventListener(
                       "click",
                       evt => {
