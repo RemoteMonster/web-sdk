@@ -1,3 +1,11 @@
+## [2.5.6](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.5...v2.5.6) (2019-12-11)
+
+
+
+## [2.5.6](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.5...v2.5.6) (2019-12-11)
+
+
+
 ## [2.5.5](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.4...v2.5.5) (2019-12-09)
 
 
