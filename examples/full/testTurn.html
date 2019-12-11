@@ -188,6 +188,12 @@
 
                 // please register your own service key from remotemonster site.
                 let config = {
+                    rtc:{
+                        onlyturnserver: true,
+                        iceServers: [
+                        {urls: "turn:103.131.95.101:3478", username: "ray", credential: "ray"},
+                        ],
+                    },
                     credential: {
                         key: key,
                         serviceId: serviceId
