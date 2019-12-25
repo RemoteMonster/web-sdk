@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="RemoteMonster live media service demo" />
+    <meta name="author" content="Lucas Choi" />
+
+    <title>Video Config for Cast</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+  </head>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      ></ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav
+            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+          >
+            <!-- Sidebar Toggle (Topbar) -->
+            <button
+              id="sidebarToggleTop"
+              class="btn btn-link d-md-none rounded-circle mr-3"
+            >
+              <i class="fa fa-bars"></i>
+            </button>
+            <h3 class="h3 mb-4 text-gray-800">ConferenceCall Test</h3>
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <h4 class="font-weight-bold">How to use</h4>
+            <li>
+              Enter 클릭시 'remon' 이라는 conference Room 에 접속. 
+              Leave 클릭시 방을 떠납니다.
+            </li>
+            <li>
+              Open the same
+              <a href="./conference.html" target="_blank">site</a> on
+              other tab or browser. Then click on channel you created in the
+              channel list.
+            </li>
+            <li>
+              Source code:
+              <a
+                href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/conference.html"
+                target="_blank"
+                >github page</a
+              >
+            </li>
+            <br />
+
+            <!-- Content Row -->
+            <div class="row">
+            
+              <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Other Videos
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <div class="row" style="width:250px;" id="otherVideos">
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Local Video
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <video
+                        id="myVideo"
+                        class="remote-video center w-300 h-300"
+                        autoplay
+                        muted
+                        controls
+                        playsinline
+                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"
+                      ></video>
+
+                      <h6
+                        id="waitingTv"
+                        class="m-0 font-weight-bold text-primary"
+                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;"
+                      >
+                        waiting
+                      </h6>
+                      <div class="col-lg-5">
+                        <div class="mt-12 text-center">
+                          <span class="mr-2">
+                            <a
+                              id="enterBtn"
+                              href="#"
+                              class="btn btn-primary btn-user text-center"
+                            >
+                            ENTER
+                            </a>
+                          </span>
+                        </div>
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+
+          <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          />
+          <!-- The webrtc adapter is required for browser compatibility -->
+          <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+          <script>
+            const enterBtn = document.querySelector("#enterBtn");
+            const otherVideos= document.getElementById('otherVideos');
+            let isConnected = false;
+            let remon;
+            let remonRoom=[];
+            const key = "1234567890";
+            const serviceId = "SERVICEID1";
+            // please register your own service key from remotemonster site.
+            let config = {
+              credential: {
+                key: key,
+                serviceId: serviceId,
+                wsurl : "wss://conference.remotemonster.com/ws",
+                resturl : "https://conference.remotemonster.com/rest",
+
+            },
+              view: {
+                //remote: "#remoteVideo",
+                local: "#myVideo"
+              },
+              media: {
+                video: {
+                  width: "640",
+                  height: "480",
+                  codec: "H264",
+                  maxBandwidth: 1800,
+                  frameRate: { max: 25, min: 25 }
+                },
+                audio: true
+              }
+            };
+            const videoAttrs = {
+                            class : "remote-video center w-320 h-240",
+                            autoplay : true,
+                            muted : true,
+                            controls: true,
+                            playsinline: true,
+                            style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 300px;"
+                          }
+
+            const listener = {
+              onConnect(chid) {
+                console.log(`remon.listener.onConnect ${chid} at listener`);
+              },
+              onComplete() {
+                console.log(`remon.listener.onComplete: ${remon.getChannelId()} `);
+                remonRoom[remon.getChannelId()] = true;
+              },
+              onDisconnectChannel() {
+                // is called when other peer hang up.
+                remon.close();
+                isConnected = false;
+              },
+              onClose() {
+                // is called when remon.close() method is called.
+                console.log(`remon.listener.onClose: ${remon.getChannelId()}`);
+              },
+              onError(error) {
+                console.log(`remon.listener.onError: ${remon.getChannelId()} ${error}`);
+              },
+              onStat(result) {
+                // console.log(`EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+              },
+              onRoomEvent(result){
+                //join
+                  switch (result.event) {
+                    case 'join':
+                        if(!remonRoom[result.channel.id]){
+                          remonRoom[result.channel.id] = true;
+                            let newVideo = document.createElement('video')
+                            videoAttrs.id = result.channel.id.replace(":","-");
+                            Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
+                            config.view.remote = `#${newVideo.id}`
+                            newVideo.remon = new Remon({ config })
+                            otherVideos.appendChild(newVideo)
+                            newVideo.remon.joinCast(newVideo.id.replace("-",":"))
+                        }
+                      break;
+                    case 'leave':
+                        if(remonRoom[result.channel.id] && result.channel.id !== remon.getChannelId()){
+                          let video = document.getElementById(result.channel.id.replace(":","-"));
+                          otherVideos.removeChild(video);
+                          delete remonRoom[result.channel.id]
+                        }
+                      break;
+                  }
+                console.log(`EVENT FIRED: onRoomEvent channel Id : ${remon.getChannelId()}`)
+                console.log(`EVENT FIRED: onRoomEvent: ${JSON.stringify(result)}`)
+              }
+            };
+            
+            
+
+            async function start() {
+              if (isConnected) {
+                isConnected = false;
+                document.querySelector('#enterBtn').innerHTML = "Enter";
+                Object.keys(remonRoom).forEach(function(id){
+                  if( id !== remon.getChannelId()){
+                    let video = document.getElementById(id.replace(":","-"));
+                    if(video && video.remon){
+                      otherVideos.removeChild(video);
+                    }
+                  }
+                  delete remonRoom[id];
+                })
+                remon.close()
+              } else {
+                isConnected = true;
+                document.querySelector('#enterBtn').innerHTML = "leave";
+                remon = new Remon({ config, listener });
+                await remon.createRoom("remon")
+                let participants = await remon.fetchRooms("remon");
+                participants.forEach(async function(participant){
+                  if(!remonRoom[participant.id]){
+                          remonRoom[participant.id] = true;
+                            let newVideo = document.createElement('video');
+                            videoAttrs.id =  participant.id.replace(":","-");
+                            Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
+                            config.view.remote = `#${newVideo.id}`
+                            newVideo.remon = new Remon({ config })
+                            otherVideos.appendChild(newVideo)
+                            await newVideo.remon.joinCast(newVideo.id.replace("-",":"));
+                        }
+                })
+               
+              }
+            }
+
+
+            enterBtn.addEventListener("click",
+              evt => {
+                start();
+                evt.preventDefault();
+              },
+              false
+            );
+
+
+
+          </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span
+                >Copyright &copy;
+                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
+              >
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        $("#accordionSidebar").load("nav.html");
+      });
+    </script>
+  </body>
+</html>

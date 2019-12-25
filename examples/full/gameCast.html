@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="RemoteMonster live media service demo" />
+    <meta name="author" content="Lucas Choi" />
+
+    <title>Game streaming example</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+  </head>
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      ></ul>
+      <!-- End of Sidebar -->
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav
+            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+          >
+            <!-- Sidebar Toggle (Topbar) -->
+            <button
+              id="sidebarToggleTop"
+              class="btn btn-link d-md-none rounded-circle mr-3"
+            >
+              <i class="fa fa-bars"></i>
+            </button>
+            <h3 class="h3 mb-4 text-gray-800">Game streaming example</h3>
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <h4 class="font-weight-bold">가이드</h4>
+            <li>본 예제로 RemoteMonster서버로 게임방송을 송출할 수 있습니다.</li>
+            <li>2가지 방식으로 게임방송을 송출할 수 있습니다.</li>
+            <li>첫번째 방법</li>
+            <ul style="line-height: 15px">파란색 'Create' 버튼을 클릭하고 송출할 게임 화면을 '전체화면' 단위로 선택하고 꼭 '오디오 공유' 옵션을 선택해주세요.</ul>
+            <li>두번째 방법</li>
+            <ul style="line-height: 15px">두번째 방법은 OBS에 <a href="https://obsproject.com/forum/resources/obs-virtualcam.539/">VirtualCam</a> 플러그인을 설치하고 게임화면을 OBS에서 구성한 후
+              Virtual Camera를 생성합니다.</ul>
+            <ul style="line-height: 5px">그리고 나서 본 예제에서 'Camera Input'에서 Virtual Camera를 선택한 후 파란색 버튼을 클릭하세요.</ul>
+            <li>각 방법의 시청은 <a href="./castList.html" target="_blank">link</a> 에 들어가서 'Channels'에 생성된 파란색 버튼을 누르시면 시청할 수 있습니다.</li>
+
+            <li>
+              Source code:
+              <a
+                href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/gameCast.html"
+                target="_blank"
+                >github page</a
+              >
+            </li>
+            <br />
+
+            <!-- Content Row -->
+            <div class="row">
+              <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      My Channel
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <video
+                        id="myVideo"
+                        class="remote-video center w-300 h-300"
+                        autoplay
+                        muted
+                        controls
+                        playsinline
+                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"
+                      ></video>
+                      <div
+                        id="statBox"
+                        class="right w-20 h-20"
+                        style="z-index:2;position:absolute;width:200px;height:110px;right:30px;top:100px;background:yellowgreen;opacity:0.5;"
+                      ></div>
+                      <h6
+                        id="waitingTv"
+                        class="m-0 font-weight-bold text-primary"
+                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;"
+                      >
+                        waiting
+                      </h6>
+
+                      <div class="mt-4 text-center">
+                        <span class="mr-2">
+                          <input
+                            id="channelNameInput"
+                            class="text-center"
+                            type="text"
+                            placeholder="channel name"
+                            autofocus
+                          />
+                        </span>
+                        <span class="mr-2">
+                          <a
+                            id="channelBtn"
+                            href="#"
+                            class="btn btn-primary btn-user text-center"
+                            >CREATE</a
+                          >
+                        </span>
+                        <div class="row rounded mt-3">
+                          <span class="mr-2">
+                            <div class="small mb-1">Camera Input</div>
+                            <select
+                              id="videoInputSelect"
+                              onchange="changeVideoInputDevice()"
+                              class="custom-select custom-select-sm form-control form-control-sm"
+                            ><option value='0'>game screen</option></select>
+                          </span>
+                          <!--Audio Input-->
+                          <span class="col-lg-2 mg-2">
+                            <div class="small mb-1">Audio Input</div>
+                            <select
+                              id="audioInputSelect"
+                              onchange="changeAudioInputDevice()"
+                              class="custom-select custom-select-sm form-control form-control-sm"
+                            ></select>
+                          </span>
+                          <!-- screen share fps -->
+                          <span class="mr-2">
+                            <div class="small mb-1">Screen Share FPS</div>
+                            <input
+                              id="videoFPSInput"
+                              onchange="changeVideoFPS()"
+                              class="form-control-sm form-control text-center"
+                              type="text"
+                              value="30"
+                            />
+                          </span>
+                          <!--Video Resolution-->
+                          <span class="mr-2">
+                            <div class="small mb-1">
+                              Screen Share Resolution
+                            </div>
+                            <select
+                              id="resolutionSelect"
+                              onchange="changeResolution()"
+                              class="custom-select custom-select-sm form-control form-control-sm"
+                            >
+                              <option value="480" selected>640-480</option>
+                              <option value="720">1280-720</option>
+                              <option value="1080">1920-1080</option>
+                            </select>
+                          </span>
+                        </div>
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+          <!-- The webrtc adapter is required for browser compatibility -->
+          <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
+
+          <script>
+            const channelButton = document.querySelector("#channelBtn");
+            const channelNameInput = document.getElementById(
+              "channelNameInput"
+            );
+            const video = document.getElementById("myVideo");
+            const waitingTv = document.getElementById("waitingTv");
+            const videoInputSelect = document.getElementById(
+              "videoInputSelect"
+            );
+            const audioInputSelect = document.getElementById("audioInputSelect");
+            const screenFps = document.getElementById("videoFPSInput");
+            const statBox = document.getElementById("statBox");
+            let isConnected = false;
+            let isCaster = false;
+            let captured = false;
+            let myChannelId;
+            let remon;
+            let remonCam;
+            let cameraList = [];
+            let micList = [];
+            const key = "1234567890";
+            const serviceId = "SERVICEID1";
+            var waitingLoop;
+            let screenWidth = 640;
+            let screenHeight = 480;
+
+            // please register your own service key from remotemonster site.
+            let config = {
+              credential: { key, serviceId },
+              view: { remote: "#myVideo", local: "#myVideo" },
+              media: {
+                video: {
+                  width: 640,
+                  height: 480,
+                  codec: "VP8",
+                  maxBandwidth: 2000,
+                  frameRate: 30
+                },
+                audio: {
+                    deviceId: 'default'
+                },
+                screen: true
+              },
+              // rtc: { simulcast: true}
+            };
+            const configForCam = {
+              credential: { key, serviceId },
+              view: { remote: "#remoteCam", local: "#remoteCam" },
+              media: {
+                video: {
+                  width: "320",
+                  height: "240",
+                  codec: "VP8",
+                  maxBandwidth: 400,
+                  frameRate: 20,
+                  simulcast: false
+                },
+                audio: true
+              },
+              rtc: { audioType: "voice" }
+            };
+
+            const listener = {
+              onConnect(chid) {
+                console.log(`EVENT FIRED: onConnect: ${chid}`);
+              },
+              onComplete() {
+                console.log("EVENT FIRED: onComplete");
+                setViewsViaParameters(
+                  false,
+                  "hidden",
+                  "CLOSE",
+                  "hidden",
+                  "visible"
+                );
+              },
+              onDisconnectChannel() {
+                // is called when other peer hang up.
+                remon.close();
+                isConnected = false;
+                setViewsViaParameters(
+                  false,
+                  "hidden",
+                  "CREATE",
+                  "visible",
+                  "hidden"
+                );
+              },
+              onClose() {
+                // is called when remon.close() method is called.
+                console.log("EVENT FIRED: onClose");
+                remon.close();
+                isConnected = false;
+                setViewsViaParameters(
+                  false,
+                  "hidden",
+                  "CREATE",
+                  "visible",
+                  "hidden"
+                );
+              },
+              onError(error) {
+                console.log(`EVENT FIRED: onError: ${error}`);
+              },
+              onStat(result) {
+                let stats = "";
+                if (isCaster) {
+                  stats +=
+                    "resolution: " +
+                    result.localFrameWidth +
+                    " - " +
+                    result.localFrameHeight;
+                  stats += "\n<br>frameRate: " + result.localFrameRate;
+                  statBox.innerHTML = stats;
+                } else {
+                  stats +=
+                    "resolution: " +
+                    result.remoteFrameWidth +
+                    " - " +
+                    result.remoteFrameHeight;
+                  stats += "\n<br>frameRate: " + result.remoteFrameRate;
+                  stats +=
+                    "\n<br>videoFractionRating: " +
+                    result.remoteVideoFractionRating;
+                  statBox.innerHTML = stats;
+                }
+              },
+              onReconnect() {
+                remon.close();
+                // remonCam.close();
+                if (!isCaster) {
+                  remon.joinCast(myChannelId);
+                  // remonCam.joinCast(myChannelId + "_cam");
+                }
+              }
+            };
+            const listenerForCam = {
+              onDisconnectChannel() {
+                // remonCam.close();
+              },
+              onClose() {
+                // remonCam.close();
+              }
+            };
+
+            function setViewsViaParameters(
+              runWaitLoop,
+              waitingTvVisibility,
+              btnText,
+              inputVisiblility,
+              screenShareVisibility
+            ) {
+              waitingTv.style.visibility = waitingTvVisibility;
+              channelButton.innerHTML = btnText;
+              channelNameInput.style.visibility = inputVisiblility;
+            }
+
+            function start(isViewer) {
+              if (isConnected) {
+                isConnected = false;
+                isCaster = false;
+                setViewsViaParameters(
+                  false,
+                  "hidden",
+                  "CREATE",
+                  "visible",
+                  "hidden"
+                );
+                remon.close();
+                // remonCam.close();
+                myChannelId = "";
+              } else {
+                isConnected = true;
+                isCaster = !isViewer;
+                setViewsViaParameters(
+                  true,
+                  "visible",
+                  "CLOSE",
+                  "hidden",
+                  "visible"
+                );
+                // if (!isCaster) {
+                config.view.remote = "#myVideo";
+                config.view.local = "#myVideo";
+                if (videoInputSelect.selectedIndex!==0){
+                  config.media.video.deviceId= videoInputSelect.options[videoInputSelect.selectedIndex].value;
+                  console.log('deviceId', config.media.video.deviceId, videoInputSelect );
+                  config.media.audio.deviceId= audioInputSelect.options[audioInputSelect.selectedIndex].value;
+                  config.media.screen = false;
+                }
+                // }
+                remon = new Remon({ config, listener });
+                // remonCam = new Remon({
+                //   config: configForCam,
+                //   listener: listenerForCam
+                // });
+                myChannelId = channelNameInput.value
+                  ? channelNameInput.value
+                  : getRandomId();
+                channelNameInput.value = "";
+                if (isCaster) {
+                  remon.createCast(myChannelId);
+                  ///remonCam.createCast(myChannelId + "_cam");
+                } else {
+                  remon.joinCast(myChannelId);
+                  video.muted = false;
+                  ///remonCam.joinCast(myChannelId + "_cam");
+                }
+              }
+            }
+
+            function getRandomId() {
+              var text = "";
+              var possible =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+              for (var i = 0; i < 5; i++)
+                text += possible.charAt(
+                  Math.floor(Math.random() * possible.length)
+                );
+              return Date.now() + "_" + text;
+            }
+
+            channelButton.addEventListener(
+              "click",
+              evt => {
+                start(false);
+                evt.preventDefault();
+              },
+              false
+            );
+
+            async function getDevices() {
+              var devices = await navigator.mediaDevices.enumerateDevices();
+              for (let i = 0; i < devices.length; i++) {
+                let device = devices[i];
+                if (device.kind === "videoinput") {
+                  cameraList.push({ text: device.label, id: device.deviceId });
+                } else if (device.kind === "audioinput") {
+                  micList.push({ text: device.label, id: device.deviceId });
+                }
+                // else if (device.kind === 'audiooutput') {
+                //     speakerList.push({ text: device.label, id: device.deviceId })
+                // }
+              }
+              for (let i = 0; i < cameraList.length; i++) {
+                const videoInputOption = document.createElement("option");
+                videoInputOption.value = cameraList[i].id;
+                videoInputOption.text = cameraList[i].text;
+                videoInputSelect.appendChild(videoInputOption);
+              }
+              for (let i = 0; i < micList.length; i++) {
+                const audioInputOption = document.createElement("option");
+                audioInputOption.value = micList[i].id;
+                audioInputOption.text = micList[i].text;
+                audioInputSelect.appendChild(audioInputOption);
+              }
+            }
+            function changeResolution() {
+              const resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split("-");
+              config.media.video.width= resolution[0];
+              config.media.video.height = resolution[1];
+            }
+            function changeVideoInputDevice() {
+              if (isConnected)
+                remon.setVideoDevice(videoInputSelect.options[videoInputSelect.selectedIndex].value);
+            }
+            function changeAudioInputDevice() {
+              if (isConnected)
+                remon.setAudioDevice(audioInputSelect.options[audioInputSelect.selectedIndex].value);
+            }
+            function changeVideoFPS() {
+                config.media.video.frameRate = parseInt(videoFPSInput.value, 10);
+            }
+            getDevices();
+          </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span
+                >Copyright &copy;
+                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        $("#accordionSidebar").load("nav.html");
+      });
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-84812645-1');
+    </script>
+  </body>
+</html>

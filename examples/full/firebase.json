@@ -1,0 +1,12 @@
+{
+  "hosting": {
+    "site": "sample-remotemonster",
+    "public": "/",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
+// firebase deploy --only hosting:sample-remotemonster

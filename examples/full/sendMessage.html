@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="RemoteMonster live media service demo">
+    <meta name="author" content="Lucas Choi">
+
+    <title>Send Message</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <h3 class="h3 mb-4 text-gray-800">Send Message example</h3>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h4 class="font-weight-bold">How to use</h4>
+                <li>Enter a channel name and click the "CONNECT" button to create a channel.</li>
+                <li>Open the same <a href="./sendMessage.html" target="_blank">page</a>in another tab or a browser. Then
+                    click on the channel you created from the channel list.
+                <li>When the call begins, you can send a message by typing in the message in the input window, and clicking the "Send Message" button.</li>
+                <li>You can check the messages sent and received in the "Chat Log" on the left.</li>
+                </li>
+                <li>Source code: <a
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/sendMessage.html"
+                        target="_blank">github page</a></li>
+                <li class="text-danger">Please use a unique channel name.</li>
+                <br>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <div class="col-xl-12 col-md-12 mb-12">
+                        <div class="card shadow mb-12">
+                            <div class="card-group">
+                                <div class="col-2" style="margin-left: -1rem; margin-right: -1rem">
+                                    <!-- Custom Text Color Utilities -->
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary text-center">Channel List</h6>
+                                    </div>
+                                    <div id="lvChannel" class="card-body" style="margin: -0.5rem;">
+                                    </div>
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary text-center">Chat log</h6>
+                                    </div>
+                                    <div id="chatLogDiv" class="card-body" style="margin: -0.5rem;">
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="col-xl-12 col-md-12 mb-12" style="padding: 1rem">
+                                        <div style="position: relative;">
+                                            <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
+                                                   style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+                                            <video id="localVideo"
+                                                   style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
+                                                   autoplay muted>
+                                            </video>
+                                            <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
+                                                style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
+                                                waiting</h6>
+                                            <!-- <div id="chatScroll"
+                                                 style="z-index:3; position: absolute; overflow:scroll; width:30%; height:20%; bottom: 50px; left:30px;">
+                                            </div> -->
+
+                                        </div>
+                                        <div class="mt-4 text-center">
+                                            <span class="mr-2">
+                                                <input id="channelNameInput" class="text-center" type="text"
+                                               placeholder="channel name" autofocus>
+                                            </span>
+                                            <span class="mr-2">
+                                                <input id="chatMsg" class="form-control-user text-center" type="text" style="visibility: hidden"
+                                               placeholder="chat message">
+                                            </span>
+                                            <span class="mr-2">
+                                                <a id="sendMessageBtn" onclick="sendMessage()" class="btn btn-primary btn-user text-center" style="visibility: hidden">
+                                                    Send Message</a>
+                                            </span>
+                                        </div>
+                                        <br>
+                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">CONNECT</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.container-fluid -->
+
+                    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+                    <!-- The webrtc adapter is required for browser compatibility -->
+                    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+
+                    <script>
+                        const localVideo = document.getElementById("localVideo");
+                        const channelBtnEl = document.querySelector('#channelBtn');
+                        const channelList = document.getElementById("lvChannel");
+                        const channelNameInput = document.getElementById("channelNameInput");
+                        const waitingTv = document.getElementById("waitingTv");
+                        const sendMessageBtn = document.getElementById("sendMessageBtn");
+                        const chatLogDiv = document.getElementById("chatLogDiv");
+                        const chatMsg = document.getElementById("chatMsg");
+                        let isConnected = false;
+                        let remon;
+                        const key = '1234567890';
+                        const serviceId = 'SERVICEID1';
+                        var waitingLoop;
+                        var joinChannelId;
+                        createDummyRemonForSearchLoop();
+                        startSearchLoop();
+
+                        // please register your own service key from remotemonster site.
+                        const config = {
+                            credential: {
+                                key: key,
+                                serviceId: serviceId
+                            },
+                            view: {
+                                remote: '#remoteVideo',
+                                local: '#localVideo'
+                            }
+                        };
+
+                        const listener = {
+                            onConnect(chId) {
+                                joinChannelId = chId;
+                                console.log(`EVENT FIRED: onConnect: ${chId}`);
+                            },
+                            onComplete() {
+                                console.log('EVENT FIRED: onComplete');
+                                setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden', false);
+                            },
+                            onDisconnectChannel() {
+                                // is called when other peer hang up.
+                                remon.close();
+                                isConnected = false;
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                            },
+                            onClose() {
+                                // is called when remon.close() method is called.
+                                console.log('EVENT FIRED: onClose');
+                                remon.close();
+                                isConnected = false;
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                            },
+                            onError(error) {
+                                console.log(`EVENT FIRED: onError: ${error}`);
+                            },
+                            onStat(result) {
+                                console.log(`EVENT FIRED: onStat: ${result}`);
+                            },
+                            onMessage(msg) {
+                                addMesssage(false, msg);
+                            }
+                        };
+
+                        function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, isClearChatViews) {
+                            localVideo.style.visibility = localVideoVisibility;
+                            if (runWaitLoop) {
+                                waitingMsgLoop();
+                            } else {
+                                clearInterval(waitingLoop);
+                            }
+                            waitingTv.style.visibility = waitingTvVisibility;
+                            channelBtnEl.innerHTML = btnText;
+                            channelNameInput.style.visibility = inputVisiblility;
+                            if (isClearChatViews) {
+                                sendMessageBtn.style.visibility = 'hidden';
+                                chatMsg.style.visibility = 'hidden';
+                            } else {
+                                sendMessageBtn.style.visibility = 'visible';
+                                chatMsg.style.visibility = 'visible';
+                            }
+                        }
+
+                        function start() {
+                            if (isConnected) {
+                                isConnected = false;
+                                setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible', true);
+                                remon.close();
+                            } else {
+                                isConnected = true;
+                                setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden', true);
+                                remon = new Remon({config, listener});
+                                remon.connectCall(channelNameInput.value ? channelNameInput.value : getRandomId());
+                            }
+                        }
+
+                        function getRandomId() {
+                            var text = "";
+                            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                            for (var i = 0; i < 5; i++)
+                                text += possible.charAt(Math.floor(Math.random() * possible.length));
+                            return Date.now() + "_" + text;
+                        }
+
+                        function addMesssage(isMine, msg) {
+                            var msgItem = document.createElement("p");
+                            msgItem.style.textShadow = "0 0 7px #ffffff";
+                            msgItem.style.lineHeight = 0.9;
+                            if (!isMine) msgItem.style.color = "Blue";
+                            msgItem.innerHTML = isMine ? "Me : " + msg : "Other : " + msg;
+                            //chatScroll.appendChild(msgItem);
+                            chatLogDiv.appendChild(msgItem);
+                            //chatScroll.scroll(0, chatScroll.scrollHeight);
+                        }
+
+                        function createDummyRemonForSearchLoop() {
+                            if (remon) remon.close();
+                            let cfg = {
+                                credential: {key: key, serviceId: serviceId},
+                                view: {local: '#localVideo1', remote: '#remoteVideo1'},
+                                media: {audio: true, video: true}
+                            };
+                            cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
+                            cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
+                            remon = new Remon({config: cfg});
+                        }
+
+                        function waitingMsgLoop() {
+                            var numOfPoint = 0;
+                            var pointStr = "";
+                            waitingLoop = setInterval(async function () {
+                                pointStr = "";
+                                numOfPoint++;
+                                if (numOfPoint === 4) numOfPoint = 0;
+                                for (var i = 0; i < numOfPoint; i++) {
+                                    pointStr += ".";
+                                }
+                                waitingTv.innerText = "waiting" + pointStr;
+                            }, 1000);
+                        }
+
+                        function startSearchLoop() {
+                            setInterval(async function () {
+                                remon.config.credential.serviceId = serviceId;
+                                remon.config.credential.key = key;
+                                var searchResult = await remon.fetchCalls();
+                                while (channelList.firstChild) {
+                                    channelList.removeChild(channelList.firstChild);
+                                }
+                                searchResult.forEach((ch, i) => {
+                                    if (joinChannelId !== ch.id) {
+                                        ch.type = 'P2P';
+                                        if (ch.status === 'WAIT') {
+                                            var btn = document.createElement("input");
+                                            btn.type = "button";
+                                            btn.name = ch.id;
+                                            btn.value = ch.id;
+                                            btn.className = "btn btn-primary btn-user btn-block text-center";
+                                            btn.addEventListener('click', (evt) => {
+                                                channelNameInput.value = ch.id;
+                                                start();
+                                                evt.preventDefault();
+                                            }, false);
+                                            channelList.appendChild(btn);
+                                        }
+                                    }
+                                });
+                            }, 3000);
+                        }
+
+                        channelBtnEl.addEventListener('click', (evt) => {
+                            start();
+                            evt.preventDefault();
+                        }, false);
+
+                        function sendMessage(msg) {
+                            if (chatMsg.value){
+                                msg = chatMsg.value;
+                                chatMsg.value="";
+                            }else{
+                                if (!msg) msg = 'Test Message';
+                            }
+                            remon.sendMessage(msg);
+                            addMesssage(true, msg);
+                        }
+                    </script>
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                        </div>
+                    </div>
+                </footer>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="js/sb-admin-2.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("#accordionSidebar").load("nav.html");
+            });
+        </script>
+    </div>
+</div>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
+</script>
+</body>
+
+</html>
