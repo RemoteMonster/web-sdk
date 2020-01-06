@@ -1,6 +1,6 @@
 {
   "name": "@remotemonster/sdk",
-  "version": "2.3.0",
+  "version": "2.5.8",
   "description": "RemoteMonster Web SDK",
   "browser": "remon.min.js",
   "scripts": {
