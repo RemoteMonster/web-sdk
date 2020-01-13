@@ -1,4 +1,28 @@
-## [2.5.8](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.7...v2.5.8) (2020-01-06)
+## [2.5.9](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.8...v2.5.9) (2020-01-13)
+
+
+
+## [2.5.9](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.8...v2.5.9) (2020-01-13)
+
+
+
+## [2.5.8](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.6...v2.5.8) (2020-01-08)
+
+
+### Bug Fixes
+
+* **log:** add config info to log ([bbbae93](https://github.com/RemoteMonster/remon-web-sdk/commit/bbbae93))
+* **log:** add config info to quality log ([a11dd20](https://github.com/RemoteMonster/remon-web-sdk/commit/a11dd20))
+* **quality:** add quality check when signaling close ([b2779ed](https://github.com/RemoteMonster/remon-web-sdk/commit/b2779ed))
+* **quality:** change date type to long ([1ead5e7](https://github.com/RemoteMonster/remon-web-sdk/commit/1ead5e7))
+
+
+### Features
+
+* **quality:** add event log when each command call ([75ab230](https://github.com/RemoteMonster/remon-web-sdk/commit/75ab230))
+* **quality:** add qualitychecker ([5cd1084](https://github.com/RemoteMonster/remon-web-sdk/commit/5cd1084))
+* **quality:** add support for Safari ([5e3a334](https://github.com/RemoteMonster/remon-web-sdk/commit/5e3a334))
+>>>>>>> develop-iceHandling
 
 
 
