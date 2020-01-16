@@ -79,7 +79,7 @@
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">My Channel</h6>
+                                <h6 id='hChannel' class="m-0 font-weight-bold text-primary">My Channel</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
@@ -116,6 +116,7 @@
             <script>
 const localVideo = document.getElementById("localVideo");
 const channelBtnEl = document.querySelector('#channelBtn');
+const hChannel = document.querySelector('#hChannel');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
 const waitingTv = document.getElementById("waitingTv");
@@ -123,6 +124,8 @@ let isConnected = false;
 let remon;
 const key = '27f8ca5ee273153d9a9c5944c766fa097d2e16de4dda425a';
 const serviceId = 'simpleapp';
+const channelIdValidator = /^[A-Za-z0-9!@$^&()\-_=]{4,1024}$/;
+
 let myChannelId;
 var waitingLoop;
 createDummyRemonForSearchLoop();
@@ -142,15 +145,18 @@ const config = {
 const listener = {
     onConnect(chid) {
         console.log(`EVENT FIRED: onConnect: ${chid}`);
+        hChannel.innerHTML = 'My Channel - '+ myChannelId;
     },
     onComplete() {
         console.log('EVENT FIRED: onComplete');
+        hChannel.innerHTML = 'My Channel - '+ myChannelId;
         setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
         // is called when other peer hang up.
         remon.close();
         isConnected = false;
+        hChannel.innerHTML = 'My Channel';
         setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
     },
     onClose() {
@@ -158,6 +164,7 @@ const listener = {
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
+        hChannel.innerHTML = 'My Channel';
         setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
     },
     onError(error) {
@@ -189,7 +196,12 @@ function start() {
         isConnected = true;
         setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
         remon = new Remon({config, listener});
-        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId()
+        if (!channelIdValidator.test(channelNameInput.value)) {
+            myChannelId = getRandomId();
+        } else {
+            myChannelId = channelNameInput.value;
+        }
+        // myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
         remon.connectCall(myChannelId);
     }
 }
