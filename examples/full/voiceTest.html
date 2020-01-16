@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Call Test</title>
+    <title>Voioce Test</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Call Test</h3>
+                <h3 class="h3 mb-4 text-gray-800">Voioce Test</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -51,11 +51,11 @@
                 <li>You can create a channel or join a channel.</li>
                 <li>"Channels" shows the list of channels you can join. The channel you create from this page doesn't show on the list.</li>
                 <li>To create a channel, please enter a channel name and click the "CONNECT" button. </li>
-                <li>Open the same <a href="callTest.html" target="_blank">link</a> in another tab or a browser. To join the channel you created,
+                <li>Open the same <a href="voiceTest.html" target="_blank">link</a> in another tab or a browser. To join the channel you created,
                     click on the channel name from the channel list.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/callTest.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/voiceTest.html"
                         target="_blank">github page</a></li>
                 <li class="text-danger">Please use a unique channel name.</li>
                 <br>
@@ -84,12 +84,7 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <main class="text-center">
-                                    <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
-                                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                    <video id="localVideo"
-                                        style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
-                                        autoplay muted>
-                                    </video>
+                                    <audio id="remoteAudio" autoplay controls playsinline></audio>
                                     <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                         style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                         waiting</h6>
@@ -114,7 +109,6 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
 
             <script>
-const localVideo = document.getElementById("localVideo");
 const channelBtnEl = document.querySelector('#channelBtn');
 const hChannel = document.querySelector('#hChannel');
 const channelList = document.getElementById("lvChannel");
@@ -137,8 +131,11 @@ const config = {
         key, serviceId
     },
     view: {
-        remote: '#remoteVideo',
-        local: '#localVideo'
+        remote: '#remoteAudio',
+    },
+    media: {
+        audio: true,
+        video: false,
     }
 };
 
@@ -150,7 +147,7 @@ const listener = {
     onComplete() {
         console.log('EVENT FIRED: onComplete');
         hChannel.innerHTML = 'My Channel - '+ myChannelId;
-        setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
+        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
         // is called when other peer hang up.
@@ -158,7 +155,7 @@ const listener = {
         isConnected = false;
         hChannel.innerHTML = 'My Channel';
         channelNameInput.value = "";
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible');
     },
     onClose() {
         // is called when remon.close() method is called.
@@ -167,7 +164,7 @@ const listener = {
         isConnected = false;
         hChannel.innerHTML = 'My Channel';
         channelNameInput.value = "";
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible');
     },
     onError(error) {
         console.log(`EVENT FIRED: onError: ${error}`);
@@ -177,8 +174,7 @@ const listener = {
     }
 };
 
-function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
-    localVideo.style.visibility = localVideoVisibility;
+function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
     if (runWaitLoop) {
         waitingMsgLoop();
     } else {
@@ -192,11 +188,11 @@ function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisib
 function start() {
     if (isConnected) {
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CONNECT', 'visible');
         remon.close();
     } else {
         isConnected = true;
-        setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
+        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
         remon = new Remon({config, listener});
         if (!channelIdValidator.test(channelNameInput.value)) {
             myChannelId = getRandomId();
@@ -226,7 +222,6 @@ function createDummyRemonForSearchLoop() {
     if (remon) remon.close();
     let cfg = {
         credential: {key: key, serviceId: serviceId},
-        view: {local: '#localVideo1', remote: '#remoteVideo1'},
         media: {audio: false, video: false}
     };
     remon = new Remon({config: cfg});
