@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="RemoteMonster live media service demo"/>
+    <meta name="author" content="Jinho Choi"/>
+
+    <title>Stream cast by WBS(</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+            href="vendor/fontawesome-free/css/all.min.css"
+            rel="stylesheet"
+            type="text/css"
+    />
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet"/>
+    <script src="js/wbs.js"></script>
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul
+            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+            id="accordionSidebar"
+    ></ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav
+                    class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+            >
+                <!-- Sidebar Toggle (Topbar) -->
+                <button
+                        id="sidebarToggleTop"
+                        class="btn btn-link d-md-none rounded-circle mr-3"
+                >
+                    <i class="fa fa-bars"></i>
+                </button>
+                <h3 class="h3 mb-4 text-gray-800">Stream cast by WBS</h3>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h4 class="font-weight-bold">가이드</h4>
+                <li>OBS 프로그램과 유사하게 방송을 송출할 수 있는 페이지입니다.(WBS project를 사용하였습니다.)</li>
+                <li>- 사용순서 -</li>
+                <ul style="line-height: 10px">1. 'Start broadcast!!' 버튼을 클릭합니다.</ul>
+                <ul style="line-height: 10px">2. 왼쪽 하단의 'Scenes'에서 '+'버튼을 누르시면, 'Scene 1'이 추가됩니다.</ul>
+                <ul style="line-height: 10px">3. 'Scenes'의 오른쪽 'Sources'에서 '+'버튼을 눌러 추가할 비디오/오디오 소스를 선택합니다.</ul>
+                <ul style="line-height: 10px">3-1. 비디오 소스를 추가했을 경우 소스 선택 후, 크기 및 위치를 지정하실 수 있습니다.</ul>
+                <ul style="line-height: 10px">3-2. 오디오 소스를 추가했을 경우, 우측의 'Mixer'에서 오디오 인풋을 확인할 수 있습니다.</ul>
+                <ul style="line-height: 10px">4. 설정이 끝났다면 오른쪽 하단의 초록색 'Start Streaming' 버튼을 통해 방송을 송출 할 수있습니다.</ul>
+                <ul style="line-height: 10px">5. 시청은 <a href="./castList.html" target="_blank">link</a> 에 들어가서 'Channels'에 생성된 파란색 버튼을 누르시면 시청할 수 있습니다.</ul>
+                <ul style="line-height: 10px">6. 방송이 끝났다면 빨간색 'Stop Streaming' 버튼으로 송출을 종료할 수 있습니다.</ul>
+                <li>
+                    Source code:
+                    <a
+                            href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/wbsCast.html"
+                            target="_blank"
+                    >github page</a
+                    >
+                </li>
+                <br/>
+
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-xl-11 col-lg-5">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"><h6 class="m-0 font-weight-bold text-primary">My Channel</h6></div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <main class="text-center">
+                                    <div id="wbs" style="width:100%;height:800px;" class="justify-content-between">
+                                        <img id="wbsimg" src="img/wbs.png">
+                                    </div>
+                                    <video id="myVideo" class="remote-video center w-300 h-300"
+                                           autoplay muted
+                                           controls
+                                           playsinline
+                                           style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%; visibility: hidden;display: none"></video>
+                                    <div class="mt-4 text-center">
+                                        <div class="row rounded mt-3"></div>
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+            <!-- The webrtc adapter is required for browser compatibility -->
+            <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
+
+
+            <script>
+                let isConnected = false;
+                let isCaster = false;
+                let myChannelId;
+                let remon;
+                const key = "1234567890";
+                const serviceId = "SERVICEID1";
+
+                // please register your own service key from remotemonster site.
+                let config = {
+                    credential: {key, serviceId},
+                    view: {remote: "#myVideo", local: "#myVideo"},
+                    media: {
+                        video: {
+                            width: "1920",
+                            height: "1080",
+                            codec: "VP8",
+                            maxBandwidth: 8000,
+                            frameRate: 60
+                        },
+                        audio: true
+                    },
+                };
+
+                const listener = {
+                    onConnect(chid) {
+                        console.log(`EVENT FIRED: onConnect: ${chid}`);
+                    },
+                    onComplete() {
+                        console.log("EVENT FIRED: onComplete");
+                    },
+                    onDisconnectChannel() {
+                        // is called when other peer hang up.
+                        remon.close();
+                        isConnected = false;
+                    },
+                    onClose() {
+                        // is called when remon.close() method is called.
+                        console.log("EVENT FIRED: onClose");
+                        remon.close();
+                        isConnected = false;
+                    },
+                    onError(error) {
+                        console.log(`EVENT FIRED: onError: ${error}`);
+                    },
+                    onStat(result) {
+                        let stats = "";
+                        if (isCaster) {
+                            stats +=
+                                "resolution: " +
+                                result.localFrameWidth +
+                                " - " +
+                                result.localFrameHeight;
+                            stats += "\n<br>frameRate: " + result.localFrameRate;
+                            console.log(stats);
+                        } else {
+                            stats +=
+                                "resolution: " +
+                                result.remoteFrameWidth +
+                                " - " +
+                                result.remoteFrameHeight;
+                            stats += "\n<br>frameRate: " + result.remoteFrameRate;
+                            stats +=
+                                "\n<br>videoFractionRating: " +
+                                result.remoteVideoFractionRating;
+                            console.log(stats);
+                        }
+                    },
+                    onReconnect() {
+                        remon.close();
+                        if (!isCaster) {
+                            remon.joinCast(myChannelId);
+                        }
+                    }
+                };
+
+                function start(isViewer) {
+                    if (isConnected) {
+                        stopAll();
+                    } else {
+                        isConnected = true;
+                        isCaster = !isViewer;
+                        // if (!isCaster) {
+                        config.view.remote = "#myVideo";
+                        config.view.local = "#myVideo";
+                        // }
+                        remon = new Remon({config, listener});
+                        myChannelId = getRandomId();
+                        if (isCaster) {
+                            remon.createCast(myChannelId);
+                        } else {
+                            remon.joinCast(myChannelId);
+                        }
+                    }
+                }
+
+                function getRandomId() {
+                    var text = "";
+                    var possible =
+                        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    for (var i = 0; i < 5; i++)
+                        text += possible.charAt(
+                            Math.floor(Math.random() * possible.length)
+                        );
+                    return Date.now() + "_" + text;
+                }
+
+                function stopAll() {
+                    isConnected = false;
+                    isCaster = false;
+                    remon.close();
+                    myChannelId = "";
+                }
+
+                document.querySelector('#wbsimg').addEventListener('click', () => {
+                    document.querySelector('#wbsimg').parentElement.removeChild(document.querySelector('#wbsimg'));
+                    const wbs = new WBS('#wbs');
+                    wbs.on('stream', function (stream) {
+                        // fired when user presses "Start Streaming"
+                        // stream is the MediaStream output
+                        config.view.localStream = stream;
+                        start(false);
+                    });
+                    wbs.on('stopstream', function () {
+                        // fired when the user presses "Stop Streaming"
+                        stopAll();
+                    });
+                })
+                //getDevices();
+            </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+              <span
+              >Copyright &copy;
+                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
+              >
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#accordionSidebar").load("nav.html");
+    });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
+</script>
+</body>
+</html>
