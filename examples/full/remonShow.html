@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="RemoteMonster live media service demo">
+    <meta name="author" content="Lucas Choi">
+
+    <title>Remon Show</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <!-- The webrtc adapter is required for browser compatibility -->
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@remotemonster/show/remonshow-mini.min.js"></script>
+
+    <script>
+        let myChannelId;
+        var myListener = {
+            onCreateChannel(chid) {
+                console.log(`EVENT FIRED: onConnect: ${chid}`);
+                myChannelId = chid;
+                hChannel.innerHTML = 'My Channel - ' + myChannelId;
+            },
+            onComplete() {
+                console.log('EVENT FIRED: onComplete');
+                hChannel.innerHTML = 'My Channel - ' + myChannelId;
+            },
+            onDisconnectChannel() {
+                // is called when other peer hang up.
+                console.log("some viewer is exited");
+                hChannel.innerHTML = 'My Channel';
+            },
+            onClose() {
+                // is called when remon.close() method is called.
+                console.log('EVENT FIRED: onClose');
+                hChannel.innerHTML = 'My Channel';
+            },
+            onError(error) {
+                console.log(`EVENT FIRED: onError: ${error}`);
+            }
+        };
+    </script>
+</head>
+
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <h3 class="h3 mb-4 text-gray-800">Remon Show example</h3>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h4 class="font-weight-bold">How to use</h4>
+
+                <li>Only channel creation is possible on the current page.</li>
+                <br/>
+                <li>Bottom left first button: Use ' ▶️' or '⬛️' to create and exit channels.</li>
+                <li>Bottom left second button: Use '🎥' to select your video input list and view the preview.</li>
+                <li>Bottom left third button: '🎙' can be used to check and select your 'Audio Input List'.</li>
+                <li>Bottom left fourth button: Use ' 💻' to select the screen to be broadcast. (You have to check if you
+                    want to send audio)
+                </li>
+                <br/>
+                <li>Bottom right first button: '🔍' self test can be performed to check the traversing of each item.
+                </li>
+                <li>Bottom right second button: If ' 📊' is being broadcast, you can check the report on transmission
+                    quality.
+                </li>
+                <li>Bottom right fourth button: Use the ' ⚙️' button to change the settings of the broadcast to be
+                    generated. (It must be set before broadcasting)
+                </li>
+                <li>Bottom right last button : '⿴' Full screen button.</li>
+                <br/>
+                <li>Next to 'My Channel' shows the 'channel ID' that you'r currently broadcasting.</li>
+                <li>Enter a value in the input box and press the '▶' button to create a channel with that name.</li>
+                <br/>
+                <li>Open this <a href="./castList.html" target="_blank">link</a> in another tab or a browser. To join
+                    the channel you created, click on the channel name from the channel list.
+                </li>
+                <li>Source code: <a
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/remonShow.html"
+                        target="_blank">github page</a></li>
+                <li class="text-danger">Please use a unique channel name.</li>
+
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-xl-8 col-lg-8">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 id='hChannel' class="m-0 font-weight-bold text-primary">My Channel</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <remon-cast key="1234567890" serviceId="SERVICEID1"
+                                            listener="myListener" poster="img/poster.jpg">
+                                </remon-cast>
+                                <input id="channelNameInput" class="form-control text-center mt-3" type="text"
+                                       placeholder="room name" oninput="onInputChannel()" autofocus>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+
+
+            <script>
+                const hChannel = document.querySelector('#hChannel');
+                const channelNameInput = document.getElementById("channelNameInput");
+                const channelIdValidator = /^[A-Za-z0-9!@$^&()\-_=]{4,1024}$/;
+
+                function onInputChannel() {
+
+                    channelNameInput.value ?
+                        (!channelIdValidator.test(channelNameInput.value) ? myChannelId = getRandomId() : myChannelId = channelNameInput.value)
+                        : myChannelId = channelNameInput.value;
+
+                    document.getElementsByTagName("remon-cast")[0].setAttribute("channelId", myChannelId);
+                }
+
+                function getRandomId() {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    for (var i = 0; i < 5; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    return Date.now() + "_" + text;
+                }
+            </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#accordionSidebar").load("nav.html");
+    });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
+</script>
+</body>
+
+</html>
