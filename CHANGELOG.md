@@ -1,10 +1,82 @@
-## [2.5.10](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.9...v2.5.10) (2020-01-17)
+## [2.5.11](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.10...v2.5.11) (2020-01-31)
+
+
+### Bug Fixes
+
+* **health:** do not re-create when ice re-connected ([c291e9f](https://github.com/RemoteMonster/remon-web-sdk/commit/c291e9f))
+
+
+
+## [2.5.11](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.10...v2.5.11) (2020-01-31)
+
+
+### Bug Fixes
+
+* **health:** do not re-create when ice re-connected ([c291e9f](https://github.com/RemoteMonster/remon-web-sdk/commit/c291e9f))
+
+
+
+## [2.5.10](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.6...v2.5.10) (2020-01-28)
 
 
 ### Bug Fixes
 
 * **error:** not throw onError when onIceError ([f29a32e](https://github.com/RemoteMonster/remon-web-sdk/commit/f29a32e))
+* **health:** do not re-create when ice re-connected ([c291e9f](https://github.com/RemoteMonster/remon-web-sdk/commit/c291e9f))
+* **log:** add config info to log ([bbbae93](https://github.com/RemoteMonster/remon-web-sdk/commit/bbbae93))
+* **log:** add config info to quality log ([a11dd20](https://github.com/RemoteMonster/remon-web-sdk/commit/a11dd20))
 * **media:** setUserDevice multi devices ([373db1a](https://github.com/RemoteMonster/remon-web-sdk/commit/373db1a))
+* **quality:** add quality check when signaling close ([b2779ed](https://github.com/RemoteMonster/remon-web-sdk/commit/b2779ed))
+* **quality:** change date type to long ([1ead5e7](https://github.com/RemoteMonster/remon-web-sdk/commit/1ead5e7))
+
+
+### Features
+
+* **quality:** add event log when each command call ([75ab230](https://github.com/RemoteMonster/remon-web-sdk/commit/75ab230))
+* **quality:** add qualitychecker ([5cd1084](https://github.com/RemoteMonster/remon-web-sdk/commit/5cd1084))
+* **quality:** add support for Safari ([5e3a334](https://github.com/RemoteMonster/remon-web-sdk/commit/5e3a334))
+
+
+
+## [2.5.10](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.6...v2.5.10) (2020-01-21)
+
+
+### Bug Fixes
+
+* **error:** not throw onError when onIceError ([f29a32e](https://github.com/RemoteMonster/remon-web-sdk/commit/f29a32e))
+* **log:** add config info to log ([bbbae93](https://github.com/RemoteMonster/remon-web-sdk/commit/bbbae93))
+* **log:** add config info to quality log ([a11dd20](https://github.com/RemoteMonster/remon-web-sdk/commit/a11dd20))
+* **media:** setUserDevice multi devices ([373db1a](https://github.com/RemoteMonster/remon-web-sdk/commit/373db1a))
+* **quality:** add quality check when signaling close ([b2779ed](https://github.com/RemoteMonster/remon-web-sdk/commit/b2779ed))
+* **quality:** change date type to long ([1ead5e7](https://github.com/RemoteMonster/remon-web-sdk/commit/1ead5e7))
+
+
+### Features
+
+* **quality:** add event log when each command call ([75ab230](https://github.com/RemoteMonster/remon-web-sdk/commit/75ab230))
+* **quality:** add qualitychecker ([5cd1084](https://github.com/RemoteMonster/remon-web-sdk/commit/5cd1084))
+* **quality:** add support for Safari ([5e3a334](https://github.com/RemoteMonster/remon-web-sdk/commit/5e3a334))
+
+
+
+## [2.5.10](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.6...v2.5.10) (2020-01-21)
+
+
+### Bug Fixes
+
+* **error:** not throw onError when onIceError ([f29a32e](https://github.com/RemoteMonster/remon-web-sdk/commit/f29a32e))
+* **log:** add config info to log ([bbbae93](https://github.com/RemoteMonster/remon-web-sdk/commit/bbbae93))
+* **log:** add config info to quality log ([a11dd20](https://github.com/RemoteMonster/remon-web-sdk/commit/a11dd20))
+* **media:** setUserDevice multi devices ([373db1a](https://github.com/RemoteMonster/remon-web-sdk/commit/373db1a))
+* **quality:** add quality check when signaling close ([b2779ed](https://github.com/RemoteMonster/remon-web-sdk/commit/b2779ed))
+* **quality:** change date type to long ([1ead5e7](https://github.com/RemoteMonster/remon-web-sdk/commit/1ead5e7))
+
+
+### Features
+
+* **quality:** add event log when each command call ([75ab230](https://github.com/RemoteMonster/remon-web-sdk/commit/75ab230))
+* **quality:** add qualitychecker ([5cd1084](https://github.com/RemoteMonster/remon-web-sdk/commit/5cd1084))
+* **quality:** add support for Safari ([5e3a334](https://github.com/RemoteMonster/remon-web-sdk/commit/5e3a334))
 
 
 

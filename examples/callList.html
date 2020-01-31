@@ -236,8 +236,8 @@
                   "visible"
                 );
               },
-              onError(error) {
-                console.log(`EVENT FIRED: onError: ${error}`);
+              onError(errorCode, errorMessage) {
+                console.log(`EVENT FIRED: onError: ${errorCode} ${errorMessage}`);
               },
               onStat(result) {
                 console.log(`EVENT FIRED: onStat: ${result}`);
