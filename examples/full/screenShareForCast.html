@@ -142,6 +142,8 @@
                 const channelNameInput = document.getElementById("channelNameInput");
                 const waitingTv = document.getElementById("waitingTv");
                 const screenShareBtn = document.getElementById("screenShareBtn");
+                const videoFPSInput= document.getElementById("videoFPSInput");
+                const resolutionSelect= document.getElementById("resolutionSelect");
                 let isConnected = false;
                 let isCaster = false;
                 let captured = false;
@@ -168,9 +170,9 @@
                         video: {
                             width: '640',
                             height: '480',
-                            codec : 'vp8',
-                            maxBandwidth: 9000,
-                            frameRate: {max: 25, min: 25}
+                            codec : 'h264',
+                            maxBandwidth: 4000,
+                            frameRate: 25
                         },
                         audio : true
                     }
