@@ -1,3 +1,12 @@
+## [2.5.13](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.12...v2.5.13) (2020-02-12)
+
+
+### Bug Fixes
+
+* **log:** add option to disable for qualitylog ([58c1e5c](https://github.com/RemoteMonster/remon-web-sdk/commit/58c1e5c))
+
+
+
 ## [2.5.12](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.11...v2.5.12) (2020-02-08)
 
 
