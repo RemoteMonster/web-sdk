@@ -7,7 +7,7 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Call List</title>
+    <title>Cast Voice List</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Call List example</h3>
+                <h3 class="h3 mb-4 text-gray-800">Cast Voice List example</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -47,15 +47,15 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>Channel is a concept of a call circuit in RemoteMonster SDK</li>
+                <li>Channel is a concept of a cast room in RemoteMonster SDK</li>
                 <li>You can create a channel or join a channel.</li>
                 <li>"Channels" shows the list of channels you can join. The channel you create from this page doesn't show on the list.</li>
-                <li>To create a channel, please enter a channel name and click the "CONNECT" button. </li>
-                <li>Open the same <a href="callList.html" target="_blank">link</a> in another tab or a browser. To join the channel you created,
+                <li>To create a channel, please enter a channel name and click the "CREATE" button. </li>
+                <li>Open this <a href="./castList.html" target="_blank">link</a> in another tab or a browser. To join the channel you created,
                     click on the channel name from the channel list.
                 </li>
                 <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/callList.html"
+                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/castList.html"
                         target="_blank">github page</a></li>
                 <li class="text-danger">Please use a unique channel name.</li>
                 <br>
@@ -84,21 +84,16 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <main class="text-center">
-                                    <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls playsinline
-                                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-                                    <video id="localVideo"
-                                        style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
-                                        autoplay muted>
-                                    </video>
+                                    <audio id="localVideo" autoplay controls playsinline></audio>
                                     <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                         style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                         waiting</h6>
 
                                     <input id="channelNameInput" class="form-control text-center" type="text"
-                                        placeholder="channel name" autofocus>
+                                        placeholder="room name" autofocus>
                                     <a id="channelBtn" href="#"
                                     class="btn btn-primary btn-user btn-block text-center">
-                                        CONNECT
+                                        CREATE
                                     </a>
                                 </main>
                             </div>
@@ -114,12 +109,12 @@
             <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
             <script>
-const localVideo = document.getElementById("localVideo");
 const channelBtnEl = document.querySelector('#channelBtn');
 const channelList = document.getElementById("lvChannel");
 const channelNameInput = document.getElementById("channelNameInput");
 const waitingTv = document.getElementById("waitingTv");
 let isConnected = false;
+let isCaster = false;
 let remon;
 const key = '1234567890';
 const serviceId = 'SERVICEID1';
@@ -131,11 +126,16 @@ startSearchLoop();
 // please register your own service key from remotemonster site.
 const config = {
     credential: {
-        key, serviceId
+        key: '1234567890',
+        serviceId: 'SERVICEID1'
     },
     view: {
         remote: '#remoteVideo',
         local: '#localVideo'
+    },
+    media: {
+        audio: true,
+        video: false
     }
 };
 
@@ -145,19 +145,21 @@ const listener = {
     },
     onComplete() {
         console.log('EVENT FIRED: onComplete');
-        setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
+        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
-        console.log('EVENT FIRED: onDisconnectChannel');
+        // is called when other peer hang up.
         remon.close();
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onClose() {
+        // is called when remon.close() method is called.
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        myChannelId = "";
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
     },
     onError(error) {
         console.log(`EVENT FIRED: onError: ${error}`);
@@ -167,8 +169,7 @@ const listener = {
     }
 };
 
-function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
-    localVideo.style.visibility = localVideoVisibility;
+function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility) {
     if (runWaitLoop) {
         waitingMsgLoop();
     } else {
@@ -179,17 +180,24 @@ function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisib
     channelNameInput.style.visibility = inputVisiblility;
 }
 
-function start() {
+function start(isViewer) {
     if (isConnected) {
         isConnected = false;
-        setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
+        isCaster = false;
+        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible');
         remon.close();
+        myChannelId = "";
     } else {
         isConnected = true;
-        setViewsViaParameters('visible', true, 'visible', 'CLOSE', 'hidden');
+        isCaster = !isViewer;
+        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden');
+        if (!isCaster) {
+            config.view.remote = '#localVideo';
+        }
         remon = new Remon({config, listener});
-        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId()
-        remon.connectCall(myChannelId);
+        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
+        channelNameInput.value = "";
+        isCaster? remon.createCast(myChannelId): remon.joinCast(myChannelId);
     }
 }
 
@@ -202,7 +210,7 @@ function getRandomId() {
 }
 
 channelBtnEl.addEventListener('click', (evt) => {
-    start();
+    start(false);
     evt.preventDefault();
 }, false);
 
@@ -211,7 +219,7 @@ function createDummyRemonForSearchLoop() {
     if (remon) remon.close();
     let cfg = {
         credential: {key: key, serviceId: serviceId},
-        view: {local: '#localVideo1', remote: '#remoteVideo1'},
+        view: {},
         media: {audio: false, video: false}
     };
     remon = new Remon({config: cfg});
@@ -235,21 +243,20 @@ function startSearchLoop() {
     setInterval(async function () {
         remon.config.credential.serviceId = serviceId;
         remon.config.credential.key = key;
-        var searchResult = await remon.fetchCalls();
+        var searchResult = await remon.fetchCasts();
         while (channelList.firstChild) {
             channelList.removeChild(channelList.firstChild);
         }
         searchResult.forEach((ch, i) => {
-            ch.type = 'P2P';
-            if (ch.status === 'WAIT' && ch.id !== myChannelId) {
+            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
                 var btn = document.createElement("input");
                 btn.type = "button";
                 btn.name = ch.id;
-                btn.value = ch.id;
+                btn.value = ch.name;
                 btn.className = "btn btn-primary btn-user btn-block text-center";
                 btn.addEventListener('click', (evt) => {
                     channelNameInput.value = ch.id;
-                    start();
+                    start(true);
                     evt.preventDefault();
                 }, false);
 
