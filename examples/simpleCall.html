@@ -166,14 +166,14 @@
               },
               onDisconnectChannel() {
                 // is called when other peer hang up.
-                remon.close();
+                //remon.close();
                 isConnected = false;
                 channelBtnEl.innerHTML = "CONNECT";
               },
               onClose() {
                 // is called when remon.close() method is called.
                 console.log("EVENT FIRED: onClose");
-                remon.close();
+                //remon.close();
                 isConnected = false;
                 channelBtnEl.innerHTML = "CONNECT";
               },
