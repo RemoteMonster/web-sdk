@@ -88,7 +88,7 @@
                   <div class="card-body">
                     <main class="text-center">
                       <audio
-                        id="remoteVideo"
+                        id="localVideo"
                         autoplay
                         controls
                         playsinline
@@ -140,7 +140,7 @@
               },
               view: {
                 remote: "#remoteVideo",
-                local: "#localVieo"
+                local: "#localVideo"
               },
               media: {
                 audio: true,
@@ -186,7 +186,7 @@
                 isConnected = true;
                 channelButton.innerHTML = "WAIT";
                 remon = new Remon({ config, listener });
-                remon.connectCall("simpleRemon");
+                remon.connectCall("simpleRemon81");
               }
             }
 
