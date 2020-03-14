@@ -1,3 +1,12 @@
+## [2.5.16](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.15...v2.5.16) (2020-03-14)
+
+
+### Bug Fixes
+
+* **logger:** delete stream in config ([04e045c](https://github.com/RemoteMonster/remon-web-sdk/commit/04e045c))
+
+
+
 ## [2.5.15](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.14...v2.5.15) (2020-03-11)
 
 
