@@ -10,7 +10,7 @@
     <meta name="description" content="RemoteMonster live media service demo" />
     <meta name="author" content="Lucas Choi" />
 
-    <title>Video Config for Cast</title>
+    <title>Conference List</title>
 
     <!-- Custom fonts for this template-->
     <link
@@ -61,7 +61,7 @@
             <!-- Page Heading -->
             <h4 class="font-weight-bold">How to use</h4>
             <li>
-              room name 에 입장하고자 하는 conferenceRoom 이름을 넣고 Enter 클릭시 해당하는 conference Room 에 접속. 
+              room name 에 입장하고자 하는 conferenceRoom 이름을 넣고 Enter 클릭시 해당하는 conference Room 에 접속.
             </li>
             <li>
               아무것도 넣지 않을시 'remon' 이라는 이름의 conference Room 에 접속.
@@ -71,7 +71,7 @@
             </li>
             <li>
               Open the same
-              <a href="./conference.html" target="_blank">site</a> on
+              <a href="./conferenceList.html" target="_blank">site</a> on
               other tab or browser. Then click on channel you created in the
               channel list.
             </li>
@@ -87,7 +87,7 @@
 
             <!-- Content Row -->
             <div class="row">
-            
+
               <div class="col-xl-4 col-lg-5">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Dropdown -->
@@ -197,7 +197,7 @@
                   width: "640",
                   height: "480",
                   codec: "H264",
-                  maxBandwidth: 1800,
+                  maxBandwidth: 500,
                   frameRate: { max: 25, min: 25 }
                 },
                 audio: true
@@ -262,7 +262,7 @@
                 console.log(`EVENT FIRED: onRoomEvent: ${JSON.stringify(result)}`)
               }
             };
-            
+
             createDummyRemonForSearchLoop();
 
             async function start() {
@@ -285,10 +285,10 @@
                   : 'remon';
                 isConnected = true;
                 document.querySelector('#enterBtn').innerHTML = "leave";
-                
+
                 await remon.createRoom(roomName)
                 let participants = await remon.fetchRooms(roomName);
-               
+
                 participants.forEach(async function(participant){
                   if(!currentRoom[participant.id]){
                           currentRoom[participant.id] = true;
@@ -304,14 +304,14 @@
               }
             }
 
-            
-            
+
+
             function createDummyRemonForSearchLoop() {
               if (remon) remon.close();
               remon = new Remon({ config, listener });
             }
-            
-            
+
+
             enterBtn.addEventListener("click",
               evt => {
                 start();
@@ -332,7 +332,7 @@
             <div class="copyright text-center my-auto">
               <span
                 >Copyright &copy;
-                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
+                <a href="https://remotemonster.com">RemoteMonster</a> 2020</span
               >
             </div>
           </div>

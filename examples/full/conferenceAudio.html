@@ -65,7 +65,7 @@
             </li>
             <li>
               Open the same
-              <a href="./conference.html" target="_blank">site</a> on
+              <a href="./conferenceAudio.html" target="_blank">site</a> on
               other tab or browser. Then click on channel you created in the
               channel list.
             </li>
@@ -74,8 +74,7 @@
               <a
                 href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/conferenceAudio.html"
                 target="_blank"
-                >github page</a
-              >
+                >github page</a>
             </li>
             <br />
 
@@ -228,6 +227,7 @@
             let dummyRemon;
             const key = "1234567890";
             const serviceId = "SERVICEID1";
+            var myRoomChId;
             var waitingLoop;
             let cameraList = [];
             let micList = [];
@@ -258,6 +258,7 @@
                 console.log(`remon.listener.onConnect ${chid} at listener`);
               },
               onComplete() {
+                myRoomChId = remon.getChannelId();
                 console.log("remon.listener.onComplete " + remon.getChannelId());
                 setViewsViaParameters(false, "hidden", "CLOSE", "hidden");
               },
@@ -272,6 +273,7 @@
                 // is called when remon.close() method is called.
                 console.log(`remon.listener.onClose: ${remon.getChannelId()}`);
                 remon.close();
+
                 isConnected = false;
                 setViewsViaParameters(false, "hidden", "CREATE", "visible");
               },
@@ -440,12 +442,11 @@
                   }
                 })
                 searchResult.forEach(({id}, i) => {
+                  var chid = id;
                   id = id.replace(":","-");
                   //console.log(id)
                   //TODO:
-                  if (
-                    !(remon && id === remon.getChannelId()) && document.getElementById(id) == null
-                  ) {
+                  if ( chid !== myRoomChId && document.getElementById(id) == null) {
                     const audioAttrs = {
                       id :id,
                       class : "remote-video center w-320 h-240",
@@ -516,7 +517,7 @@
             <div class="copyright text-center my-auto">
               <span
                 >Copyright &copy;
-                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
+                <a href="https://remotemonster.com">RemoteMonster</a> 2020</span
               >
             </div>
           </div>

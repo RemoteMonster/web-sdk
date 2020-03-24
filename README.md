@@ -27,7 +27,7 @@ From [jsDelivr](https://www.jsdelivr.com)
 <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
 <!-- Specific version -->
-<script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.4/remon.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 ```
 
 ### Downloads

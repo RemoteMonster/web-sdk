@@ -148,13 +148,12 @@ const listener = {
         setViewsViaParameters('visible', false, 'hidden', 'CLOSE', 'hidden');
     },
     onDisconnectChannel() {
-        // is called when other peer hang up.
+        console.log('EVENT FIRED: onDisconnectChannel');
         remon.close();
         isConnected = false;
         setViewsViaParameters('hidden', false, 'hidden', 'CONNECT', 'visible');
     },
     onClose() {
-        // is called when remon.close() method is called.
         console.log('EVENT FIRED: onClose');
         remon.close();
         isConnected = false;
@@ -267,7 +266,7 @@ function startSearchLoop() {
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2020</span>
                 </div>
             </div>
         </footer>

@@ -168,7 +168,7 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk@2.4.20/remon.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
             <script>
 
@@ -189,6 +189,7 @@ let remon;
 let dummyRemon;
 const key = '1234567890';
 const serviceId = 'SERVICEID1';
+
 var waitingLoop;
 let cameraList = [];
 let micList = [];
@@ -199,7 +200,9 @@ startSearchLoop();
 let config = {
     credential: {
         key: key,
-        serviceId: serviceId
+        serviceId: serviceId,
+        wsurl: 'wss://signal.remotemonster.com/ws',
+        resturl: 'https://signal.remotemonster.com/rest'
     },
     view: {
         remote: '#remoteVideo',
@@ -213,15 +216,17 @@ let config = {
             maxBandwidth: 3000,
             frameRate: 30,
         },
-        audio:{
-            autoGainControl: false,
-            echoCancellation: false,
-            noiseSuppression: false,
-            channelCount: 2,
-            maxBandwidth: 128,
-        },
-    },
-    rtc: {audioType: "music"}
+        audio: true,
+    }
+    //     audio:{
+    //         autoGainControl: false,
+    //         echoCancellation: false,
+    //         noiseSuppression: false,
+    //         channelCount: 2,
+    //         maxBandwidth: 128,
+    //     },
+    // },
+    // rtc: {audioType: "music"}
 };
 
 const listener = {
@@ -302,12 +307,15 @@ channelButton.addEventListener('click', (evt) => {
 function createDummyRemonForSearchLoop() {
     if (dummyRemon) dummyRemon.close();
     let cfg = {
-        credential: {key: key, serviceId: serviceId},
+        credential: {
+            key: key,
+            serviceId: serviceId,
+            wsurl: 'wss://signal.remotemonster.com/ws',
+            resturl: 'https://signal.remotemonster.com/rest'
+        },
         view: {local: '#localVideo1', remote: '#remoteVideo1'},
         media: {audio: true, video: true}
     };
-    cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
-    cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
     dummyRemon = new Remon({config: cfg});
 }
 
@@ -408,7 +416,7 @@ getDevices();
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2019</span>
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2020</span>
                 </div>
             </div>
         </footer>

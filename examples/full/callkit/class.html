@@ -7,15 +7,14 @@
     <meta name="description" content="RemoteMonster live media service demo">
     <meta name="author" content="Lucas Choi">
 
-    <title>Camera Switch for Cast</title>
+    <title>CallKit Class Test</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
           rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -38,7 +37,7 @@
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                     <i class="fa fa-bars"></i>
                 </button>
-                <h3 class="h3 mb-4 text-gray-800">Camera Switch example for Cast</h3>
+                <h3 class="h3 mb-4 text-gray-800">CallKit Class Test</h3>
             </nav>
             <!-- End of Topbar -->
 
@@ -47,15 +46,13 @@
 
                 <!-- Page Heading -->
                 <h4 class="font-weight-bold">How to use</h4>
-                <li>This example shows how to change camera source for a video broadcast but can be applied for video calls as well.</li>
-                <li>Channel is a concept of a call circuit in RemoteMonster SDK</li>
-                <li>Open this <a href="screenShareForCast.html" target="_blank">link</a> in another tab or a browser. Then
-                    click on the channel you created from the channel list.</li>
-                <li>If you have multiple cameras, you can press the "Camera Switch" button to switch to different cameras.</li>
-                <li>Source code: <a
-                        href="https://github.com/RemoteMonster/web-sdk/blob/master/examples/full/screenShareForCast.html"
-                        target="_blank">github page</a></li>
-                <li class="text-danger">Please use a unique channel name.</li>
+                <li>안드로이드 Remon Call Kit에 로그인을 합니다. </li>
+                <li>로그인이 됐다면 왼족의 학생 리스트에 뜨게 됩니다.</li>
+                <br/>
+                <li>로그인시 서버에 푸시주소가 발행되며, DB에서 관리합니다.</li>
+                <li>학생을 선택해서 누르게 되면, 해당 학생에게 전화를 걸게 됩니다.</li>
+                <li>해당 학생의 앱에서 전화를 수락하면 통화가 시작됩니다.</li>
+                <li class="text-danger">통화의 Channle ID 는 랜덤하게 생성됩니다.</li>
                 <br>
 
                 <!-- Content Row -->
@@ -64,7 +61,7 @@
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Channels</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">학생 리스트</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
@@ -77,35 +74,28 @@
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">My Channel</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">수업 화면</h6>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <main class="text-center">
-                                    <video id="myVideo" class="remote-video center w-300 h-300" autoplay controls
+                                    <video id="remoteVideo" class="remote-video center w-300 h-300" autoplay controls
                                            playsinline
                                            style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
-
+                                    <video id="localVideo"
+                                           style="z-index:2;position:absolute; bottom: 50px;right:30px;width:30%;border-radius: 10px;transform: rotateY(180deg);"
+                                           autoplay muted>
+                                    </video>
                                     <h6 id="waitingTv" class="m-0 font-weight-bold text-primary"
                                         style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;">
                                         waiting</h6>
 
-                                    <div class="mt-4 text-center">
-                                        <span class="mr-2">
-                                            <input id="channelNameInput" class="text-center" type="text"
-                                                   placeholder="channel name" autofocus>
-                                        </span>
-                                        <span class="mr-2">
-                                            <a id="channelBtn" href="#"
-                                               class="btn btn-primary btn-user text-center">
-                                                CREATE
-                                            </a>
-                                        </span>
-                                        <span class="mr-2">
-                                            <a id="cameraSwitchBtn" href="#" class="btn btn-primary btn-user"
-                                               style="visibility:hidden;">Camera Switch</a>
-                                        </span>
-                                    </div>
+                                    <input id="teacherNameInput" class="form-control text-center" type="text"
+                                           placeholder="Please enter teacher name" autofocus>
+                                    <a id="channelBtn" href="#"
+                                       class="btn btn-primary btn-user btn-block text-center " style="visibility: hidden">
+                                        CLOSE
+                                    </a>
                                 </main>
                             </div>
                         </div>
@@ -117,44 +107,50 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
             <!-- The webrtc adapter is required for browser compatibility -->
             <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
 
+            <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-analytics.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-database.js"></script>
+            <!--<script src="/__/firebase/7.8.2/firebase-firestore.js"></script>-->
             <script>
-                const channelButton = document.querySelector('#channelBtn');
+                const localVideo = document.getElementById("localVideo");
+                const channelBtnEl = document.querySelector('#channelBtn');
                 const channelList = document.getElementById("lvChannel");
-                const channelNameInput = document.getElementById("channelNameInput");
+                const teacherNameInput = document.getElementById("teacherNameInput");
                 const waitingTv = document.getElementById("waitingTv");
-                const cameraSwitchBtn = document.getElementById("cameraSwitchBtn");
                 let isConnected = false;
-                let isCaster = false;
-                let myChannelId;
                 let remon;
-                let dummyRemon;
                 const key = '1234567890';
                 const serviceId = 'SERVICEID1';
+                let myChannelId;
                 var waitingLoop;
-                createDummyRemonForSearchLoop();
-                startSearchLoop();
+
+                var firebaseConfig = {
+                    apiKey: "AIzaSyD9iMEStu_af_x89fuFj-D_DoikBP5Ouj8",
+                    authDomain: "remon-callkit.firebaseapp.com",
+                    databaseURL: "https://remon-callkit.firebaseio.com",
+                    projectId: "remon-callkit",
+                    storageBucket: "remon-callkit.appspot.com",
+                    messagingSenderId: "309346897312",
+                    appId: "1:309346897312:web:0fa4fd4d70b550025928c5",
+                    measurementId: "G-D7EFRVRWWP"
+                };
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                firebase.analytics();
+                var database = firebase.database();
+                getStudentList();
+                fetchInterval();
 
                 // please register your own service key from remotemonster site.
-                let config = {
+                const config = {
                     credential: {
-                        key: key,
-                        serviceId: serviceId
+                        key, serviceId
                     },
                     view: {
                         remote: '#remoteVideo',
-                        local: '#myVideo'
-                    },
-                    media: {
-                        video: {
-                            width: '640',
-                            height: '480',
-                            codec: 'vp8',
-                            maxBandwidth: 1800,
-                            frameRate: {max: 25, min: 25}
-                        },
-                        audio: true
+                        local: '#localVideo'
                     }
                 };
 
@@ -164,20 +160,19 @@
                     },
                     onComplete() {
                         console.log('EVENT FIRED: onComplete');
-                        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden', 'visible');
+                        setViewsViaParameters('visible', false, 'hidden', 'visible', 'hidden');
                     },
                     onDisconnectChannel() {
-                        // is called when other peer hang up.
+                        console.log('EVENT FIRED: onDisconnectChannel');
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', 'hidden');
+                        setViewsViaParameters('hidden', false, 'hidden', 'hidden', 'visible');
                     },
                     onClose() {
-                        // is called when remon.close() method is called.
                         console.log('EVENT FIRED: onClose');
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', 'hidden');
+                        setViewsViaParameters('hidden', false, 'hidden', 'hidden', 'visible');
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
@@ -187,40 +182,28 @@
                     }
                 };
 
-                function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, cameraSwitchVisibility) {
+                function setViewsViaParameters(localVideoVisibility, runWaitLoop, waitingTvVisibility, btnVisiblility, inputVisiblility) {
+                    localVideo.style.visibility = localVideoVisibility;
                     if (runWaitLoop) {
                         waitingMsgLoop();
                     } else {
                         clearInterval(waitingLoop);
                     }
                     waitingTv.style.visibility = waitingTvVisibility;
-                    channelButton.innerHTML = btnText;
-                    channelNameInput.style.visibility = inputVisiblility;
-                    if (isCaster) {
-                        cameraSwitchBtn.style.visibility = cameraSwitchVisibility;
-                    } else {
-                        cameraSwitchBtn.style.visibility = 'hidden';
-                    }
+                    channelBtnEl.style.visibility = btnVisiblility;
+                    teacherNameInput.style.visibility = inputVisiblility;
                 }
 
-                function start(isViewer) {
+                function start() {
                     if (isConnected) {
                         isConnected = false;
-                        isCaster = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', 'hidden');
+                        setViewsViaParameters('hidden', false, 'hidden', 'hidden', 'visible');
                         remon.close();
-                        myChannelId = "";
                     } else {
                         isConnected = true;
-                        isCaster = !isViewer;
-                        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden', 'visible');
-                        if (!isCaster) {
-                            config.view.remote = '#myVideo';
-                        }
+                        setViewsViaParameters('visible', true, 'visible', 'visible', 'hidden');
                         remon = new Remon({config, listener});
-                        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
-                        channelNameInput.value = "";
-                        isCaster ? remon.createCast(myChannelId) : remon.joinCast(myChannelId);
+                        remon.connectCall(myChannelId);
                     }
                 }
 
@@ -232,23 +215,11 @@
                     return Date.now() + "_" + text;
                 }
 
-                channelButton.addEventListener('click', (evt) => {
-                    start(false);
+                channelBtnEl.addEventListener('click', (evt) => {
+                    start();
                     evt.preventDefault();
                 }, false);
 
-
-                function createDummyRemonForSearchLoop() {
-                    if (dummyRemon) dummyRemon.close();
-                    let cfg = {
-                        credential: {key: key, serviceId: serviceId},
-                        view: {local: '#localVideo1', remote: '#remoteVideo1'},
-                        media: {audio: true, video: true}
-                    };
-                    cfg.credential.wsurl = 'wss://signal.remotemonster.com/ws';
-                    cfg.credential.resturl = 'https://signal.remotemonster.com/rest';
-                    dummyRemon = new Remon({config: cfg});
-                }
 
                 function waitingMsgLoop() {
                     var numOfPoint = 0;
@@ -264,36 +235,50 @@
                     }, 1000);
                 }
 
-                function startSearchLoop() {
+                function fetchInterval() {
                     setInterval(async function () {
-                        dummyRemon.config.credential.serviceId = serviceId;
-                        dummyRemon.config.credential.key = key;
-                        var searchResult = await dummyRemon.fetchCasts();
                         while (channelList.firstChild) {
                             channelList.removeChild(channelList.firstChild);
                         }
-                        searchResult.forEach((ch, i) => {
-                            if (ch.status === 'COMPLETE' && ch.id !== myChannelId && !isCaster) {
+                        getStudentList()
+                    }, 3000);
+                }
+                function getStudentList() {
+                    database.ref("account").once('value').then((snap) => {
+                        if (snap.exists()) {
+                            Object.keys(snap.val()).forEach((studentId) =>{
+                                console.log(studentId)
+
                                 var btn = document.createElement("input");
                                 btn.type = "button";
-                                btn.name = ch.id;
-                                btn.value = ch.name;
+                                btn.name = studentId;
+                                btn.value = studentId;
                                 btn.className = "btn btn-primary btn-user btn-block text-center";
                                 btn.addEventListener('click', (evt) => {
-                                    channelNameInput.value = ch.id;
-                                    start(true);
+                                    myChannelId = getRandomId();
+                                    sendCall(studentId);
+                                    start();
                                     evt.preventDefault();
                                 }, false);
                                 channelList.appendChild(btn);
-                            }
-                        });
-                    }, 3000);
+                            });
+                        } else {
+                            console.log("no User")
+                        }
+                    })
                 }
 
-                cameraSwitchBtn.addEventListener("click", evt => {
-                    remon.switchCamera();
-                    evt.preventDefault();
-                });
+                function sendCall(studentId) {
+                    $.ajax({
+                        url: 'https://us-central1-remon-callkit.cloudfunctions.net/sendNotification',
+                        type: 'POST',
+                        data: {'teacherId': teacherNameInput.value, 'studentId': studentId, 'channelId': myChannelId}
+                    }).then((data, textStatus, jqXHR) => {
+                        console.log(data);
+                    }, (jqXHR, textStatus, errorThrown) => {
+                        /*pass*/
+                    })
+                }
             </script>
         </div>
         <!-- End of Main Content -->
@@ -313,32 +298,18 @@
 
 </div>
 <!-- End of Page Wrapper -->
+
 <!-- Scroll to Top Button-->
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $("#accordionSidebar").load("nav.html");
-    });
-</script>
-
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() {
+        dataLayer.push(arguments);
+    }
     gtag('js', new Date());
     gtag('config', 'UA-84812645-1');
 </script>
