@@ -74,12 +74,10 @@
                                             </span>
                                         </div>
                                         <br>
-                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center">방송 시작</a>
+                                        <a id="channelBtn" href="#" class="btn btn-primary btn-user btn-block text-center" style="visibility: hidden">방송 시작</a>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -140,21 +138,21 @@
                     },
                     onComplete() {
                         console.log('EVENT FIRED: onComplete');
-                        setViewsViaParameters(false, 'hidden', 'CLOSE', 'hidden', false);
+                        setViewsViaParameters(false, 'hidden', 'CLOSE', 'visible', 'hidden', false);
                         remon.sendMessage(username +'님이 방에 입장하셨습니다.');
                     },
                     onDisconnectChannel() {
                         // is called when other peer hang up.
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'hidden', 'visible', true);
                     },
                     onClose() {
                         // is called when remon.close() method is called.
                         console.log('EVENT FIRED: onClose');
                         remon.close();
                         isConnected = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'hidden', 'visible', true);
                     },
                     onError(error) {
                         console.log(`EVENT FIRED: onError: ${error}`);
@@ -167,7 +165,7 @@
                     }
                 };
 
-                function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, inputVisiblility, isClearChatViews) {
+                function setViewsViaParameters(runWaitLoop, waitingTvVisibility, btnText, btnVisibility, inputVisiblility, isClearChatViews) {
                     if (runWaitLoop) {
                         waitingMsgLoop();
                     } else {
@@ -175,6 +173,7 @@
                     }
                     waitingTv.style.visibility = waitingTvVisibility;
                     channelButton.innerHTML = btnText;
+                    channelButton.style.visibility = btnVisibility;
                     if (isClearChatViews) {
                         while (chatLogDiv.firstChild) {
                             chatLogDiv.removeChild(chatLogDiv.firstChild);
@@ -191,13 +190,13 @@
                     if (isConnected) {
                         isConnected = false;
                         isCaster = false;
-                        setViewsViaParameters(false, 'hidden', 'CREATE', 'visible', true);
+                        setViewsViaParameters(false, 'hidden', 'CREATE', 'hidden', 'visible', true);
                         remon.close();
                         myChannelId = "";
                     } else {
                         isConnected = true;
                         isCaster = !isViewer;
-                        setViewsViaParameters(true, 'visible', 'CLOSE', 'hidden', false);
+                        setViewsViaParameters(true, 'visible', 'CLOSE', 'visible', 'hidden', false);
                         config.view.remote = '#myVideo';
                         remon = new Remon({config, listener});
                         remon.joinCast(chid);

@@ -71,7 +71,7 @@
                                                 <select id="videoInputSelect" onchange="changeVideoInputDevice()"></select>
                                             </span>
                                             <!-- </div> -->
-    
+
                                             <!-- <div class="col-sm-12 col-md-3"> -->
                                             <!--Audio Input-->
                                             <span class="mr-2">
@@ -258,8 +258,8 @@
                             config.view.remote = '#myVideo';
                         }
                         remon = new Remon({config, listener});
-                        myChannelId = "jackie"+ getRandomId();
-                        
+                        myChannelId = isCaster ? "jackie"+ getRandomId() : myChannelId;
+
                         isCaster ? remon.createCast(myChannelId) : remon.joinCast(myChannelId);
                     }
                 }
@@ -321,6 +321,7 @@
                                 btn.value = ch.name;
                                 btn.className = "btn btn-primary btn-user btn-block text-center";
                                 btn.addEventListener('click', (evt) => {
+                                    myChannelId = btn.value;
                                     start(true);
                                     evt.preventDefault();
                                 }, false);
