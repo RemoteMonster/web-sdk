@@ -1,10 +1,9 @@
-## [2.5.18](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.16...v2.5.18) (2020-03-24)
+## [2.5.19](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.18...v2.5.19) (2020-04-20)
 
 
 ### Bug Fixes
 
-* **quality:** fix quality.start bug completely ([0091f13](https://github.com/RemoteMonster/remon-web-sdk/commit/0091f13))
-* **safari:** fix safari mobile when view cast mode ([a1912aa](https://github.com/RemoteMonster/remon-web-sdk/commit/a1912aa))
+* **log:** fix quality.end log ([ce1f436](https://github.com/RemoteMonster/remon-web-sdk/commit/ce1f436))
 
 
 
