@@ -1,3 +1,21 @@
+## [2.6.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.6.0...v2.6.1) (2020-04-21)
+
+
+### Bug Fixes
+
+* **fingerprint:** fix bug format ([abf8b21](https://github.com/RemoteMonster/remon-web-sdk/commit/abf8b21))
+
+
+
+## [2.6.1](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.6.0...v2.6.1) (2020-04-21)
+
+
+### Bug Fixes
+
+* **fingerprint:** fix bug format ([abf8b21](https://github.com/RemoteMonster/remon-web-sdk/commit/abf8b21))
+
+
+
 # [2.6.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.19...v2.6.0) (2020-04-21)
 
 
