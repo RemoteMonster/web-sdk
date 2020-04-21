@@ -1,3 +1,19 @@
+# [2.6.0](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.19...v2.6.0) (2020-04-21)
+
+
+### Bug Fixes
+
+* **fingerprint:** add fingerprint into signal msg ([a490bc8](https://github.com/RemoteMonster/remon-web-sdk/commit/a490bc8))
+* **quality:** fix quality.end log format ([442dce3](https://github.com/RemoteMonster/remon-web-sdk/commit/442dce3))
+
+
+### Features
+
+* **fingerprint:** add fingerprint into auth msg ([357f91a](https://github.com/RemoteMonster/remon-web-sdk/commit/357f91a))
+* **fingerprint:** add fingerprint into log msgs ([eb41f64](https://github.com/RemoteMonster/remon-web-sdk/commit/eb41f64))
+
+
+
 ## [2.5.19](https://github.com/RemoteMonster/remon-web-sdk/compare/v2.5.18...v2.5.19) (2020-04-20)
 
 
