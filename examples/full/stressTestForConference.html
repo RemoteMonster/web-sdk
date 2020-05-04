@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="RemoteMonster live media service demo">
+    <meta name="author" content="Lucas Choi">
+
+    <title>Stress Test for Conference</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <h3 class="h3 mb-4 text-gray-800">Video Config example for Cast</h3>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 id="myChannel" class="m-0 font-weight-bold text-primary">My Channel</h6>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <main class="text-center">
+                                    <div class="row">
+                                        <video id="myVideo" class="remote-video center w-300 h-300" autoplay muted
+                                               controls playsinline
+                                               style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"></video>
+                                        <audio id="myAudio" class="remote-video center w-300 h-300" autoplay muted
+                                               controls playsinline
+                                               style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%; display: none"></audio>
+                                    </div>
+                                    <div class="row">
+                                        <!--Video Input-->
+                                        <div class="col-sm-12 col-md-6">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video Input</div>
+                                              <select id="videoInputSelect" onchange="changeVideoInputDevice()"
+                                                      class="custom-select custom-select-sm form-control form-control-sm"></select>
+                                          </span>
+                                        </div>
+
+                                        <!--Audio Input-->
+                                        <div class="col-sm-12 col-md-6">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Audio Input</div>
+                                              <select id="audioInputSelect" onchange="changeAudioInputDevice()"
+                                                      class="custom-select custom-select-sm form-control form-control-sm"></select>
+                                          </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!--Use Video-->
+                                        <div class="col-sm-12 col-md-2">
+                                            <span class="col-lg-2 mg-2">
+                                                <div class="small mb-1">Use Video</div>
+                                                <input id="useVideoToggle" type="checkbox" onclick="videoEnabled()"
+                                                       checked data-toggle="toggle" data-onstyle="primary">
+                                          </span>
+                                        </div>
+
+                                        <!--Video Bandwidth-->
+                                        <div class="col-sm-12 col-md-2">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video Bandwidth</div>
+                                              <input id="videoBandwidthInput" onchange="changeVideoBandwidth()"
+                                                     class="form-control-sm form-control text-center mb-4" type="text"
+                                                     value=100>
+                                          </span>
+                                        </div>
+
+                                        <!--Audio Bandwidth-->
+                                        <div class="col-sm-12 col-md-2">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Audio Bandwidth</div>
+                                              <input id="audioBandwidthInput" onchange="changeAudioBandwidth()"
+                                                     class="form-control-sm form-control text-center mb-4" type="text"
+                                                     value=32>
+                                          </span>
+                                        </div>
+
+                                        <!--Video Codec-->
+                                        <div class="col-sm-12 col-md-2">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video Codec</div>
+                                              <select id="videoCodecSelect" onchange="changeVideoCodec()"
+                                                      class="custom-select custom-select-sm form-control form-control-sm">
+                                                  <option value="h264">H.264</option>
+                                                  <option value="vp8">VP8</option>
+                                                  <option value="vp9">VP9</option>
+                                              </select>
+                                          </span>
+                                        </div>
+
+                                        <!--Video FPS-->
+                                        <div class="col-sm-12 col-md-2">
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Video FPS</div>
+                                              <input id="videoFPSInput" onchange="changeVideoFPS()"
+                                                     class="form-control-sm form-control text-center mb-4" type="text"
+                                                     value=25>
+                                          </span>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-2">
+                                            <!--Video Resolution-->
+                                            <span class="col-lg-2 mg-2">
+                                              <div class="small mb-1">Resolution</div>
+                                              <select id="resolutionSelect" onchange="changeResolution()"
+                                                      class="custom-select custom-select-sm form-control form-control-sm">
+                                                  <option value="120">160-120</option>
+                                                  <option value="240">320-240</option>
+                                                  <option value="480">640-480</option>
+                                                  <option value="720">1280-720</option>
+                                                  <option value="1080">1920-1080</option>
+                                                  <option value="4096">4096-2160</option>
+                                              </select>
+                                          </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3 text-center justify-content-center">
+                                        <input id="channelNameInput" class="text-center col-sm-10 col-md-4" type="text"
+                                               placeholder="channel name" autofocus>
+                                        <a id="channelBtn" href="#"
+                                           class="col-sm-10 col-md-2 btn btn-primary btn-user text-center ml-2">
+                                            CREATE
+                                        </a>
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+            <!-- The webrtc adapter is required for browser compatibility -->
+            <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+
+            <script>
+                const myAudio = document.getElementById('myAudio');
+                const myVideo = document.getElementById('myVideo');
+                const channelButton = document.querySelector('#channelBtn');
+                const channelNameInput = document.getElementById("channelNameInput");
+                const myChannel = document.getElementById("myChannel");
+                const videoInputSelect = document.getElementById("videoInputSelect");
+                const useVideoToggle = document.getElementById("useVideoToggle");
+                const audioInputSelect = document.getElementById("audioInputSelect");
+                const videoCodecSelect = document.getElementById("videoCodecSelect");
+                const resolutionSelect = document.getElementById("resolutionSelect");
+                const videoFPSInput = document.getElementById("videoFPSInput");
+                const videoBandwidthInput = document.getElementById("videoBandwidthInput");
+                const audioBandwidthInput = document.getElementById("audioBandwidthInput");
+                let isConnected = false;
+                let myChannelId;
+                let remon;
+                const key = '92fc01b9bf09a5aa61c9a06f66704d2bb1dd5263b5a953f2c1d231794ad420f8';
+                const serviceId = 'e874171e-f3f1-4114-ab98-a595f541a314';
+
+                let cameraList = [];
+                let micList = [];
+
+                let config = {
+                    credential: {
+                        key: key,
+                        serviceId: serviceId,
+                        wsurl: 'wss://signal.remotemonster.com/ws',
+                        resturl: 'https://signal.remotemonster.com/rest'
+                    },
+                    view: {
+                        remote: '#remoteVideo',
+                        local: '#myVideo'
+                    },
+                    media: {
+                        video: {
+                            width: '160',
+                            height: '120',
+                            codec: 'vp8',
+                            maxBandwidth: 100,
+                            frameRate: 25,
+                        },
+                        audio:{
+                            autoGainControl: false,
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                            channelCount: 2,
+                            maxBandwidth: 32,
+                        },
+                    },
+                    // rtc: {audioType: "music"},
+                };
+
+                const listener = {
+                    onConnect(chid) {
+                        console.log(`EVENT FIRED: onConnect: ${chid}`);
+                    },
+                    onComplete() {
+                        myChannel.innerHTML = "My Channel - " + myChannelId;
+                        console.log('EVENT FIRED: onComplete');
+                        setViewsViaParameters('CLOSE', 'hidden');
+                    },
+                    onDisconnectChannel() {
+                        remon.close();
+                        isConnected = false;
+                        setViewsViaParameters('CREATE', 'visible');
+                    },
+                    onClose() {
+                        myChannel.innerHTML = "My Channel";
+                        console.log('EVENT FIRED: onClose');
+                        remon.close();
+                        isConnected = false;
+                        setViewsViaParameters('CREATE', 'visible');
+                    },
+                    onError(error) {
+                        console.log(`EVENT FIRED: onError: ${error}`);
+                    },
+                    onStat(result) {
+                        console.log(`EVENT FIRED: onStat: ${result}`);
+                    }
+                };
+
+                function setViewsViaParameters(btnText, inputVisiblility) {
+                    channelButton.innerHTML = btnText;
+                    channelNameInput.style.visibility = inputVisiblility;
+                }
+
+                function start() {
+                    if (isConnected) {
+                        isConnected = false;
+                        setViewsViaParameters('CREATE', 'visible');
+                        remon.close();
+                        myChannelId = "";
+                    } else {
+                        console.log(config);
+                        isConnected = true;
+                        setViewsViaParameters('CLOSE', 'hidden');
+                        remon = new Remon({config, listener});
+                        myChannelId = channelNameInput.value ? channelNameInput.value : getRandomId();
+                        channelNameInput.value = "";
+                        remon.createRoom(myChannelId);
+                    }
+                }
+
+                function getRandomId() {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    for (var i = 0; i < 5; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+                    return text + "_" + Date.now();
+                }
+
+                channelButton.addEventListener('click', (evt) => {
+                    start();
+                    evt.preventDefault();
+                }, false);
+
+                async function getDevices() {
+                    var devices = await navigator.mediaDevices.enumerateDevices();
+                    for (let i = 0; i < devices.length; i++) {
+                        let device = devices[i];
+                        if (device.kind === 'videoinput') {
+                            cameraList.push({text: device.label, id: device.deviceId})
+                        } else if (device.kind === 'audioinput') {
+                            micList.push({text: device.label, id: device.deviceId})
+                        }
+                    }
+                    for (let i = 0; i < cameraList.length; i++) {
+                        const videoInputOption = document.createElement('option');
+                        videoInputOption.value = cameraList[i].id;
+                        // videoInputOption.text = cameraList[i].text;
+                        videoInputOption.text = cameraList[i].text ? cameraList[i].text : ("Device " + cameraList[i].id);
+                        videoInputSelect.appendChild(videoInputOption);
+                    }
+                    for (let i = 0; i < micList.length; i++) {
+                        const audioInputOption = document.createElement('option');
+                        audioInputOption.value = micList[i].id;
+                        // audioInputOption.text = micList[i].text;
+                        audioInputOption.text = micList[i].text ? micList[i].text : ("Device " + micList[i].id);
+                        audioInputSelect.appendChild(audioInputOption);
+                    }
+                }
+
+                function changeVideoInputDevice() {
+                    config.media.video.deviceId = videoInputSelect.options[videoInputSelect.selectedIndex].value;
+                }
+
+                function changeVideoCodec() {
+                    config.media.video.codec = videoCodecSelect.options[videoCodecSelect.selectedIndex].value;
+                }
+
+                function changeAudioInputDevice() {
+                    config.media.audio.deviceId = audioInputSelect.options[audioInputSelect.selectedIndex].value;
+                }
+
+                function changeVideoFPS() {
+                    config.media.video.frameRate = parseInt(videoFPSInput.value, 10);
+                }
+
+                function changeVideoBandwidth() {
+                    config.media.video.maxBandwidth = parseInt(videoBandwidthInput.value, 10);
+                }
+
+                function changeAudioBandwidth() {
+                    config.media.audio.maxBandwidth = parseInt(audioBandwidthInput.value, 10);
+                }
+
+                function videoEnabled(){
+                    if (useVideoToggle.checked) {
+                        myAudio.style.display = 'none';
+                        myVideo.style.display = 'block';
+                        config.view.local = '#myVideo';
+                    } else {
+                        myAudio.style.display = 'block';
+                        myVideo.style.display = 'none';
+                        config.view.local = '#myAudio';
+                    }
+                }
+
+                function changeResolution() {
+                    resolution = resolutionSelect.options[resolutionSelect.selectedIndex].text.split('-');
+                    config.media.video.width = resolution[0];
+                    config.media.video.height = resolution[1]
+                }
+
+                getDevices();
+            </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; <a href='https://remotemonster.com'>RemoteMonster</a> 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="js/sb-admin-2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#accordionSidebar").load("nav.html");
+    });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-84812645-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-84812645-1');
+</script>
+</body>
+
+</html>
