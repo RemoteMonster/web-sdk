@@ -201,6 +201,16 @@
                               CREATE
                             </a>
                           </span>
+                          <span class="mr-2">
+                            <a id="pauseVideoButton" href="#" class="btn btn-primary btn-user text-center">
+                              pause video
+                            </a>
+                          </span>
+                          <span class="mr-2">
+                            <a id="muteAudioButton" href="#" class="btn btn-primary btn-user text-center">
+                              mute
+                              </a>
+                          </span>
                         </div>
                       </div>
                     </main>
@@ -228,9 +238,15 @@
             const lowBtn = document.getElementById("lowBtn");
             const mediumBtn = document.getElementById("mediumBtn");
             const highBtn = document.getElementById("highBtn");
+            const pauseVideoButton= document.getElementById("pauseVideoButton");
+            const muteAudioButton= document.getElementById("muteAudioButton");
             const waitingTv = document.getElementById("waitingTv");
             const headerWidth = document.getElementById("headerWidth");
             const headerHeight = document.getElementById("headerHeight");
+            const wsurl= "wss://dev-jaguar.remotemonster.com/ws";
+            const resturl= "https://dev-jaguar.remotemonster.com/rest";
+            let toggleRemoteAudio= true;
+            let toggleRemoteVideo= true;
             let isConnected = false;
             let isCaster = false;
             let myChannelId;
@@ -256,10 +272,10 @@
               },
               media: {
                 video: {
-                  width: "1920",
-                  height: "1080",
+                  width: "1280",
+                  height: "720",
                   codec: "VP8",
-                  maxBandwidth: 4000,
+                  maxBandwidth: 1000,
                   frameRate: { max: 25, min: 25 }
                 },
                 audio: true
@@ -330,6 +346,8 @@
                 if (!isCaster) {
                   config.view.remote = "#myVideo";
                 }
+                config.credential.wsurl= wsurl;
+                config.credential.resturl= resturl;
                 remon = new Remon({ config, listener });
                 myChannelId = channelNameInput.value
                   ? channelNameInput.value
@@ -368,8 +386,10 @@
                 view: { local: "#localVideo1", remote: "#remoteVideo1" },
                 media: { audio: true, video: true }
               };
-              cfg.credential.wsurl = "wss://signal.remotemonster.com/ws";
-              cfg.credential.resturl = "https://signal.remotemonster.com/rest";
+              // cfg.credential.wsurl = "wss://signal.remotemonster.com/ws";
+              // cfg.credential.resturl = "https://signal.remotemonster.com/rest";
+              cfg.credential.wsurl= wsurl;
+              cfg.credential.resturl= resturl;
               dummyRemon = new Remon({ config: cfg });
             }
 
@@ -435,6 +455,16 @@
                 remon.setVideoQuality("HIGH");
                 evt.preventDefault();
               });
+              pauseVideoButton.addEventListener("click", evt => {
+                toggleRemoteVideo= !toggleRemoteVideo;
+                remon.pauseRemoteVideo(toggleRemoteVideo);
+                evt.preventDefault();
+              });
+              muteAudioButton.addEventListener("click", evt => {
+                toggleRemoteAudio= !toggleRemoteAudio;
+                remon.muteRemoteAudio(toggleRemoteAudio);
+                evt.preventDefault();
+              })
             }
           </script>
         </div>
