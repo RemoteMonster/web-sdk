@@ -1,3 +1,13 @@
+## [2.6.3](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.2...v2.6.3) (2020-07-13)
+
+
+### Bug Fixes
+
+* **reconnect:** fix missType on reconnect ([62f665d](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/62f665d))
+* miss typo ([f8095b2](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/f8095b2))
+
+
+
 ## 2.6.2 (2020-07-07)
 
 
