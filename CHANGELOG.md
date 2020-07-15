@@ -1,3 +1,12 @@
+## [2.6.4](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.3...v2.6.4) (2020-07-15)
+
+
+### Bug Fixes
+
+* change option to true for cpuoverusedetection ([b70bafe](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/b70bafe))
+
+
+
 ## [2.6.3](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.2...v2.6.3) (2020-07-13)
 
 
