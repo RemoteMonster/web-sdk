@@ -124,8 +124,10 @@
             // let resturl = "https://matiz.remotemonster.com/rest";
             let wsurl= "wss://signal.remotemonster.com/ws";
             let resturl= "https://signal.remotemonster.com/rest";
-            let serviceId= 'healthchecker';
-            let key = 'ee1761b003084b5431bf918fa87b850bc499467bdfaf4bdf';
+            // let serviceId= 'healthchecker';
+            // let key = 'ee1761b003084b5431bf918fa87b850bc499467bdfaf4bdf';
+            let serviceId= 'SERVICEID1';
+            let key= '1234567890';
             let remon;
             // please register your own service key from remotemonster site.
             const dummyConfig = {
@@ -198,7 +200,7 @@
                 isCaster = true;
                 channelBtnEl.innerHTML = "CLOSE";
                 remon = new Remon({ config, listener });
-                remon.createCast("testchannel");
+                remon.createCast("testchannel2");
               }
             }
 
@@ -225,7 +227,7 @@
               var isRoomExist = false;
               searchResult.forEach((ch, i) => {
                 ch.type = "BROADCAST";
-                if (ch.status === "COMPLETE" && ch.id === "testchannel") {
+                if (ch.status === "COMPLETE" && ch.id === "testchannel2") {
                   console.log(
                     "------------------- find my channel -----------------"
                   );
@@ -238,7 +240,7 @@
             }
             function joinRoom(config, listener) {
               remon = new Remon({ config, listener });
-              remon.joinCast("testchannel");
+              remon.joinCast("testchannel2");
               isCaster = false;
               isCreated = true;
               isRoomExist = true;

@@ -1,3 +1,13 @@
+## [2.6.5](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.4...v2.6.5) (2020-07-17)
+
+
+### Bug Fixes
+
+* **mute:** mute media when bool is diff from old val ([f4b41be](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/f4b41be))
+* **statLog:** delete old stat log ([37ef605](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/37ef605))
+
+
+
 ## [2.6.4](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.3...v2.6.4) (2020-07-15)
 
 

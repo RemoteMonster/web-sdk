@@ -133,7 +133,7 @@
             // please register your own service key from remotemonster site.
             const config = {
               rtc:{
-               
+               cpuOveruseDetection: true
               },
               credential: {
                 key,
@@ -200,7 +200,7 @@
                 isConnected = true;
                 channelBtnEl.innerHTML = "WAIT";
                 remon = new Remon({ config, listener });
-                remon.connectCall("simpleRemon");
+                remon.connectCall("simpleRemon2");
               }
             }
 
