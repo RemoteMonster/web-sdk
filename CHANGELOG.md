@@ -1,10 +1,11 @@
-## [2.6.5](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.4...v2.6.5) (2020-07-17)
+## [2.6.6](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.5...v2.6.6) (2020-08-06)
 
 
 ### Bug Fixes
 
-* **mute:** mute media when bool is diff from old val ([f4b41be](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/f4b41be))
-* **statLog:** delete old stat log ([37ef605](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/37ef605))
+* changeLocal video without audio ([1112a4b](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/1112a4b))
+* pauseRemoteVideo를 10%확률로 갱신하기 ([4a2a6ce](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/4a2a6ce))
+* remove old code ([6980194](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/6980194))
 
 
 
