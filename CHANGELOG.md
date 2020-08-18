@@ -1,3 +1,12 @@
+## [2.6.7](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.6...v2.6.7) (2020-08-18)
+
+
+### Bug Fixes
+
+* muteRemoteAudio를 10%확률로 갱신하기 ([d423b26](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/d423b26))
+
+
+
 ## [2.6.6](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.5...v2.6.6) (2020-08-06)
 
 
