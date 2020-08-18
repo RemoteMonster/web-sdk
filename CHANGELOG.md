@@ -1,3 +1,13 @@
+## [2.6.8](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.7...v2.6.8) (2020-08-18)
+
+
+### Features
+
+* add enableLocal... methods ([9fe1689](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/9fe1689))
+* add enableRemote methods ([4a795a7](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/4a795a7))
+
+
+
 ## [2.6.7](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.6...v2.6.7) (2020-08-18)
 
 
