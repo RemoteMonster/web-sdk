@@ -1,3 +1,12 @@
+## [2.6.9](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.8...v2.6.9) (2020-08-18)
+
+
+### Bug Fixes
+
+* enableLocalAudio boolean ([4af6070](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/4af6070))
+
+
+
 ## [2.6.8](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.7...v2.6.8) (2020-08-18)
 
 
