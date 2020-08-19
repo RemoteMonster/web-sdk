@@ -1,3 +1,12 @@
+## [2.6.10](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.9...v2.6.10) (2020-08-19)
+
+
+### Bug Fixes
+
+* onComplete를 최대한 뒤에 실행함 ([92dbff1](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/92dbff1))
+
+
+
 ## [2.6.9](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.8...v2.6.9) (2020-08-18)
 
 
