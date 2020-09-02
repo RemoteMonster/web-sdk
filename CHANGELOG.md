@@ -1,3 +1,12 @@
+## [2.6.11](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.10...v2.6.11) (2020-09-02)
+
+
+### Features
+
+* sharding for sig ([84f03b4](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/84f03b4))
+
+
+
 ## [2.6.10](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.9...v2.6.10) (2020-08-19)
 
 
