@@ -1,3 +1,25 @@
+## [2.6.12](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.11...v2.6.12) (2020-09-07)
+
+
+### Bug Fixes
+
+* **close:** check if context.remoteVideo is null ([cc272ce](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/cc272ce))
+* **dev:** chore for localVideo ([9047bbb](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/9047bbb))
+* **pc:** get transceiver by filter = audio/video ([9caa615](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/9caa615))
+
+
+
+## [2.6.12](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.11...v2.6.12) (2020-09-07)
+
+
+### Bug Fixes
+
+* **close:** check if context.remoteVideo is null ([cc272ce](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/cc272ce))
+* **dev:** chore for localVideo ([9047bbb](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/9047bbb))
+* **pc:** get transceiver by filter = audio/video ([9caa615](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/9caa615))
+
+
+
 ## [2.6.11](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.10...v2.6.11) (2020-09-02)
 
 
