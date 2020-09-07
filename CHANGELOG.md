@@ -1,3 +1,12 @@
+## [2.6.13](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.12...v2.6.13) (2020-09-07)
+
+
+### Bug Fixes
+
+* **safari:** apply maxBandwidth property for safari ([a5d37eb](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/a5d37eb))
+
+
+
 ## [2.6.12](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.11...v2.6.12) (2020-09-07)
 
 
