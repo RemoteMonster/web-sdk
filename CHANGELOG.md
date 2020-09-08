@@ -1,3 +1,12 @@
+## [2.6.15](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.14...v2.6.15) (2020-09-08)
+
+
+### Bug Fixes
+
+* **pc:** chore ([c1b1e00](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/c1b1e00))
+
+
+
 ## [2.6.14](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.13...v2.6.14) (2020-09-08)
 
 
