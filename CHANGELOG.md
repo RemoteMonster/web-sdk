@@ -1,3 +1,21 @@
+## [2.6.14](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.13...v2.6.14) (2020-09-08)
+
+
+### Bug Fixes
+
+* **media:** remove all gettransceivers[0] code ([8a33aa6](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/8a33aa6))
+
+
+
+## [2.6.14](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.13...v2.6.14) (2020-09-08)
+
+
+### Bug Fixes
+
+* **media:** remove all gettransceivers[0] code ([8a33aa6](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/8a33aa6))
+
+
+
 ## [2.6.13](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.12...v2.6.13) (2020-09-07)
 
 
