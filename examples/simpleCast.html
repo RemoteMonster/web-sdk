@@ -92,6 +92,8 @@
                           playsinline
                           style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"
                         ></video>
+                        <audio id="localAudio"
+                        autoplay controls playsinline></audio><button id="audioplay" value="play">play</button>
                       </div>
                       <a
                         id="channelBtn"
@@ -118,6 +120,15 @@
 
           <script>
             const channelBtnEl = document.querySelector("#channelBtn");
+            const audioTag= document.querySelector("#localAudio");
+            const audioPlayButton = document.querySelector("#audioplay");
+            audioTag.play();
+            audioPlayButton.addEventListener("click", ()=>{
+              //audioTag.play();
+              findRoom();
+              
+              }
+              );
             let isCreated = false;
             let isCaster = false;
             // let wsurl="wss://matiz.remotemonster.com/ws";
@@ -163,6 +174,8 @@
               onComplete() {
                 console.log("EVENT FIRED: onComplete");
                 channelBtnEl.innerHTML = "CLOSE";
+                audioTag.srcObject= remon.context.remoteStream;
+                audioTag.play();
               },
               onDisconnectChannel() {
                 // is called when other peer hang up.
@@ -187,7 +200,7 @@
                 console.log("onReconnect is called");
                 if (!isCaster) {
                   remon.close();
-                  joinRoom(config, listener);
+                  //joinRoom(config, listener);
                 }
               }
             };
@@ -204,7 +217,7 @@
                 isCaster = true;
                 channelBtnEl.innerHTML = "CLOSE";
                 remon = new Remon({ config, listener });
-                remon.createCast("testchannel2");
+                remon.createCast("testchannel");
               }
             }
 
@@ -231,7 +244,7 @@
               var isRoomExist = false;
               searchResult.forEach((ch, i) => {
                 ch.type = "BROADCAST";
-                if (ch.status === "COMPLETE" && ch.id === "testchannel2") {
+                if (ch.status === "COMPLETE" && ch.id === "testchannel") {
                   console.log(
                     "------------------- find my channel -----------------"
                   );
@@ -244,12 +257,12 @@
             }
             function joinRoom(config, listener) {
               remon = new Remon({ config, listener });
-              remon.joinCast("testchannel2");
+              remon.joinCast("testchannel");
               isCaster = false;
               isCreated = true;
               isRoomExist = true;
             }
-            findRoom();
+            // findRoom();
           </script>
         </div>
         <!-- End of Main Content -->

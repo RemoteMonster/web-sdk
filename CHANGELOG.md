@@ -1,3 +1,12 @@
+## [2.6.17](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.16...v2.6.17) (2020-09-14)
+
+
+### Bug Fixes
+
+* **fingerprint:** remove fingerprint ([b99df03](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/b99df03))
+
+
+
 ## [2.6.16](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.15...v2.6.16) (2020-09-09)
 
 
