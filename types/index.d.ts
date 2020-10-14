@@ -262,132 +262,132 @@ export interface RemonListener {
    * connected and authentication is completed. Return value is token by
    * authentication process.
    */
-  onInit: OnInitListener;
+  onInit: InitListener;
 
   /**
    * It's called when you execute connectCall method with channelId and
    * there's no such channel id. Remon will create a room with the channel Id
    * and onCreateChannel method is called.
    */
-  onCreateChannel: OnCreateChannelListener;
+  onCreateChannel: CreateChannelListener;
 
   /**
    * It's called when you execute connectCall method with channel ID and
    * there's such channel ID. Remon will connect peers. After this event,
    * signalling with peers will be executed.
    */
-  onConnectChannel: OnConnectChannelListener;
+  onConnectChannel: ConnectChannelListener;
 
   /**
    * Called when signaling is complete and the stream is well connected. From
    * this time, the video can be transmitted or viewed.
    */
-  onComplete: OnCompleteListener;
+  onComplete: CompleteListener;
 
   /**
    * Called when a local stream has been obtained. You can get a local stream
    * from this event.
    */
-  onDisplayUserMedia: OnDisplayUserMediaListener;
+  onDisplayUserMedia: DisplayUserMediaListener;
 
   /**
    * Similar to onDisplayUserMedia, but occurs when signaling is complete.
    */
-  onAddLocalStream: OnAddLocalStreamListener;
+  onAddLocalStream: AddLocalStreamListener;
 
   /**
    * Occurs when signaling is complete and a remote stream can be received.
    * You can take a remote stream as an argument.
    */
-  onAddRemoteStream: OnAddRemoteStreamListener;
+  onAddRemoteStream: AddRemoteStreamListener;
 
   /**
    * State is classified into INIT, CONNECT, WAIT, COMPLETE, CLOSE, etc.
    * according to the connection state. This event is called when the state is
    * changed.
    */
-  onStateChange: OnStateChangeListener;
+  onStateChange: StateChangeListener;
 
   /**
    * Occurs when a connection is terminated by the other side or the network,
    * not by me.
    */
-  onDisconnectChannel: OnDisconnectChannelListener;
+  onDisconnectChannel: DisconnectChannelListener;
 
   /**
    * If the other party sent an arbitrary message through the
    * Remon.sendMessage method, You can receive it via this event.
    */
-  onMessage: OnMessageListener;
+  onMessage: MessageListener;
 
   /**
    * When communicating or broadcasting, you can check the current quality of
    * the stream every 3 seconds. There are several stat entries, but the
    * easiest way to know the current quality is 'ratings' property.
    */
-  onStat: OnStatListener;
+  onStat: StatListener;
 
   /**
    * Event that can check the result when calling search method such as
    * fetchCall or fetchCast.
    */
-  onSearch: OnSearchListener;
+  onSearch: SearchListener;
 
   /**
    * Occurs when the close command that I explicitly called actually
    * completes.
    */
-  onClose: OnCloseListener;
+  onClose: CloseListener;
 
   /**
    * Occurs when using conference mode. When someone enters or leaves the
    * room, join and leave events occur and you can connect to the user through
    * the join method through the channel information.
    */
-  onRoomEvent: OnRoomEventListener;
+  onRoomEvent: RoomEventListener;
 
   /**
    * Occurs when the viewer of the broadcast calls the joinCast command, when
    * the command actually completes and can receive the stream.
    */
-  onJoin: OnJoinListener;
+  onJoin: JoinListener;
 
   /**
    * Several events about the recording process when a client wants to record
    * or record. Among the parameters to receive, event values include stop,
    * upload, error, and uploaded.
    */
-  onRecordEvent: OnRecordEventListener;
+  onRecordEvent: RecordEventListener;
 
   /**
    * All errors can be received in this event.
    */
-  onError: OnErrorListener;
+  onError: ErrorListener;
 }
 
-export type OnInitListener = (token: string) => void;
-export type OnCreateChannelListener = (channelId: string) => void;
-export type OnConnectChannelListener = (channelId: string) => void;
-export type OnCompleteListener = () => void;
-export type OnDisplayUserMediaListener = (stream: MediaStream) => void;
-export type OnAddLocalStreamListener = (stream: MediaStream) => void;
-export type OnAddRemoteStreamListener = (stream: MediaStream) => void;
-export type OnStateChangeListener = (state: State) => void;
-export type OnDisconnectChannelListener = () => void;
-export type OnMessageListener = (message: string) => void;
-export type OnStatListener = (stat: any) => void;
-export type OnSearchListener = (message: Message) => void;
-export type OnCloseListener = () => void;
-export type OnRoomEventListener = (message: Message) => void;
-export type OnJoinListener = () => void;
-export type OnRecordEventListener = (event: OnRecordEvent) => void;
-export type OnErrorListener = {
+export type InitListener = (token: string) => void;
+export type CreateChannelListener = (channelId: string) => void;
+export type ConnectChannelListener = (channelId: string) => void;
+export type CompleteListener = () => void;
+export type DisplayUserMediaListener = (stream: MediaStream) => void;
+export type AddLocalStreamListener = (stream: MediaStream) => void;
+export type AddRemoteStreamListener = (stream: MediaStream) => void;
+export type StateChangeListener = (state: State) => void;
+export type DisconnectChannelListener = () => void;
+export type MessageListener = (message: string) => void;
+export type StatListener = (stat: any) => void;
+export type SearchListener = (message: Message) => void;
+export type CloseListener = () => void;
+export type RoomEventListener = (message: Message) => void;
+export type JoinListener = () => void;
+export type RecordEventListener = (event: RecordEvent) => void;
+export type ErrorListener = {
   /**
    * Service ID, Secret Key가 없음
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(
+  (
     code: "4101",
     message: "undefinedServiceId Or undefinedServiceKey"
   ): void;
@@ -399,21 +399,21 @@ export type OnErrorListener = {
    *
    * @param error "UserMediaDeviceFailedError" + string
    */
-  onError(code: "4182", error: string): void;
+  (code: "4182", error: string): void;
 
   /**
    * 리모트몬스터와 인증이 올바르게 이루어지지 않음 (클라이언트의 이유)
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4201", message: "initFailedError", error: Error): void;
+  (code: "4201", message: "initFailedError", error: Error): void;
 
   /**
    * 리모트몬스터와 인증이 올바르게 이루어지지 않음 (서버의 이유)
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4204", error: any): void;
+  (code: "4204", error: any): void;
 
   /**
    * 로컬피어 정보 획득 실패
@@ -422,19 +422,19 @@ export type OnErrorListener = {
    *
    * @param message "Create offer failed :" + string
    */
-  onError(code: "4231", message: string): void;
+  (code: "4231", message: string): void;
 
   /**
    * 로컬피어 정보 설정 실패
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4232", message: "set local offer is failed"): void;
+  (code: "4232", message: "set local offer is failed"): void;
 
   /**
    * ! UNDOCUMENTED ERROR CODE!
    */
-  onError(code: "4233", message: "set remote sdp is failed"): void;
+  (code: "4233", message: "set remote sdp is failed"): void;
 
   /**
    * 네트워크 환경이 매우 좋지 않아 리모트몬스터 서버로 접속이 이루어지지 않음
@@ -442,42 +442,42 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4241", message: "Disconnected from Signal Server"): void;
+  (code: "4241", message: "Disconnected from Signal Server"): void;
 
   /**
    * 미디어,접속 협상 실패
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4245", message: "ICEFailed"): void;
+  (code: "4245", message: "ICEFailed"): void;
 
   /**
    * 피어 접속 연결 실패
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: '4246', message: 'add ice candidate failed'): void;
+  (code: '4246', message: 'add ice candidate failed'): void;
 
   /**
    * 네트워크 환경이 불안정함
    *
    * https://docs.remotemonster.com/common/error#errorcode_must
    */
-  onError(code: "4343", message: "ICEClosed" | "ICEDisconnected After 3 seconds"): void;
+  (code: "4343", message: "ICEClosed" | "ICEDisconnected After 3 seconds"): void;
 
   /**
    * 네트워크 환경의 변화
    *
    * https://docs.remotemonster.com/common/error#undefined
    */
-  onError(code: "4344", message: "ICEDisconnected"): void;
+  (code: "4344", message: "ICEDisconnected"): void;
 
   /**
    * 네트워크 환경의 변화
    *
    * https://docs.remotemonster.com/common/error#undefined
    */
-  onError(
+  (
     code: "4345",
     message: "ICEDisconnected but Connected in 3 seconds"
   ): void;
@@ -489,12 +489,12 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#wserror-websocketerror
    */
-  onError(message: "WebSocketFailedError", error: any): void;
+  (message: "WebSocketFailedError", error: any): void;
 
   /**
    * ! UNDOCUMENTED ERROR CODE!
    */
-  onError(code: string, message: string): void;
+  (code: string, message: string): void;
 
   /**
    * - peerConnection 생성 안될때
@@ -503,7 +503,7 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#iceerror-icefailed
    */
-  onError(message: "ICEFailedError"): void;
+  (message: "ICEFailedError"): void;
 
   /**
    * - new Remon시 인자가 잘못될 경우
@@ -517,7 +517,7 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#invalidparametererror-invalidparametererror
    */
-  onError(message: "InvalidParameterError"): void;
+  (message: "InvalidParameterError"): void;
 
   /**
    * - create/connect의 반환에 channel정보가 없는 경우
@@ -526,7 +526,7 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#connecterror-connectchannelfailed
    */
-  onError(message: "ConnectChannelFailedError"): void;
+  (message: "ConnectChannelFailedError"): void;
 
   /**
    * - Media 특히 Camera를 못가져온 경우(Video를 On했음에도 불구하고))
@@ -534,27 +534,27 @@ export type OnErrorListener = {
    *
    * https://docs.remotemonster.com/common/error#mediaerror-usermediadeviceerror
    */
-  onError(message: "UserMediaDeviceFailedError", error: Error): void;
+  (message: "UserMediaDeviceFailedError", error: Error): void;
 
   /**
    * ! UNDOCUMENTED CODE!
    */
-  onError(message: "Signaling: 500 Error"): void;
+  (message: "Signaling: 500 Error"): void;
 
   /**
    * ! UNDOCUMENTED CODE!
    */
-  onError(message: "Signaling: 502 Error: Unknown token"): void;
+  (message: "Signaling: 502 Error: Unknown token"): void;
 
   /**
    * ! UNDOCUMENTED CODE!
    */
-  onError(message: "Signaling: 530 Error: No media server"): void;
+  (message: "Signaling: 530 Error: No media server"): void;
 
   /**
    * ! UNDOCUMENTED CODE!
    */
-  onError(message: "SSL authentication(https) is required."): void;
+  (message: "SSL authentication(https) is required."): void;
 
   /**
    * https://docs.remotemonster.com/common/error#unknown-unknown
@@ -562,49 +562,49 @@ export type OnErrorListener = {
    * @param message 1. "mixer: unknown error"
    * @param message 2. "mixer:" + string
    */
-  onError(message: string): void;
+  (message: string): void;
 };
 
-export type OnRecordEvent =
-  | OnRecordEventUploaded
-  | OnRecordEventProgress
-  | OnRecordEventUpload
-  | OnRecordEventStop
-  | OnRecordEventError;
+export type RecordEvent =
+  | RecordEventUploaded
+  | RecordEventProgress
+  | RecordEventUpload
+  | RecordEventStop
+  | RecordEventError;
 
-export interface OnRecordEventUploaded {
+export interface RecordEventUploaded {
   event: "uploaded";
   id: string;
   size: number;
 }
 
-export interface OnRecordEventProgress {
+export interface RecordEventProgress {
   event: "progress";
   id: string;
   size: number;
 }
 
-export interface OnRecordEventUpload {
+export interface RecordEventUpload {
   event: "upload";
   id: string;
   size: string;
   file: any;
 }
 
-export interface OnRecordEventStop {
+export interface RecordEventStop {
   event: "stop";
   id: string;
   size: number;
 }
 
-export interface OnRecordEventError {
+export interface RecordEventError {
   event: "error";
   id: string;
   size: number;
   error: any;
 }
 
-export type RecordEventType = OnRecordEvent["event"];
+export type RecordEventType = RecordEvent["event"];
 
 export interface Message {
   event: string;
