@@ -262,107 +262,107 @@ export interface RemonListener {
    * connected and authentication is completed. Return value is token by
    * authentication process.
    */
-  onInit: InitListener;
+  onInit?: InitListener;
 
   /**
    * It's called when you execute connectCall method with channelId and
    * there's no such channel id. Remon will create a room with the channel Id
    * and onCreateChannel method is called.
    */
-  onCreateChannel: CreateChannelListener;
+  onCreateChannel?: CreateChannelListener;
 
   /**
    * It's called when you execute connectCall method with channel ID and
    * there's such channel ID. Remon will connect peers. After this event,
    * signalling with peers will be executed.
    */
-  onConnectChannel: ConnectChannelListener;
+  onConnectChannel?: ConnectChannelListener;
 
   /**
    * Called when signaling is complete and the stream is well connected. From
    * this time, the video can be transmitted or viewed.
    */
-  onComplete: CompleteListener;
+  onComplete?: CompleteListener;
 
   /**
    * Called when a local stream has been obtained. You can get a local stream
    * from this event.
    */
-  onDisplayUserMedia: DisplayUserMediaListener;
+  onDisplayUserMedia?: DisplayUserMediaListener;
 
   /**
    * Similar to onDisplayUserMedia, but occurs when signaling is complete.
    */
-  onAddLocalStream: AddLocalStreamListener;
+  onAddLocalStream?: AddLocalStreamListener;
 
   /**
    * Occurs when signaling is complete and a remote stream can be received.
    * You can take a remote stream as an argument.
    */
-  onAddRemoteStream: AddRemoteStreamListener;
+  onAddRemoteStream?: AddRemoteStreamListener;
 
   /**
    * State is classified into INIT, CONNECT, WAIT, COMPLETE, CLOSE, etc.
    * according to the connection state. This event is called when the state is
    * changed.
    */
-  onStateChange: StateChangeListener;
+  onStateChange?: StateChangeListener;
 
   /**
    * Occurs when a connection is terminated by the other side or the network,
    * not by me.
    */
-  onDisconnectChannel: DisconnectChannelListener;
+  onDisconnectChannel?: DisconnectChannelListener;
 
   /**
    * If the other party sent an arbitrary message through the
    * Remon.sendMessage method, You can receive it via this event.
    */
-  onMessage: MessageListener;
+  onMessage?: MessageListener;
 
   /**
    * When communicating or broadcasting, you can check the current quality of
    * the stream every 3 seconds. There are several stat entries, but the
    * easiest way to know the current quality is 'ratings' property.
    */
-  onStat: StatListener;
+  onStat?: StatListener;
 
   /**
    * Event that can check the result when calling search method such as
    * fetchCall or fetchCast.
    */
-  onSearch: SearchListener;
+  onSearch?: SearchListener;
 
   /**
    * Occurs when the close command that I explicitly called actually
    * completes.
    */
-  onClose: CloseListener;
+  onClose?: CloseListener;
 
   /**
    * Occurs when using conference mode. When someone enters or leaves the
    * room, join and leave events occur and you can connect to the user through
    * the join method through the channel information.
    */
-  onRoomEvent: RoomEventListener;
+  onRoomEvent?: RoomEventListener;
 
   /**
    * Occurs when the viewer of the broadcast calls the joinCast command, when
    * the command actually completes and can receive the stream.
    */
-  onJoin: JoinListener;
+  onJoin?: JoinListener;
 
   /**
    * Several events about the recording process when a client wants to record
    * or record. Among the parameters to receive, event values include stop,
    * upload, error, and uploaded.
    */
-  onRecordEvent: RecordEventListener;
+  onRecordEvent?: RecordEventListener;
 
   /**
    * All errors can be received in this event.
    */
-  onError: ErrorListener;
+  onError?: ErrorListener;
 }
 
 export type InitListener = (token: string) => void;
