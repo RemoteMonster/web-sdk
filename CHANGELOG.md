@@ -1,3 +1,18 @@
+## [2.6.20](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.19...v2.6.20) (2020-10-22)
+
+
+### Bug Fixes
+
+* **media:** add await at replaceTrack ([025de41](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/025de41))
+* **media:** input mute상태에서 dev변경되도 mute상태 유지되게 변경 ([5733a6a](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/5733a6a))
+
+
+### Features
+
+* **conference:** 새로운 방식의 회의용 mediaserver 방식 적용 ([48af76f](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/48af76f))
+
+
+
 ## [2.6.19](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.18...v2.6.19) (2020-09-15)
 
 

@@ -209,6 +209,13 @@
                             >
                               CREATE
                             </a>
+                            <a
+                              id="videoOffBtn"
+                              href="#"
+                              class="btn btn-primary btn-user text-center"
+                            >
+                              videooff
+                            </a>
                           </span>
                         </div>
                       </div>
@@ -229,7 +236,11 @@
           <script src="/remon.js"></script>
 
           <script>
+            // const server = "wss://audctrl.turn.remotemonster.com/janus/";
+            // const ws_url = "wss://audctrl.turn.remotemonster.com/ws/";
+            // const rest_url = "https://audctrl.turn.remotemonster.com/rest";
             const channelButton = document.querySelector("#channelBtn");
+            const videoOffButton = document.querySelector("#videoOffBtn");
             const channelList = document.getElementById("lvChannel");
             const channelNameInput = document.getElementById(
               "channelNameInput"
@@ -253,8 +264,10 @@
             let myChannelId;
             let remon;
             let dummyRemon;
-            const key = "1234567890";
-            const serviceId = "SERVICEID1";
+            // const key = "1234567890";
+            // const serviceId = "SERVICEID1";
+            const key= "27f8ca5ee273153d9a9c5944c766fa097d2e16de4dda425a";
+            const serviceId= "simpleapp";
             var waitingLoop;
             let cameraList = [];
             let micList = [];
@@ -265,7 +278,9 @@
             let config = {
               credential: {
                 key: key,
-                serviceId: serviceId
+                serviceId: serviceId,
+                // wsurl: ws_url,
+                // resturl: rest_url
               },
               view: {
                 remote: "#remoteVideo",
@@ -358,6 +373,9 @@
               return text;
             }
 
+            videoOffButton.addEventListener("click", evt => {
+              remon.enableLocalVideo(false);
+            })
             channelButton.addEventListener(
               "click",
               evt => {
@@ -374,8 +392,8 @@
                 view: { local: "#localVideo1", remote: "#remoteVideo1" },
                 media: { audio: true, video: true }
               };
-              cfg.credential.wsurl = "wss://signal.remotemonster.com/ws";
-              cfg.credential.resturl = "https://signal.remotemonster.com/rest";
+              // cfg.credential.wsurl = ws_url;
+              // cfg.credential.resturl = rest_url;
               dummyRemon = new Remon({ config: cfg });
             }
 

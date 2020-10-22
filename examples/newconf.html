@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="RemoteMonster live media service demo" />
+    <meta name="author" content="Lucas Choi" />
+
+    <title>1안 Audio Only SFU</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+  </head>
+
+  <body id="page-top">
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCZgtAT7OXuifqDxWbsrsjT3MRTaPdpM9Y",
+        authDomain: "kite-signal.firebaseapp.com",
+        databaseURL: "https://kite-signal.firebaseio.com",
+        projectId: "kite-signal",
+        storageBucket: "kite-signal.appspot.com",
+        messagingSenderId: "484402115075",
+        appId: "1:484402115075:web:9417a374dd09cb83f91436"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      var fireStore = firebase.firestore();
+/*
+      var fbUnsubscribe = fireStore.collection("audiocontrol").onSnapshot((docs) => {
+        const changes = docs.docChanges();
+        changes.forEach((change) => {
+          var peID = change.doc.id;
+          const data = change.doc.data();
+          switch (change.type) {
+            case 'removed':
+              console.log('user removed', peID);
+              break;
+            case 'added':
+            case 'modified':
+              console.log('user added', peID, data);
+              break;
+          }
+        });
+      });
+*/
+    </script>
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+
+            <br />
+            <div class="row">
+            <!-- Page Heading -->
+            <br />
+            <div class="col-sm">
+              <div class="mt-12 text-left">
+                <h4 class="font-weight-bold">1안 Audio Only SFU</h4>
+              </div>
+            </div>
+            <br />
+                        </div>
+            <br />
+            <!-- Content Row -->
+            <div class="row">
+            
+              <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Other Videos
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <div class="row" style="width:250px;" id="otherVideos">
+                      </div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - Dropdown -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      Local Video
+                    </h6>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <main class="text-center">
+                      <video
+                        id="myVideo"
+                        class="remote-video center w-300 h-300"
+                        autoplay
+                        muted
+                        controls
+                        playsinline
+                        style="z-index:1;background: rgba(0, 0, 0, 0.5); width: 100%;"
+                      ></video>
+
+                      <h6
+                        id="waitingTv"
+                        class="m-0 font-weight-bold text-primary"
+                        style="z-index:3; position: absolute;bottom: 55px;right:45px; visibility: hidden;"
+                      >
+                        waiting
+                      </h6>
+
+            <div class="row">
+ <div class="col-lg-1">
+              <div class="mt-12 text-center">
+                <span class="mr-1">
+                  <button
+                    id="vidOnBtn"
+                    class="btn btn-primary btn-user text-center"
+                  >
+                  Video Off
+                </button>
+                </span>
+              </div>
+            </div>
+
+                      <div class="col-lg-1">
+                        <div class="mt-12 text-center">
+                          <span class="mr-2">
+                            <a
+                              id="enterBtn"
+                              href="#"
+                              class="btn btn-primary btn-user text-center"
+                            >
+                            ENTER
+                            </a>
+                          </span>
+                        </div>
+                      </div>
+</div>
+                    </main>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+
+          <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          />
+          <!-- The webrtc adapter is required for browser compatibility -->
+          <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+          <!--<script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>-->
+          <script src="/remon.js"></script>
+          <script>
+            var ws_url = "wss://audctrl.turn.remotemonster.com/ws/";
+            var rest_url = "https://audctrl.turn.remotemonster.com/rest";
+            var fstore_prefix = "audiocontrol";
+            //var server = "ws://127.0.0.1:8188/janus/";
+            //var ws_url = "ws://127.0.0.1:8082/ws";
+            //var rest_url = "http://127.0.0.1:8081/rest";
+            //var fstore_prefix = "test127";
+            var pluginIDs = [];
+            var myChID = null;
+            const vidOnBtn = document.querySelector("#vidOnBtn");
+            const enterBtn = document.querySelector("#enterBtn");
+            const otherVideos= document.getElementById('otherVideos');
+            let isConnected = false;
+            let isVideoOn = true;
+            let remon;
+            let remonRoom=[];
+            const key = "1234567890";
+            const serviceId = "SERVICEID1";
+            // please register your own service key from remotemonster site.
+            let config = {
+              credential: {
+                key: key,
+                serviceId: serviceId,
+                wsurl : ws_url,
+                resturl : rest_url,
+              },
+              view: {
+                //remote: "#remoteVideo",
+                local: "#myVideo"
+              },
+              media: {
+                video: {
+                  width: "320",
+                  height: "240",
+                  codec: "H264",
+                  maxBandwidth: 300,
+                  frameRate: { max: 15, min: 15 }
+                },
+                audio: true
+              }
+            };
+            const videoAttrs = {
+                            class : "remote-video center w-320 h-240",
+                            autoplay : true,
+                            muted : true,
+                            controls: true,
+                            playsinline: true,
+                            style :"z-index:1;background: rgba(0, 0, 0, 0.5); width: 300px;"
+                          }
+            const listener = {
+              onInit(token) {
+                if( remon.getChannelId().indexOf(":") < 0) {
+                  myChID = remon.getChannelId() + ":" + token
+                  fireStore.collection(fstore_prefix).doc(myChID).set({ "pluginIDs": pluginIDs });
+                }
+                
+                //console.log(`remon.listener.onInit: ${token}`);
+              },
+              onConnect(chid) {
+                console.log(`remon.listener.onConnect ${chid} at listener`);
+              },
+              onComplete() {
+                console.log(`remon.listener.onComplete: ${remon.getChannelId()} `);
+                remonRoom[remon.getChannelId()] = true;
+                // for audio channel
+                let audio0 = document.createElement('video')
+                videoAttrs.id = 'ach-0';
+                Object.keys(videoAttrs).forEach(key => audio0.setAttribute(key, videoAttrs[key]))
+                config.view.remote = `#${audio0.id}`
+                otherVideos.appendChild(audio0)
+                remon.audch0 = new Remon({ config })
+                //remon.audch0.joinCast(remon.getChannelId(), true, 0);  
+                remon.audch0.joinConferenceAudioCast(remon.getChannelId(), 0)
+              },
+              onDisconnectChannel() {
+                // is called when other peer hang up.
+                remon.close();
+                isConnected = false;
+                fireStore.collection(fstore_prefix).doc(myChID).delete();
+              },
+              onClose() {
+                // is called when remon.close() method is called.
+                console.log(`remon.listener.onClose: ${remon.getChannelId()}`);
+              },
+              onError(error) {
+                console.log(`remon.listener.onError: ${remon.getChannelId()} ${error}`);
+              },
+              onStat(result) {
+                // console.log(`EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+              },
+              onRoomEvent(result){
+                //join
+                  switch (result.event) {
+                    case 'join':
+                        if(!remonRoom[result.channel.id]){
+                            console.log("[oohay] join ch : " + JSON.stringify(result.channel.id))
+                          remonRoom[result.channel.id] = true;
+                            let newVideo = document.createElement('video')
+                            videoAttrs.id = result.channel.id.replace(":","-");
+                            Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
+                            config.view.remote = `#${newVideo.id}`
+                            newVideo.onComplete = false;
+                            newVideo.remon = new Remon(
+                              { config: config, 
+                                listener: {
+                                  onInit(token) {
+                                    console.log(`sub onInit`);
+                                    setTimeout(() => {                                        
+                                      if( newVideo.onComplete == false) {                                          
+                                        otherVideos.removeChild(newVideo);
+                                      }
+                                    }, 2000);
+                                  },
+                                  onConnect(chid) {
+                                    console.log(`sub remon.listener.onConnect ${chid} at listener`);
+                                  },
+                                  onComplete() {
+                                    console.log(`sub remon.listener.onComplete:`);
+                                    newVideo.onComplete = true;
+                                  },
+                                  onDisconnectChannel() {
+                                    console.log(`sub disconnect`);
+                                  },
+                                  onClose() {
+                                    // is called when remon.close() method is called.
+                                    console.log(`sub remon.listener.onClose:`);
+                                  },
+                                  onError(error) {
+                                    console.log(`sub remon.listener.onError:`);
+                                  },
+                                  onStat(result) {
+                                    //console.log(`sub EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+                                  },
+                                  onRoomEvent(result){
+                                    console.log(`sub ROOM EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+                                  }
+                                },
+                              });
+                            otherVideos.appendChild(newVideo)
+                            newVideo.remon.joinCast(newVideo.id.replace("-",":"))
+                        }
+                      break;
+                    case 'leave':
+                        if(remonRoom[result.channel.id] && result.channel.id !== remon.getChannelId()){
+                          let video = document.getElementById(result.channel.id.replace(":","-"));
+                          otherVideos.removeChild(video);
+                          delete remonRoom[result.channel.id]
+                        }
+                      break;
+                  }
+                console.log(`EVENT FIRED: onRoomEvent channel Id : ${remon.getChannelId()}`)
+                console.log(`EVENT FIRED: onRoomEvent: ${JSON.stringify(result)}`)
+              }
+            };
+            
+            
+            async function start() {
+              if (isConnected) {
+                await fireStore.collection(fstore_prefix).doc(myChID).delete();
+                isConnected = false;
+                document.querySelector('#enterBtn').innerHTML = "Enter";
+                Object.keys(remonRoom).forEach(function(id){
+                  if( id !== remon.getChannelId()){
+                    let video = document.getElementById(id.replace(":","-"));
+                    if(video && video.remon){
+                      otherVideos.removeChild(video);
+                    }
+                  }
+                  delete remonRoom[id];
+                })
+                remon.close();
+                window.location.reload();
+                vidOnBtn.disabled = false;
+              } else {
+                isConnected = true;
+                vidOnBtn.disabled = true;
+                document.querySelector('#enterBtn').innerHTML = "leave";
+                if( !isVideoOn) {                    
+                  config.media.video = false;
+                }
+                remon = new Remon({ config, listener });
+                let response = await remon.createRoom("remon");
+                console.log("response",response)
+                let participants = await remon.fetchRooms("remon");
+                participants.forEach(async function(participant){
+                  if(!remonRoom[participant.id]){
+                          remonRoom[participant.id] = true;
+                            let newVideo = document.createElement('video');
+                            videoAttrs.id =  participant.id.replace(":","-");
+                            Object.keys(videoAttrs).forEach(key => newVideo.setAttribute(key, videoAttrs[key]))
+                            config.view.remote = `#${newVideo.id}`
+                            newVideo.onComplete = false;
+                            newVideo.remon = new Remon({ 
+                                config: config, 
+                                listener: {
+                                  onInit(token) {
+                                    console.log(`sub onInit`);
+                                    setTimeout(() => {                                        
+                                      if( newVideo.onComplete == false) {                                          
+                                        otherVideos.removeChild(newVideo);
+                                      }
+                                    }, 2000);
+                                  },
+                                  onConnect(chid) {
+                                    console.log(`sub remon.listener.onConnect ${chid} at listener`);
+                                  },
+                                  onComplete() {
+                                    console.log(`sub remon.listener.onComplete:`);
+                                    newVideo.onComplete = true;
+                                  },
+                                  onDisconnectChannel() {
+                                    console.log(`sub disconnect`);
+                                  },
+                                  onClose() {
+                                    // is called when remon.close() method is called.
+                                    console.log(`sub remon.listener.onClose:`);
+                                  },
+                                  onError(error) {
+                                    console.log(`sub remon.listener.onError:`);
+                                  },
+                                  onStat(result) {
+                                    //console.log(`sub EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+                                  },
+                                  onRoomEvent(result){
+                                    console.log(`sub ROOM EVENT FIRED: onStat:  ${JSON.stringify(result)}`);
+                                  }
+                                },
+                              });
+                            otherVideos.appendChild(newVideo)
+                            await newVideo.remon.joinCast(newVideo.id.replace("-",":"));
+                        }
+                })
+               
+              }
+            }
+            vidOnBtn.addEventListener("click", async(evt) => {
+              isVideoOn = !isVideoOn
+              if(isVideoOn) {
+                document.querySelector('#vidOnBtn').innerHTML = "Video Off";
+              } else {
+                document.querySelector('#vidOnBtn').innerHTML = "Video On";
+              }
+              evt.preventDefault();
+              false
+            });
+            enterBtn.addEventListener("click",
+              async(evt) => {
+                start();
+                evt.preventDefault();
+              },
+              false
+            );
+          </script>
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span
+                >Copyright &copy;
+                <a href="https://remotemonster.com">RemoteMonster</a> 2019</span
+              >
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        //$("#accordionSidebar").load("nav.html");
+      });
+    </script>
+  </body>
+</html>
