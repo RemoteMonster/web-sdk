@@ -1,3 +1,7 @@
+## [2.6.21](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.20...v2.6.21) (2020-10-22)
+
+
+
 ## [2.6.20](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.19...v2.6.20) (2020-10-22)
 
 
