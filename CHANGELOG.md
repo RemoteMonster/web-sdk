@@ -1,3 +1,12 @@
+## [2.6.22](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.21...v2.6.22) (2020-10-26)
+
+
+### Bug Fixes
+
+* **remon:** change method name joinConferenceAudio to wireAudio ([48d6964](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/48d6964))
+
+
+
 ## [2.6.21](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.20...v2.6.21) (2020-10-22)
 
 

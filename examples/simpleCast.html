@@ -122,6 +122,7 @@
             const channelBtnEl = document.querySelector("#channelBtn");
             const audioTag= document.querySelector("#localAudio");
             const audioPlayButton = document.querySelector("#audioplay");
+            const roomid= 'testchannel2';
             audioTag.play();
             audioPlayButton.addEventListener("click", ()=>{
               //audioTag.play();
@@ -137,8 +138,10 @@
             let resturl= "https://signal.remotemonster.com/rest";
             // let serviceId= 'healthchecker';
             // let key = 'ee1761b003084b5431bf918fa87b850bc499467bdfaf4bdf';
-            let serviceId= 'SERVICEID1';
-            let key= '1234567890';
+            // let serviceId= 'SERVICEID1';
+            // let key= '1234567890';
+            let serviceId= 'simpleapp';
+            let key= '27f8ca5ee273153d9a9c5944c766fa097d2e16de4dda425a';
             let remon;
             // please register your own service key from remotemonster site.
             const dummyConfig = {
@@ -217,7 +220,7 @@
                 isCaster = true;
                 channelBtnEl.innerHTML = "CLOSE";
                 remon = new Remon({ config, listener });
-                remon.createCast("testchannel");
+                remon.createCast(roomid);
               }
             }
 
@@ -244,7 +247,7 @@
               var isRoomExist = false;
               searchResult.forEach((ch, i) => {
                 ch.type = "BROADCAST";
-                if (ch.status === "COMPLETE" && ch.id === "testchannel") {
+                if (ch.status === "COMPLETE" && ch.id === roomid) {
                   console.log(
                     "------------------- find my channel -----------------"
                   );
@@ -257,7 +260,7 @@
             }
             function joinRoom(config, listener) {
               remon = new Remon({ config, listener });
-              remon.joinCast("testchannel");
+              remon.joinCast(roomid);
               isCaster = false;
               isCreated = true;
               isRoomExist = true;

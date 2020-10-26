@@ -172,8 +172,10 @@
             let isConnected = false;
             let isCaster = false;
             let remon;
-            const key = "1234567890";
-            const serviceId = "SERVICEID1";
+            // const key = "1234567890";
+            // const serviceId = "SERVICEID1";
+            const serviceId= 'simpleapp';
+            const key= '27f8ca5ee273153d9a9c5944c766fa097d2e16de4dda425a';
             let myChannelId;
             var waitingLoop;
             createDummyRemonForSearchLoop();
@@ -218,6 +220,7 @@
               },
               onStat(result) {
                 console.log(`EVENT FIRED: onStat: ${result}`);
+                console.log(result);
               }
             };
 
