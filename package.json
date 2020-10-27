@@ -13,6 +13,7 @@
     "deploy:gh-pages": "gh-pages --dist cache",
     "deploy": "npm run package && npm run deploy:gh-pages && npm run clean"
   },
+  "types": "types",
   "keywords": [
     "WebRTC",
     "RemoteMonster",
