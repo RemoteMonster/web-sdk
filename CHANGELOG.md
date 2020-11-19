@@ -1,3 +1,30 @@
+## [2.6.23](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.22...v2.6.23) (2020-11-19)
+
+
+### Bug Fixes
+
+* **chore:** Navigator.connectin --> navigator.connection ([2494615](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/2494615))
+
+
+
+## [2.6.23](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.22...v2.6.23) (2020-11-19)
+
+
+### Bug Fixes
+
+* **chore:** Navigator.connectin --> navigator.connection ([2494615](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/2494615))
+
+
+
+## [2.6.23](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.22...v2.6.23) (2020-11-19)
+
+
+### Bug Fixes
+
+* **chore:** Navigator.connectin --> navigator.connection ([2494615](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/2494615))
+
+
+
 ## [2.6.22](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.21...v2.6.22) (2020-10-26)
 
 
