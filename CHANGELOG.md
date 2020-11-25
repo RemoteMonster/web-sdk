@@ -1,3 +1,12 @@
+## [2.6.24](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.23...v2.6.24) (2020-11-25)
+
+
+### Features
+
+* **conference:** add shared/dedicated channel flag ([a40b394](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/a40b394))
+
+
+
 ## [2.6.23](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.22...v2.6.23) (2020-11-19)
 
 
