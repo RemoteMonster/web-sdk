@@ -1,3 +1,12 @@
+# [2.7.0](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.25...v2.7.0) (2020-12-03)
+
+
+### Bug Fixes
+
+* explicit casting for boolean ([7f3b7f8](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/7f3b7f8))
+
+
+
 ## [2.6.25](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.24...v2.6.25) (2020-11-26)
 
 
