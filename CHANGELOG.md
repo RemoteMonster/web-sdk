@@ -1,3 +1,12 @@
+## [2.7.2](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.7.1...v2.7.2) (2021-01-25)
+
+
+### Bug Fixes
+
+* **ice:** ice failed event is not occured ([2bd92f4](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/2bd92f4))
+
+
+
 ## [2.7.1](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.7.0...v2.7.1) (2020-12-04)
 
 
