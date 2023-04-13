@@ -1,9 +1,9 @@
-## [2.6.11](https://github.kakaocorp.com/A-TF/remon-web-sdk/compare/v2.6.10...v2.6.11) (2020-09-02)
+## [2.6.11-beta.0](https://github.kakaoenterprise.in/icl/remon-web-sdk/compare/v2.6.11...v2.6.11-beta.0) (2023-04-13)
 
 
-### Features
+### Bug Fixes
 
-* sharding for sig ([84f03b4](https://github.kakaocorp.com/A-TF/remon-web-sdk/commit/84f03b4))
+* **parsing:** change Type of SDP ([7670fc1](https://github.kakaoenterprise.in/icl/remon-web-sdk/commit/7670fc1))
 
 
 
